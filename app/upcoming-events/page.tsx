@@ -1,25 +1,10 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import localFont from "next/font/local";
+import { Inter, Playfair_Display } from "next/font/google";
 
-const playfair = localFont({
-  src: [
-    { path: "./fonts/Inter_18pt-Regular.ttf", weight: "400" },
-    { path: "./fonts/Inter_18pt-Medium.ttf", weight: "500" },
-    { path: "./fonts/Inter_18pt-Bold.ttf", weight: "700" },
-  ],
-  display: "swap",
-});
-
-const inter = localFont({
-  src: [
-    { path: "./fonts/Inter_18pt-SemiBold.ttf", weight: "600" },
-    { path: "./fonts/Inter_18pt-Bold.ttf", weight: "700" },
-    { path: "./fonts/Inter_18pt-ExtraBold.ttf", weight: "800" },
-  ],
-  display: "swap",
-});
+const inter = Inter({ subsets: ["latin"] });
+const playfair = Playfair_Display({ subsets: ["latin"] });
 
 function GoldFrameVideo({ src, className }: { src: string; className?: string }) {
   return (
