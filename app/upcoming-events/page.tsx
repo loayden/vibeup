@@ -1,25 +1,6 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import localFont from "next/font/local";
-
-const playfair = localFont({
-  src: [
-    { path: "./fonts/Inter_18pt-Regular.ttf", weight: "400" },
-    { path: "./fonts/Inter_18pt-Medium.ttf", weight: "500" },
-    { path: "./fonts/Inter_18pt-Bold.ttf", weight: "700" },
-  ],
-  display: "swap",
-});
-
-const inter = localFont({
-  src: [
-    { path: "./fonts/Inter_18pt-SemiBold.ttf", weight: "600" },
-    { path: "./fonts/Inter_18pt-Bold.ttf", weight: "700" },
-    { path: "./fonts/Inter_18pt-ExtraBold.ttf", weight: "800" },
-  ],
-  display: "swap",
-});
 
 function GoldFrameVideo({ src, className }: { src: string; className?: string }) {
   return (
@@ -38,7 +19,7 @@ function GoldFrameVideo({ src, className }: { src: string; className?: string })
 
 function TextSection() {
   return (
-    <div className={`max-w-5xl mx-auto text-center py-10 px-4 ${playfair.className}`}>
+    <div className="max-w-5xl mx-auto text-center py-10 px-4">
       <h2 className="text-center text-6xl font-bold text-amber-400 mb-12">Memories</h2>
       <p className="mt-6">
         {/* Add any additional text here if needed */}
@@ -201,7 +182,7 @@ export default function UpcomingEventsPage() {
   }, []);
 
   return (
-    <div className={`bg-black text-white ${inter.className}`}>
+    <div className="bg-black text-white">
       <audio ref={audioRef} autoPlay loop preload="auto">
         <source src="/luxury-ambient.mp3" type="audio/mpeg" />
       </audio>
