@@ -1,10 +1,6 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { Inter, Playfair_Display } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-const playfair = Playfair_Display({ subsets: ["latin"] });
 
 function GoldFrameVideo({ src, className }: { src: string; className?: string }) {
   return (
@@ -23,7 +19,7 @@ function GoldFrameVideo({ src, className }: { src: string; className?: string })
 
 function TextSection() {
   return (
-    <div className={`max-w-5xl mx-auto text-center py-10 px-4 ${playfair.className}`}>
+    <div className="max-w-5xl mx-auto text-center py-10 px-4">
       <h2 className="text-center text-6xl font-bold text-amber-400 mb-12">Memories</h2>
       <p className="mt-6">
         {/* Add any additional text here if needed */}
@@ -186,7 +182,7 @@ export default function UpcomingEventsPage() {
   }, []);
 
   return (
-    <div className={`bg-black text-white ${inter.className}`}>
+    <div className="bg-black text-white">
       <audio ref={audioRef} autoPlay loop preload="auto">
         <source src="/luxury-ambient.mp3" type="audio/mpeg" />
       </audio>
