@@ -1,0 +1,27 @@
+[00:00:01.945] Server  LOG     ✓ Ready in 1739ms
+[00:00:08.627] Server  LOG     ○ Compiling / ...
+[00:00:11.587] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:11.723] Browser ERROR   uncaughtError: Error: supabaseKey is required.
+[00:05:51.341] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:51.450] Browser ERROR   uncaughtError: Error: supabaseKey is required.
+[00:09:34.794] Server  LOG       Reload env: .env.local
+[00:09:35.551] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:35.666] Browser ERROR   uncaughtError: Error: supabaseKey is required.
+[00:11:55.480] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:55.587] Browser ERROR   uncaughtError: Error: supabaseKey is required.
+[00:26:09.051] Server  LOG       Reload env: .env.local
+[00:26:09.446] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:26:09.447] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./lib/supabase.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:26:09.449] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:26:09.556] Server  LOG     ✓ Compiled in 0ms
+[00:26:09.859] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:26:09.971] Browser ERROR   uncaughtError: Error: supabaseKey is required.
+[00:26:14.311] Server  LOG       Reload env: .env.local
+[00:26:14.334] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:26:14.334] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./lib/supabase.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:26:14.335] Server  WARN    ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:26:14.359] Server  LOG     ✓ Compiled in 12ms
+[00:26:14.796] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:26:14.926] Browser ERROR   uncaughtError: Error: supabaseKey is required.
+[00:32:23.489] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:32:23.647] Browser ERROR   uncaughtError: Error: supabaseKey is required.

@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 
 function GoldFrameVideo({ src, className }: { src: string; className?: string }) {
   return (
-    <div className={`relative border-[1px] border-amber-400 ${className || ""}`}>
+    <div className={`relative border-[1px] border-amber-400 ${className || ""}`} style={{ minWidth: 0, minHeight: 0 }}>
       <video
         src={src}
         autoPlay
@@ -49,7 +49,7 @@ function SingleImageCarousel({
 
   return (
     <section className="max-w-6xl mx-auto py-12 px-4 flex flex-col md:flex-row items-center gap-8 bg-black">
-      <div className="relative w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden flex items-center justify-center">
+      <div className="relative w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden flex items-center justify-center" style={{ minWidth: 0, minHeight: 0 }}>
         <img
           src={`/${images[currentIndex]}`}
           alt={images[currentIndex]}
@@ -113,6 +113,7 @@ function PhotoScroller({
           <div
             key={img}
             className="min-w-[280px] hover:scale-105 transition-transform duration-500 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden cursor-pointer flex-shrink-0 scroll-snap-align-start"
+            style={{ minWidth: 0, minHeight: 0 }}
           >
             <img src={`/${img}`} alt={img} className="w-full h-full object-cover" />
           </div>
@@ -145,7 +146,7 @@ function SquareVideoSection({
         {title}
       </h3>
 
-      <div className="relative z-10 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden">
+      <div className="relative z-10 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
         <video
           src={src}
           autoPlay
@@ -213,7 +214,7 @@ export default function UpcomingEventsPage() {
       {/* Hero Video with gold frame */}
       <section className="w-full py-16 px-4 relative">
         <div className="relative z-10 mx-auto aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden"
-          style={{ width: "80vw", maxWidth: "100%", minWidth: "240px" }}>
+          style={{ width: "80vw", maxWidth: "100%", minWidth: "240px", minHeight: 0 }}>
           <video
             src="/VIBEUP.mp4"
             autoPlay
@@ -240,7 +241,7 @@ export default function UpcomingEventsPage() {
 
       {/* Second Video as side-by-side layout */}
       <section className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8">
-        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden">
+        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
           <video
             src="/VIBEUP2.mp4"
             autoPlay
@@ -326,7 +327,7 @@ export default function UpcomingEventsPage() {
 
       {/* Final Video with side-by-side layout */}
       <section className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8">
-        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden">
+        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
           <video
             src="/VIBEUP4.mp4"
             autoPlay

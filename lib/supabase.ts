@@ -1,21 +1,21 @@
-
-// Supabase client configuration using .env.local values
+    // Supabase client configuration using .env.local values
 // Make sure these are added in your .env.local file:
-// NEXT_PUBLIC_SUPABASE_URL=https://clkbegobbcgajtxrwkbe.supabase.co
-// NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_secret_RN8ulpFZSQ4zcqcIn_fTWg_A3qhjnTh
+// NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+// NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+// SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn(
-    "Supabase environment variables are missing. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY."
-  );
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);     
+
+if (!supabaseServiceRoleKey) {
+  console.warn("Warning: SUPABASE_SERVICE_ROLE_KEY is missing. supabaseServer client may not function properly.");
 }
 
-export const supabase = createClient(
-  supabaseUrl || "",
-  supabaseAnonKey || ""
-);
+export const supabaseServer = supabaseServiceRoleKey
+  ? createClient(supabaseUrl, supabaseServiceRoleKey)
+  : null;

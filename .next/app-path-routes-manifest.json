@@ -1,0 +1,14 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/about/page": "/about",
+  "/admin/dashboard/page": "/admin/dashboard",
+  "/api/create-checkout/session/route": "/api/create-checkout/session",
+  "/api/subscribe/route": "/api/subscribe",
+  "/checkout/page": "/checkout",
+  "/contact-us/page": "/contact-us",
+  "/email/page": "/email",
+  "/favicon.ico/route": "/favicon.ico",
+  "/page": "/",
+  "/upcoming-events/page": "/upcoming-events"
+}

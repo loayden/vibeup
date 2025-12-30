@@ -1,0 +1,17 @@
+# -------------------------------
+# Supabase Project Configuration
+# -------------------------------
+
+# رابط مشروع Supabase الخاص بك
+NEXT_PUBLIC_SUPABASE_URL=https://clkbegobbcgajtxrwkbe.supabase.co
+
+# مفتاح عام (Anon/Public Key) للاستخدام على العميل (Frontend)
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNsa2JlZ29iYmNnYWp0eHJ3a2JlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY3OTU3OTYsImV4cCI6MjA4MjM3MTc5Nn0.EQgqt93gBH2MdXHrnvSO_MYgqrQWsTvz3f5oAz6FR30
+
+# مفتاح كامل الصلاحيات (Service Role Key) للاستخدام على السيرفر فقط
+# لا يجب مشاركته على العميل أو رفعه على Git
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNsa2JlZ29iYmNnYWp0eHJ3a2JlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2Njc5NTc5NiwiZXhwIjoyMDgyMzcxNzk2fQ.dI26Drc8i8e_5s5So_HnTdd8paeYoxtv5z0qucfcecM
+
+STRIPE_SECRET_KEY=sb_secret_RN8ulpFZSQ4zcqcIn_fTWg_A3qhjnTh
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=sb_publishable_2i8U7rjJgxv-2LTzR6v0KA_xr5DzrxB
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
