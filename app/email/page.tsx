@@ -1,98 +1,22 @@
 "use client";
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-  import { Input } from "@/components/ui/input";
 
-function EmailForm() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<null | string>(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+import EmailContent from "./EmailContent";
+import { Suspense } from "react";
 
-  useEffect(() => {     
-    const emailParam = searchParams?.get("email");
-    if (emailParam) setEmail(emailParam);
-  }, [searchParams]);
-
-  const handleSubmit = async (emailToSubmit: string) => {
-    setStatus(null);
-
-    // Simple email validation
-    if (!emailToSubmit || !/\S+@\S+\.\S+/.test(emailToSubmit)) {
-      setStatus("❌ Please enter a valid email address.");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const response = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: emailToSubmit }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        setStatus(`❌ Subscription failed: ${result.error || "Unknown error"}`);
-      } else {
-        if (result.alreadySubscribed) {
-          setStatus("⚠️ This email is already subscribed.");
-        } else {
-          localStorage.setItem("preCheckoutEmail", emailToSubmit);
-          setStatus("🎉 Email saved! Redirecting to tickets...");
-          setTimeout(() => router.push("/checkout"), 1000);
-        }
-      }
-    } catch (err: any) {
-      setStatus(`❌ Subscription failed: ${err.message || err}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function EmailPage() {
   return (
-    <div className="max-w-md w-full bg-neutral-900/80 backdrop-blur-md p-8 rounded-2xl border border-amber-500/40 shadow-lg text-center" style={{minWidth: 0, minHeight: 0}}>
-      <h1 className="text-4xl font-extrabold text-amber-400 mb-4 animate-pulse">🎫 Reserve Your Spot!</h1>
-      <p className="text-neutral-400 mb-6">
-        Enter your email to get updates and confirm your ticket reservation.
-      </p>
-
-      <Input
-        placeholder="your@email.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="bg-neutral-800 border-neutral-700 text-white placeholder:text-neutral-500 mb-4 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
-        disabled={loading}
-      />
-
-      <Button
-        onClick={() => handleSubmit(email)}
-        className="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-3 mb-2 transition-transform transform hover:scale-105"
-        disabled={loading}
-      >
-        {loading ? "Submitting..." : "Continue to Tickets"}
-      </Button>
-
-      {status && (
-        <p className={`mt-4 text-sm ${status.includes("saved") || status.includes("already") ? "text-green-400" : "text-red-400"} font-medium`}>
-          {status}
-        </p>
-      )}
-    </div>
-  );
-}
-
-export default function CaptureEmailPage() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-neutral-900 via-neutral-950 to-black text-neutral-100 px-6" style={{minWidth: 0, minHeight: 0}}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <EmailForm />
+    <div className="
+      min-h-screen 
+      flex items-center justify-center 
+      bg-gradient-to-br 
+      from-black/80 
+      via-[#1a0730]/70 
+      to-[#2d1b09]/80 
+      py-16 
+      px-6
+    ">
+      <Suspense fallback={<div className="text-amber-200 text-sm">Loading...</div>}>
+        <EmailContent />
       </Suspense>
     </div>
   );

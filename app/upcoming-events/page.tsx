@@ -20,8 +20,8 @@ function GoldFrameVideo({ src, className }: { src: string; className?: string })
 function TextSection() {
   return (
     <div className="max-w-5xl mx-auto text-center py-10 px-4">
-      <h2 className="text-center text-6xl font-bold text-amber-400 mb-12">Memories</h2>
-      <p className="mt-6">
+      <h2 className="uppercase text-center text-6xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.7)] mb-12 text-amber-400">Memories</h2>
+      <p className="mt-6 text-amber-300 leading-relaxed">
         {/* Add any additional text here if needed */}
       </p>
     </div>
@@ -48,8 +48,8 @@ function SingleImageCarousel({
   };
 
   return (
-    <section className="max-w-6xl mx-auto py-12 px-4 flex flex-col md:flex-row items-center gap-8 bg-black">
-      <div className="relative w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden flex items-center justify-center" style={{ minWidth: 0, minHeight: 0 }}>
+    <section className="max-w-6xl mx-auto py-12 px-4 flex flex-col md:flex-row items-center gap-8">
+      <div className="relative w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden flex items-center justify-center" style={{ minWidth: 0, minHeight: 0 }}>
         <img
           src={`/${images[currentIndex]}`}
           alt={images[currentIndex]}
@@ -99,8 +99,8 @@ function PhotoScroller({
   };
 
   return (
-    <section className="relative py-12 bg-black">
-      <h2 className="absolute inset-0 flex items-center justify-center text-4xl font-bold text-amber-400/15 tracking-widest uppercase text-center px-4 select-none pointer-events-none">
+    <section className="relative py-12">
+      <h2 className="absolute inset-0 flex items-center justify-center uppercase text-4xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.15)] text-amber-400/15 text-center px-4 select-none pointer-events-none">
         {heading}
       </h2>
 
@@ -112,7 +112,7 @@ function PhotoScroller({
         {images.map((img) => (
           <div
             key={img}
-            className="min-w-[280px] hover:scale-105 transition-transform duration-500 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden cursor-pointer flex-shrink-0 scroll-snap-align-start"
+            className="min-w-[280px] hover:scale-105 transition-transform duration-500 aspect-square border-[1px] border-amber-400 overflow-hidden cursor-pointer flex-shrink-0 scroll-snap-align-start"
             style={{ minWidth: 0, minHeight: 0 }}
           >
             <img src={`/${img}`} alt={img} className="w-full h-full object-cover" />
@@ -142,11 +142,11 @@ function SquareVideoSection({
 }) {
   return (
     <section className="max-w-4xl mx-auto py-16 px-4 relative">
-      <h3 className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-amber-400/15 tracking-widest uppercase text-center select-none pointer-events-none">
+      <h3 className="absolute inset-0 flex items-center justify-center uppercase text-3xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.15)] text-amber-400 select-none pointer-events-none">
         {title}
       </h3>
 
-      <div className="relative z-10 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
+      <div className="relative z-10 aspect-square border-[1px] border-amber-400 overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
         <video
           src={src}
           autoPlay
@@ -158,7 +158,7 @@ function SquareVideoSection({
       </div>
 
       {description && (
-        <p className="text-center mt-6 text-gray-300 leading-relaxed max-w-3xl mx-auto whitespace-pre-line">
+        <p className="text-center mt-6 text-amber-300 leading-relaxed max-w-3xl mx-auto whitespace-pre-line">
           {description}
         </p>
       )}
@@ -168,7 +168,7 @@ function SquareVideoSection({
 
 function Separator() {
   return (
-    <hr className="my-8 border-0 h-[1px] bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 shadow-[0_0_8px_rgba(255,191,0,0.6)]" />
+    <hr className="my-8 border-0 h-[1px] bg-gradient-to-r from-amber-400/40 via-yellow-300/40 to-amber-400/40" />
   );
 }
 
@@ -183,7 +183,7 @@ export default function UpcomingEventsPage() {
   }, []);
 
   return (
-    <div className="bg-black text-white">
+    <div className="bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 py-16 text-amber-400 font-semibold">
       <audio ref={audioRef} autoPlay loop preload="auto">
         <source src="/luxury-ambient.mp3" type="audio/mpeg" />
       </audio>
@@ -200,12 +200,11 @@ export default function UpcomingEventsPage() {
         className="
           fixed bottom-6 right-6 z-[9999]
           w-12 h-12 rounded-full
-          bg-black
-          border border-amber-400
-          text-amber-400
+          bg-gradient-to-br from-amber-600 to-yellow-400
+          text-black
           flex items-center justify-center
-          shadow-[0_0_20px_rgba(255,191,0,0.6)]
-          hover:scale-110 transition
+          shadow-[0_0_10px_rgba(255,191,0,0.9)]
+          hover:scale-110 hover:brightness-110 transition
         "
         aria-label="Toggle sound"
       >
@@ -213,7 +212,7 @@ export default function UpcomingEventsPage() {
       </button>
       {/* Hero Video with gold frame */}
       <section className="w-full py-16 px-4 relative">
-        <div className="relative z-10 mx-auto aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden"
+        <div className="relative z-10 mx-auto aspect-square border-[1px] border-amber-400 overflow-hidden"
           style={{ width: "80vw", maxWidth: "100%", minWidth: "240px", minHeight: 0 }}>
           <video
             src="/VIBEUP.mp4"
@@ -221,13 +220,13 @@ export default function UpcomingEventsPage() {
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
         </div>
-        <h1 className="text-center mt-6 text-4xl font-bold text-amber-400">
+        <h1 className="uppercase text-center mt-6 text-4xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.7)]">
           BE WITH OUR MEMORIES
         </h1>
-        <p className="text-center mt-4 text-sm text-gray-300 max-w-xl mx-auto">
+        <p className="text-center mt-4 text-amber-300 max-w-xl mx-auto leading-relaxed">
           and come to galaevent
             This is it… the final call of the year.
             One night. One celebration. One unforgettable New Year Gala Dinner 2026. Luxury black & gold décor, live Arabic stars, a five-star gala dinner, DJ, shows, and a countdown you’ll never forget.
@@ -241,14 +240,14 @@ export default function UpcomingEventsPage() {
 
       {/* Second Video as side-by-side layout */}
       <section className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8">
-        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
+        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
           <video
             src="/VIBEUP2.mp4"
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
         </div>
         <div className="w-full md:w-1/2 text-amber-400 text-lg md:text-xl font-semibold leading-relaxed whitespace-pre-line">
@@ -318,7 +317,7 @@ export default function UpcomingEventsPage() {
         }
         text={
           <>
-           “Excited to bring the Bedouin White Party to Huntington Beach 🏝️ for the first time in California and United states 🇺🇸 🌟 Let the magic begin! #BedouinWhiteParty
+           Excited to bring the Bedouin White Party to Huntington Beach 🏝️ for the first time in California and United states 🇺🇸 🌟 Let the magic begin! #BedouinWhiteParty
           </>
         }
       />
@@ -327,14 +326,14 @@ export default function UpcomingEventsPage() {
 
       {/* Final Video with side-by-side layout */}
       <section className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8">
-        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
+        <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
           <video
             src="/VIBEUP4.mp4"
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
         </div>
         <div className="w-full md:w-1/2 text-amber-400 text-lg md:text-xl font-semibold leading-relaxed whitespace-pre-line">

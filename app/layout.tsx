@@ -1,17 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const raceSans = { variable: "--font-race-sans", fontFamily: "'Race Sans', sans-serif" };
+const raceSerif = { variable: "--font-race-serif", fontFamily: "'Race Serif', serif" };
 
 export const metadata: Metadata = {
   title: "VIBEUP",
@@ -27,11 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${raceSans.variable} ${raceSerif.variable} antialiased bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 py-16 text-amber-200`}
       >
         <Navbar />
         <div className="pt-16">
-          {children}
+          <div className="text-amber-400">{children}</div>
         </div>
       </body>
     </html>

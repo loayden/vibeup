@@ -18,6 +18,11 @@ import {
   FaPhoneAlt,
   FaMapMarkerAlt,
   FaClock as FaClockIcon,
+  FaStar,
+   FaUtensils,
+   FaMusic,
+    FaClipboardList,
+     FaUsers 
 } from "react-icons/fa";
 import { FaPersonDress } from "react-icons/fa6";
 import { supabase } from "@/lib/supabase";
@@ -92,7 +97,8 @@ export default function GalaPage() {
     ],
     []
   );
-
+{/* Divider */}
+<div className="border-t border-amber-500/30 my-12"></div>
   // Subscription flow: enhanced, with inline feedback
   const subscribe = async (): Promise<void> => {
     setSubStatus(null);
@@ -112,6 +118,8 @@ export default function GalaPage() {
       setSubStatus("Subscription failed. Please try again.");
     }
   };
+  {/* Divider */}
+<div className="border-t border-amber-500/30 my-12"></div>
 
   // Ticket reservation: prompt-free, linkable via email input
   const startCheckout = async (ticketId: string) => {
@@ -141,7 +149,7 @@ export default function GalaPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+    <div className="min-h-screen bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 text-neutral-100 font-sans">
       <div>
         <audio ref={audioRef} autoPlay loop preload="auto">
           <source src="/luxury-ambient.mp3" type="audio/mpeg" />
@@ -169,47 +177,75 @@ export default function GalaPage() {
       </div>
       {/* SEO: metadata is exported via `export const metadata` for the App Router */}
 
-      {/* HERO */}
-      <section 
-        className="relative h-[95vh] overflow-hidden bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/gala-hero.jpg')",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/80" />
-        <div className="relative z-10 flex h-full items-center justify-center">
-          <div className="mx-auto max-w-4xl px-6 text-center">
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-5xl md:text-7xl font-extrabold tracking-tight text-white drop-shadow-lg">
-              New Year's Gala 2026
-            </motion.h1>
-            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mt-4 text-xl md:text-2xl text-amber-300 drop-shadow-md">
-              Black & Gold Gala Dinner Party
-            </motion.p>
-            <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="mt-2 text-lg text-amber-400 font-semibold drop-shadow-md">
-              Featuring Abdelkarim Hamdan & Sherine Zaza
-            </motion.p>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <Link href="/checkout" className="inline-block">
-                <Button size="lg" className="rounded-2xl bg-amber-500 text-black hover:bg-amber-400 font-bold">Buy Tickets Now</Button>
-              </Link>
-              <Link href="/about" className="inline-block">
-              <Button size="lg" variant="outline" className="rounded-2xl border-amber-400 text-amber-400 hover:bg-amber-400/10">Learn More</Button>
-              </Link>
-            </motion.div>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }} className="mt-8 flex items-center justify-center gap-4 text-sm">
-              <Clock className="h-4 w-4 text-amber-400" />
-              <span className="text-amber-100">{d}d {h}h {m}m {s}s until doors open</span>
-            </motion.div>
+      {/* HERO SECTION */}
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg')` }}
+        >
+          {/* Luxury overlay: deep purple-black gradient with gold shimmer */}
+         <div className="absolute inset-0 bg-black/60" />
+        </div>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-amber-600/20 via-amber-400/10 to-amber-900/20 border border-amber-500/40 rounded-full mb-8 backdrop-blur-md shadow-lg shadow-amber-400/10">
+            <Star className="w-5 h-5 text-amber-400 drop-shadow-glow" />
+            <span className="text-amber-200 text-sm font-semibold tracking-widest uppercase" style={{ letterSpacing: '0.12em' }}>Limited Tickets Available</span>
+          </div>
+          <h1 className="text-[2.8rem] md:text-7xl lg:text-8xl font-extrabold mb-8 leading-tight tracking-widest drop-shadow-[0_4px_32px_rgba(255,215,64,0.3)] uppercase" style={{letterSpacing:'0.11em', textShadow: '0 0 16px #ffd70099, 0 2px 8px #000'}}>
+            <span className="block text-amber-400 text-[1.3em] leading-tight font-black tracking-wider uppercase drop-shadow-glow" style={{letterSpacing:'0.13em', textShadow: '0 0 32px #ffb30099, 0 2px 8px #000'}}>New Year's Gala 2026</span>
+            <span className="block text-white mt-2 text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-wider drop-shadow-[0_4px_32px_rgba(255,255,255,0.08)] uppercase" style={{letterSpacing:'0.1em'}}>Black &amp; Gold Gala Dinner</span>
+            <span className="block mt-4 text-xl md:text-2xl text-amber-200 font-semibold tracking-wider uppercase" style={{letterSpacing:'0.08em', textShadow: '0 0 8px #ffd70055'}}>
+              Featuring <span className="inline-flex items-center gap-2"><Music className="inline-block text-amber-400 drop-shadow-glow" /> Abdelkarim Hamdan</span> &amp; <span className="inline-flex items-center gap-2"><Music className="inline-block text-amber-400 drop-shadow-glow" /> Sherine Zaza</span>
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-amber-100/90 mb-8 max-w-3xl mx-auto leading-relaxed font-medium drop-shadow-[0_2px_8px_rgba(255,215,64,0.13)]">
+            A Black-Tie Gala with Five-Star Dining, Live Entertainment, DJ, and VIP Experience at Hilton Los Angeles
+          </p>
+          <div className="mb-12 flex gap-4 justify-center items-center">
+            {/* Countdown Blocks */}
+            {[
+              { label: "days", value: d },
+              { label: "hours", value: h },
+              { label: "minutes", value: m },
+              { label: "seconds", value: s },
+            ].map((t) => (
+              <div key={t.label} className="flex flex-col items-center">
+                <div className="bg-gradient-to-br from-[#fbbf24] via-[#eab308] to-[#b45309] rounded-lg px-4 py-3 min-w-[80px] shadow-xl border border-amber-400/70 transition-all duration-200 hover:scale-105 hover:shadow-amber-400/60" style={{ boxShadow: '0 0 24px 0 #ffd70044, 0 2px 8px #0008' }}>
+                  <div className="text-3xl md:text-4xl font-black text-black drop-shadow-[0_2px_8px_rgba(255,220,40,0.17)] tracking-widest uppercase">{t.value.toString().padStart(2, "0")}</div>
+                </div>
+                <div className="text-xs md:text-sm text-amber-200 mt-2 uppercase tracking-widest font-semibold">
+                  {t.label}
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Hero Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
+            <Link
+              href="/checkout"
+              className="px-10 py-4 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-400 text-black font-black text-lg rounded-xl shadow-2xl shadow-amber-400/30 hover:from-yellow-400 hover:to-amber-500 hover:shadow-amber-400/60 hover:scale-105 border-2 border-amber-300/60 transition-all duration-300 flex items-center gap-2 uppercase tracking-widest"
+              style={{ letterSpacing: '0.13em', textShadow: '0 0 12px #fffbe6a0' }}
+            >
+              <FaCreditCardIcon className="mr-2 h-5 w-5 drop-shadow-glow" /> Buy Tickets Now
+            </Link>
+            <Link
+              href="/about"
+              className="px-10 py-4 bg-white/10 backdrop-blur-sm text-white font-bold text-lg rounded-xl border-2 border-white/30 hover:bg-white/20 hover:text-amber-400 hover:scale-105 transition-all duration-300 flex items-center gap-2 uppercase tracking-widest shadow-lg"
+              style={{ letterSpacing: '0.11em', textShadow: '0 0 8px #fffbe6a0' }}
+            >
+              <FaClockIcon className="mr-2 h-5 w-5 drop-shadow-glow" /> Upcoming Events
+            </Link>
           </div>
         </div>
-      </section>
-
+      </div>
+{/* Divider */}
+<div className="border-t border-amber-500/30 my-12"></div>
       {/* DETAILS */}
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="grid gap-8 md:grid-cols-2">
-          <Card className="bg-neutral-900/70">
+          <Card className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 border border-amber-500/30 rounded-xl shadow-2xl shadow-black/40">
             <CardContent className="p-6 space-y-4">
-              <h2 className="text-2xl font-bold mb-2">Event Details</h2>
+              <h2 className="text-2xl font-bold mb-2 uppercase tracking-widest text-amber-400 drop-shadow-glow">Event Details</h2>
               <div className="flex items-start gap-3">
                 <FaClockIcon className="mt-1 text-amber-400" />
                 <div>
@@ -234,9 +270,9 @@ export default function GalaPage() {
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-neutral-900/70">
+          <Card className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 border border-amber-500/30 rounded-xl shadow-2xl shadow-black/40">
             <CardContent className="p-6 space-y-4">
-              <h3 className="text-2xl font-bold mb-2">Contact Us</h3>
+              <h3 className="text-2xl font-bold mb-2 uppercase tracking-widest text-amber-400 drop-shadow-glow">Contact Us</h3>
               <div className="flex items-start gap-3">
                 <FaEnvelope className="mt-1 text-amber-400" />
                 <div>
@@ -263,31 +299,67 @@ export default function GalaPage() {
           </Card>
         </div>
       </section>
-
+{/* Divider */}
+<div className="border-t border-amber-500/30 my-12"></div>
       {/* SCHEDULE */}
-      <section className="bg-neutral-900/50 py-16">
+      <section className="py-16">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="mb-6 text-2xl font-bold">Evening Schedule</h2>
+          <h2 className="mb-6 text-2xl font-bold uppercase tracking-widest text-amber-400 drop-shadow-glow">Evening Schedule</h2>
           <div className="grid gap-4 md:grid-cols-4">
             {[
-              { id: "door-open", time: "8:30 PM", event: "🚪 Door Open" },
-              { id: "dinner-concert", time: "10:00 PM", event: "🍽️ Dinner & Concert" },
-              { id: "countdown", time: "11:45 PM", event: "⏰ Midnight Countdown" },
-              { id: "event-ends", time: "2:00 AM", event: "🎉 Event Ends" }
+              {
+                id: "door-open",
+                time: "8:30 PM",
+                event: (
+                  <>
+                    <FaMapMarkerAlt className="inline-block text-amber-400 mr-2 mb-1 drop-shadow-glow" /> Door Open
+                  </>
+                ),
+              },
+              {
+                id: "dinner-concert",
+                time: "10:00 PM",
+                event: (
+                  <>
+                    <FaPersonDress className="inline-block text-amber-400 mr-2 mb-1 drop-shadow-glow" /> Dinner &amp; Concert
+                  </>
+                ),
+              },
+              {
+                id: "countdown",
+                time: "11:45 PM",
+                event: (
+                  <>
+                    <FaClockIcon className="inline-block text-amber-400 mr-2 mb-1 drop-shadow-glow" /> Midnight Countdown
+                  </>
+                ),
+              },
+              {
+                id: "event-ends",
+                time: "2:00 AM",
+                event: (
+                  <>
+                    <Star className="inline-block text-amber-400 mr-2 mb-1 drop-shadow-glow" /> Event Ends
+                  </>
+                ),
+              },
             ].map((t) => (
-              <Card key={t.id} className="bg-neutral-950"><CardContent className="p-4 text-center">
-                <p className="text-lg font-semibold text-amber-400">{t.time}</p>
-                <p className="text-sm mt-2">{t.event}</p>
-              </CardContent></Card>
+              <Card key={t.id} className="bg-gradient-to-br from-[#1a0730]/90 to-neutral-950 border border-amber-500/20 rounded-xl shadow-xl shadow-black/40 hover:scale-105 hover:shadow-amber-400/30 transition-all duration-200">
+                <CardContent className="p-4 text-center">
+                  <p className="text-lg font-extrabold text-amber-400 tracking-widest uppercase drop-shadow-glow">{t.time}</p>
+                  <p className="text-sm mt-2 font-semibold text-amber-100">{t.event}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
-
+{/* Divider */}
+<div className="border-t border-amber-500/30 my-12"></div>
       {/* PRICING */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="mb-2 text-3xl font-bold text-center">Seating Chart & Pricing</h2>
-        <p className="text-center text-neutral-400 mb-12">Choose your perfect seating location</p>
+        <h2 className="mb-2 text-3xl font-bold text-center uppercase tracking-widest text-amber-400 drop-shadow-glow">Seating Chart & Pricing</h2>
+        <p className="text-center text-amber-200 mb-12 font-medium">Choose your perfect seating location</p>
         <div className="flex flex-col items-center mb-8">
           <div className="flex gap-3 w-full max-w-md mb-4">
             <Input
@@ -302,78 +374,88 @@ export default function GalaPage() {
           )}
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {tickets.map((t) => (
-            <Card
-              key={t.id}
-              className="relative bg-gradient-to-br from-neutral-900 to-neutral-950 border border-amber-500/30 hover:border-amber-500/60 transition-all hover:shadow-lg hover:shadow-amber-500/20"
-            >
-              <CardContent className="p-6">
-                {t.badge && (
-                  <Badge className="absolute right-4 top-4 bg-amber-500 text-black text-xs">
-                    {t.badge}
-                  </Badge>
-                )}
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-4xl">{t.color}</span>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">{t.name}</h3>
-                    {t.id === "group" && (
-                      <p className="text-xs text-neutral-400">4 or more people</p>
-                    )}
-                  </div>
-                </div>
-                <div className="border-t border-neutral-700 pt-4 mb-4">
-                  <p className="text-3xl font-extrabold text-amber-400">
-                    ${t.price.toFixed(2)}
-                  </p>
-                  <p className="text-xs text-neutral-500 mt-1">Per person</p>
-                </div>
-                <ul className="space-y-2 text-sm mb-6">
-                  <li className="flex items-center gap-2 text-neutral-300">
-                    <Check className="h-4 w-4 text-amber-400" /> Reserved Seating
-                  </li>
-                  <li className="flex items-center gap-2 text-neutral-300">
-                    <Check className="h-4 w-4 text-amber-400" /> Full Event Access
-                  </li>
-                  <li className="flex items-center gap-2 text-neutral-300">
-                    <Check className="h-4 w-4 text-amber-400" /> Dinner & Show
-                  </li>
-                </ul>
-                <Button
-                  onClick={() => startCheckout(t.id)}
-                  className="w-full rounded-lg bg-amber-500 hover:bg-amber-600 text-black font-semibold"
-                  disabled={!email || !email.includes("@")}
-                >
-                  <CreditCard className="mr-2 h-4 w-4" /> Book Now
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+  {tickets.map((t) => (
+    <Card
+      key={t.id}
+      className="relative bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 border border-amber-500/30 rounded-xl shadow-2xl shadow-black/40 hover:shadow-amber-400/50 hover:scale-105 transition-all duration-300"
+    >
+      <CardContent className="p-6">
+        {/* Badge */}
+        {t.badge && (
+          <Badge
+            className="absolute right-4 top-4 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-600 text-black text-xs font-extrabold uppercase tracking-[0.11em] shadow-lg shadow-amber-300/40 border border-amber-200/60"
+            // boxShadow: '0 0 16px #ffd70055' is handled by shadow-lg + shadow-amber-300/40
+          >
+            {t.badge}
+          </Badge>
+        )}
+        {/* Ticket Header */}
+        <div className="flex items-center gap-3 mb-4">
+          <span
+            className={`w-6 h-6 rounded-full flex-shrink-0 shadow-lg`}
+            style={{
+              backgroundColor:
+                t.color === "🔴"
+                  ? "#F87171"
+                  : t.color === "🔵"
+                  ? "#60A5FA"
+                  : t.color === "🟢"
+                  ? "#34D399"
+                  : t.color === "🟡"
+                  ? "#FACC15"
+                  : t.color === "🟣"
+                  ? "#A78BFA"
+                  : "#6B7280",
+              boxShadow: '0 0 12px #ffd70066, 0 2px 8px #0008'
+            }}
+          ></span>
+          <div>
+            <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">{t.name}</h3>
+            {t.id === "group" && (
+              <p className="text-xs text-neutral-400">4 or more people</p>
+            )}
+          </div>
         </div>
-        <div className="mt-8 bg-neutral-900/50 rounded-lg p-6 border border-amber-500/20">
-          <h3 className="font-semibold text-amber-400 mb-3">💡 Pro Tips:</h3>
-          <ul className="space-y-2 text-sm text-neutral-300">
-            <li>
-              • <strong>VIP Red</strong> - Best view of the stage with priority service
-            </li>
-            <li>
-              • <strong>Blue &amp; Green</strong> - Great sightlines and premium experience
-            </li>
-            <li>
-              • <strong>Yellow &amp; Purple</strong> - Excellent value with full access
-            </li>
-            <li>
-              • <strong>Group Tickets</strong> - Save money when booking 4+ people together
-            </li>
-          </ul>
+
+        {/* Price */}
+        <div className="border-t border-amber-400/30 pt-4 mb-4">
+          <p className="text-3xl font-black text-amber-400 drop-shadow-glow">${t.price.toFixed(2)}</p>
+          <p className="text-xs text-neutral-400 mt-1">Per person</p>
         </div>
-      </section>
+
+        {/* Features */}
+        <ul className="space-y-2 text-sm mb-6 text-amber-100 font-semibold">
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-amber-400 drop-shadow-glow" /> Reserved Seating
+          </li>
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-amber-400 drop-shadow-glow" /> Full Event Access
+          </li>
+          <li className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-amber-400 drop-shadow-glow" /> Dinner & Show
+          </li>
+        </ul>
+
+        {/* Book Button */}
+        <Button
+          onClick={() => startCheckout(t.id)}
+          className="w-full rounded-lg bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-black font-black flex items-center justify-center gap-2 uppercase tracking-widest shadow-lg hover:shadow-amber-400/60 hover:scale-105 transition-all duration-300"
+          style={{ letterSpacing: '0.09em', textShadow: '0 0 8px #fffbe6a0' }}
+          disabled={!email || !email.includes("@")}
+        >
+          <CreditCard className="h-4 w-4 drop-shadow-glow" /> Book Now
+        </Button>
+      </CardContent>
+    </Card>
+  ))}
+      </div>
+</section>
 
       {/* EMAIL */}
-      <section className="bg-gradient-to-r from-amber-950/50 to-neutral-950 py-16 border-y border-amber-500/20">
+      <section className="py-16 border-y border-amber-500/20">
         <div className="mx-auto max-w-2xl px-6 text-center">
-          <h2 className="text-3xl font-bold mb-2">Stay Updated</h2>
-          <p className="text-neutral-400 mb-8">
+          <h2 className="text-3xl font-bold mb-2 uppercase tracking-widest text-amber-400 drop-shadow-glow">Stay Updated</h2>
+          <p className="text-amber-200 mb-8 font-medium">
             Get exclusive updates, reminders, and special offers for the gala
           </p>
           <div className="flex gap-3 flex-col sm:flex-row sm:items-center sm:justify-center">
@@ -381,10 +463,11 @@ export default function GalaPage() {
               placeholder="Enter your email address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="bg-neutral-900 border-neutral-700 text-white placeholder:text-neutral-500 sm:max-w-sm"
+              className="bg-neutral-900 border-amber-700 text-white placeholder:text-neutral-500 sm:max-w-sm"
             />
             <Button
-              className="bg-amber-500 hover:bg-amber-600 text-black font-semibold min-w-fit"
+              className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-black font-black min-w-fit uppercase tracking-widest shadow-lg hover:shadow-amber-400/60 hover:scale-105 transition-all duration-300"
+              style={{ letterSpacing: '0.09em', textShadow: '0 0 8px #fffbe6a0' }}
               onClick={subscribe}
               disabled={!email || !email.includes("@")}
             >
@@ -396,247 +479,321 @@ export default function GalaPage() {
               {subStatus}
             </p>
           )}
-          <p className="text-xs text-neutral-500 mt-4">
+          <p className="text-xs text-neutral-400 mt-4">
             We respect your privacy. Unsubscribe at any time.
           </p>
         </div>
       </section>
 
+<div className="border-t border-amber-500/30 my-12"></div>
       {/* PERFORMERS */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="mb-8 text-3xl font-bold text-center">Featuring Exceptional Artists</h2>
+        <h2 className="mb-8 text-3xl font-bold text-center uppercase tracking-widest text-amber-400 drop-shadow-glow">Featuring Exceptional Artists</h2>
         <div className="grid gap-8 md:grid-cols-2">
-          <Card className="bg-neutral-900/70">
+          <Card className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 border border-amber-500/30 rounded-xl shadow-2xl shadow-black/40">
             <CardContent className="p-6">
-              <h3 className="text-2xl font-semibold mb-3 text-amber-400">✨ Abdelkarim Hamdan</h3>
-              <p className="text-neutral-300 mb-4">
+              <h3 className="text-2xl font-extrabold mb-3 text-amber-400 uppercase tracking-wider drop-shadow-glow">✨ Abdelkarim Hamdan</h3>
+              <p className="text-neutral-200 mb-4 font-medium">
                 One of the most beloved voices in the Arab world. With his warm tone, heartfelt emotion, and remarkable presence, he rose to fame from the Arab Idol stage and captured the hearts of millions.
               </p>
-              <p className="text-neutral-400 italic">
+              <p className="text-amber-200 italic">
                 "His voice carries the soul of Damascus, the beauty of Syria, and the timeless spirit of Arabic music. A performance you will feel… not just hear."
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-neutral-900/70">
+          <Card className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 border border-amber-500/30 rounded-xl shadow-2xl shadow-black/40">
             <CardContent className="p-6">
-              <h3 className="text-2xl font-semibold mb-3 text-amber-400">✨ Sherine Zaza</h3>
-              <p className="text-neutral-300 mb-4">
+              <h3 className="text-2xl font-extrabold mb-3 text-amber-400 uppercase tracking-wider drop-shadow-glow">✨ Sherine Zaza</h3>
+              <p className="text-neutral-200 mb-4 font-medium">
                 A celebrated vocalist known for her graceful presence and soulful voice. She will open tonight's gala with a powerful rendition of the National Anthem.
               </p>
-              <p className="text-neutral-400">
+              <p className="text-amber-200">
                 Accompanied by our orchestra ensemble to set the perfect tone for this unforgettable evening.
               </p>
             </CardContent>
           </Card>
         </div>
       </section>
-
+{/* Divider */}
+<div className="border-t border-amber-500/30 my-12"></div>
       {/* SOCIAL PROOF & CTA */}
       <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="mb-12 text-3xl font-bold text-center">Why Attend?</h2>
+        <h2 className="mb-12 text-3xl font-bold text-center uppercase tracking-widest text-amber-400 drop-shadow-glow">Why Attend?</h2>
         <div className="grid gap-6 md:grid-cols-3">
-          <Card className="bg-gradient-to-br from-neutral-900 to-neutral-950 border border-amber-500/20"><CardContent className="p-6 text-center">
-            <p className="text-4xl mb-4">✨</p>
-            <p className="font-semibold text-lg mb-2">World-Class Entertainment</p>
-            <p className="text-sm text-neutral-400">Featuring renowned Arab artists and live orchestra</p>
-          </CardContent></Card>
-          <Card className="bg-gradient-to-br from-neutral-900 to-neutral-950 border border-amber-500/20"><CardContent className="p-6 text-center">
-            <p className="text-4xl mb-4">🍽️</p>
-            <p className="font-semibold text-lg mb-2">Five-Star Dining</p>
-            <p className="text-sm text-neutral-400">Exquisite gourmet menu curated by Hilton chefs</p>
-          </CardContent></Card>
-          <Card className="bg-gradient-to-br from-neutral-900 to-neutral-950 border border-amber-500/20"><CardContent className="p-6 text-center">
-            <p className="text-4xl mb-4">🎉</p>
-            <p className="font-semibold text-lg mb-2">Unforgettable Celebration</p>
-            <p className="text-sm text-neutral-400">Prime New Year countdown with luxury atmosphere</p>
-          </CardContent></Card>
+          <Card className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-950 border border-amber-500/20 rounded-xl shadow-xl shadow-black/40 hover:scale-105 hover:shadow-amber-400/30 transition-all duration-200">
+            <CardContent className="p-6 text-center">
+              <Star className="text-amber-400 text-4xl mb-4 mx-auto drop-shadow-glow" />
+              <p className="font-extrabold text-lg mb-2 uppercase tracking-widest text-amber-100">World-Class Entertainment</p>
+              <p className="text-sm text-amber-200">Featuring renowned Arab artists and live orchestra</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-950 border border-amber-500/20 rounded-xl shadow-xl shadow-black/40 hover:scale-105 hover:shadow-amber-400/30 transition-all duration-200">
+            <CardContent className="p-6 text-center">
+              <Coffee className="text-amber-400 text-4xl mb-4 mx-auto drop-shadow-glow" />
+              <p className="font-extrabold text-lg mb-2 uppercase tracking-widest text-amber-100">Five-Star Dining</p>
+              <p className="text-sm text-amber-200">Exquisite gourmet menu curated by Hilton chefs</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-950 border border-amber-500/20 rounded-xl shadow-xl shadow-black/40 hover:scale-105 hover:shadow-amber-400/30 transition-all duration-200">
+            <CardContent className="p-6 text-center">
+              <Users className="text-amber-400 text-4xl mb-4 mx-auto drop-shadow-glow" />
+              <p className="font-extrabold text-lg mb-2 uppercase tracking-widest text-amber-100">Unforgettable Celebration</p>
+              <p className="text-sm text-amber-200">Prime New Year countdown with luxury atmosphere</p>
+            </CardContent>
+          </Card>
         </div>
       </section>
 {/* ABOUT & INFO */}
-      <section className="mx-auto max-w-6xl px-6 py-20 space-y-10">
-        <h2 className="text-3xl font-bold">About This Gala</h2>
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-2xl font-semibold text-amber-400 mb-3">🎉 A Night of Elegance & Arabic Spirit</h3>
-            <p className="text-neutral-300">
-              A night of elegance, luxury, and unforgettable celebration as we welcome 2026 in a breathtaking Black & Gold New Year Gala Dinner — an extraordinary evening designed to bring together the Arab community in California for a celebration unlike any other.
-            </p>
-          </div>
-          
-          <div>
-            <h3 className="text-2xl font-semibold text-amber-400 mb-3">✨ The Venue</h3>
-            <p className="text-neutral-300">
-              Hosted inside a Sierra ballroom, transformed with lavish black-and-gold décor, a magnificent catwalk stage, stunning LED screens, and immersive lighting, this gala promises a world-class experience from the moment you enter. With its massive hall and glamorous design, it brings together the Arab community for an unforgettable night of unity, joy, and new beginnings.
-            </p>
-          </div>
+{/* Divider */}
+<div className="border-t border-amber-500/30 my-12"></div>
+      {/* ABOUT & INFO */}
+<section className="mx-auto max-w-6xl px-6 py-20 space-y-12">
+  <h2 className="text-3xl font-bold text-amber-400 uppercase mb-8 text-center tracking-widest drop-shadow-glow">About This Gala</h2>
 
-          <div>
-            <h3 className="text-2xl font-semibold text-amber-400 mb-3">🍽️ Luxury Gala Dinner by Hilton</h3>
-            <p className="text-neutral-300">
-              Guests will enjoy an exquisite five-star dinner, exclusively curated by Hilton chefs — a premium dining experience featuring gourmet selections, elegant presentation, and impeccable service perfectly matching the event's black-and-gold luxury atmosphere.
-            </p>
-          </div>
+  <div className="grid gap-8 md:grid-cols-2">
+    {/* Night of Elegance */}
+    <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 p-6 rounded-xl shadow-2xl border border-amber-500/30">
+      <div className="flex items-center gap-2 mb-4">
+        <FaStar className="text-amber-400 w-6 h-6" />
+        <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">A Night of Elegance & Cultural Spirit</h3>
+      </div>
+      <p className="text-amber-100 leading-relaxed font-medium">
+        Experience an unforgettable evening of sophistication and luxury as we welcome 2026 with a Black & Gold Gala Dinner. 
+        This extraordinary event brings together the Arab community in California for a celebration of unity, culture, and refinement.
+      </p>
+    </div>
 
-          <div>
-            <h3 className="text-2xl font-semibold text-amber-400 mb-3">🎤 World-Class Entertainment</h3>
-            <p className="text-neutral-300">
-              Featuring two exceptional stars, live music, professional orchestra, dancing, and a vibrant atmosphere designed to celebrate the new year with pride and joy. The evening combines cultural artistry with modern entertainment.
-            </p>
-          </div>
+    {/* Venue */}
+    <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 p-6 rounded-xl shadow-2xl border border-amber-500/30">
+      <div className="flex items-center gap-2 mb-4">
+        <FaMapMarkerAlt className="text-amber-400 w-6 h-6" />
+        <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">The Venue</h3>
+      </div>
+      <p className="text-amber-100 leading-relaxed font-medium">
+        The gala will be held in a grand Sierra ballroom with lavish black-and-gold décor, a state-of-the-art catwalk stage, 
+        stunning LED displays, and immersive lighting. Every detail is curated to deliver a world-class experience.
+      </p>
+    </div>
 
-          <div>
-            <h3 className="text-2xl font-semibold text-amber-400 mb-3">📋 How to Reserve Your Position</h3>
-            <ol className="space-y-2 text-neutral-300 list-decimal list-inside">
-              <li>Choose your ticket(s) and complete the checkout</li>
-              <li>Open the confirmation email you receive after purchase</li>
-              <li>Click the reservation link to select your preferred position (if available)</li>
-            </ol>
-          </div>
+    {/* Luxury Dinner */}
+    <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 p-6 rounded-xl shadow-2xl border border-amber-500/30">
+      <div className="flex items-center gap-2 mb-4">
+        <FaUtensils className="text-amber-400 w-6 h-6" />
+        <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">Luxury Gala Dinner by Hilton</h3>
+      </div>
+      <p className="text-amber-100 leading-relaxed font-medium">
+        Guests will enjoy an exquisite five-star dinner prepared by Hilton chefs. 
+        Each dish combines gourmet quality, elegant presentation, and impeccable service to complement the event's luxurious atmosphere.
+      </p>
+    </div>
 
-          <div>
-            <h3 className="text-2xl font-semibold text-amber-400 mb-3">🎯 Event Organizer</h3>
-            <p className="text-neutral-300 mb-2">
-              Presented by <strong>California Nights Entertainment</strong>
-            </p>
-            <p className="text-sm text-neutral-400">
-              Contact: vibesup.event@gmail.com | +1 (949) 247-9309 | +1 (917) 818-7850
-            </p>
-          </div>
-        </div>
-      </section>
+    {/* Entertainment */}
+    <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 p-6 rounded-xl shadow-2xl border border-amber-500/30">
+      <div className="flex items-center gap-2 mb-4">
+        <FaMusic className="text-amber-400 w-6 h-6" />
+        <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">World-Class Entertainment</h3>
+      </div>
+      <p className="text-amber-100 leading-relaxed font-medium">
+        The evening features top-tier live performances, professional orchestra, and curated music, 
+        creating a dynamic atmosphere that celebrates both cultural artistry and modern entertainment.
+      </p>
+    </div>
 
-      {/* Tabs: rendered client-side only to safely set initial tab without hydration issues */}
-      {mounted && (
-        <Tabs>
-          <TabsList>
-            <TabsTrigger value="details"></TabsTrigger>
-            <TabsTrigger value="pricing"></TabsTrigger>
-          </TabsList>
+    {/* Reservation */}
+    <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 p-6 rounded-xl shadow-2xl border border-amber-500/30">
+      <div className="flex items-center gap-2 mb-4">
+        <FaClipboardList className="text-amber-400 w-6 h-6" />
+        <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">How to Reserve Your Position</h3>
+      </div>
+      <ol className="list-decimal list-inside text-amber-100 font-medium space-y-1">
+        <li>Choose your ticket(s) and complete the checkout.</li>
+        <li>Open the confirmation email received after purchase.</li>
+        <li>Click the reservation link to select your preferred seating (if available).</li>
+      </ol>
+    </div>
 
-          <TabsContent value="details">
-            <section className="mx-auto max-w-6xl px-6 py-20 space-y-10">
-              <h2 className="text-3xl font-bold">The Ultimate New Year’s Eve Gala Experience</h2>
-              <p>Welcome to the New Year’s Eve Gala, a meticulously curated black‑tie celebration designed for guests who expect nothing less than excellence. This is not simply an event; it is a complete luxury experience that blends refined aesthetics, world‑class entertainment, gourmet dining, and seamless hospitality into one unforgettable night. From the moment you arrive, every detail has been considered to ensure comfort, elegance, excitement, and exclusivity.</p>
-              <p>The evening begins with a grand welcome reception where ambient lighting, sophisticated décor, and carefully selected music establish an atmosphere of celebration and refinement. Professional hosts guide guests through a visually striking venue that balances modern luxury with timeless glamour, ensuring a seamless and memorable arrival.</p>
-              <p>Throughout the night, guests enjoy a carefully paced program that encourages both social connection and personal enjoyment. A gourmet gala dinner, prepared by experienced chefs, features premium ingredients and elegant presentation. Each course is designed to complement the evening’s rhythm, allowing guests to dine comfortably before transitioning to live entertainment and dancing.</p>
-              <p>Music is central to the gala experience. A professional DJ curates soundscapes that evolve from refined lounge tones to energetic dance tracks as midnight approaches. Advanced lighting, stage design, and acoustics ensure an immersive experience while preserving comfort and conversation.</p>
-              <p>As midnight approaches, anticipation builds. The countdown sequence combines synchronized lighting, sound, and visual effects to create a collective moment of excitement. When the New Year arrives, guests celebrate together in a setting designed to feel both grand and personal.</p>
-              <h3 className="text-2xl font-semibold">VIP Experience</h3>
-              <p>VIP ticket holders enjoy reserved seating, exclusive lounge access, priority service, and premium bottle options. The VIP lounge provides a refined environment for networking, celebration, and relaxation, supported by dedicated staff throughout the night.</p>
-              <p>VIP access is intentionally limited to preserve comfort and exclusivity, ensuring a superior experience for those who choose this elevated level of access.</p>
-              <h3 className="text-2xl font-semibold">Professional Organization</h3>
-              <p>The gala is managed by a seasoned production team with extensive experience in high‑end events. From ticket purchase to event check‑in, every interaction is designed to be secure, intuitive, and efficient. Digital ticketing with QR codes allows for fast, contactless entry.</p>
-              <p>Automated email confirmations and reminders ensure guests remain informed and confident leading up to the event. On‑site staff are trained to assist guests promptly and professionally.</p>
-              <h3 className="text-2xl font-semibold">Technology & Security</h3>
-              <p>Payments are securely processed via Stripe, supporting credit cards, Apple Pay, and Google Pay. All transactions are encrypted and handled according to industry best practices, ensuring privacy and security.</p>
-              <p>User accounts allow guests to manage tickets, review purchase history, and access QR codes at any time. The platform is optimized for speed, reliability, and mobile performance.</p>
-              <h3 className="text-2xl font-semibold">Dress Code & Atmosphere</h3>
-              <p>The black‑tie dress code elevates the visual harmony of the event and enhances the sense of occasion. Guests are encouraged to express elegance and confidence through formal attire, contributing to a cohesive and refined atmosphere.</p>
-              <p>The gala fosters a respectful and welcoming environment where guests can connect, celebrate, and create lasting memories.</p>
-              <h3 className="text-2xl font-semibold">Transparency & Trust</h3>
-              <p>Clear refund and cancellation policies are communicated in advance. In the event of significant changes, guests are promptly informed and supported with fair solutions.</p>
-              <p>Our commitment to transparency, professionalism, and guest satisfaction defines every aspect of the New Year’s Eve Gala experience.</p>
-              <h3 className="text-2xl font-semibold">A Celebration Worth Remembering</h3>
-              <p>This gala stands apart through its attention to detail, quality, and atmosphere. It is a celebration designed not only to entertain, but to inspire as guests welcome the New Year with intention, elegance, and optimism.</p>
-            </section>
-          </TabsContent>
+    {/* Event Organizer */}
+    <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 p-6 rounded-xl shadow-2xl border border-amber-500/30">
+      <div className="flex items-center gap-2 mb-4">
+        <FaUsers className="text-amber-400 w-6 h-6" />
+        <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">Event Organizer</h3>
+      </div>
+      <p className="text-amber-100 font-medium">
+        Presented by <strong>California Nights Entertainment</strong>.
+      </p>
+      <p className="text-sm text-neutral-400 mt-2">
+        Contact: vibesup.event@gmail.com | +1 (949) 247-9309 | +1 (917) 818-7850
+      </p>
+    </div>
+  </div>
 
-          <TabsContent value="pricing">
-            {/* pricing content here */}
-            <section className="mx-auto max-w-6xl px-6 py-20">
-              <h2 className="text-3xl font-bold mb-4">Pricing Information</h2>
-              <p>See the "Seating Chart & Pricing" section above for details on ticket tiers and pricing. Group discounts and VIP options available. For further questions, please contact us.</p>
-            </section>
-          </TabsContent>
-        </Tabs>
-      )}
-      
+  {/* Ultimate Gala Experience */}
+  <div className="mt-16 p-8 bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 rounded-xl shadow-2xl border border-amber-500/30">
+    <h2 className="text-3xl font-bold text-amber-400 uppercase mb-6 text-center tracking-widest drop-shadow-glow">The Ultimate New Year’s Eve Gala Experience</h2>
+    <div className="space-y-4 text-amber-100 leading-relaxed font-medium">
+      <p>
+        The New Year’s Eve Gala is a meticulously curated black-tie celebration designed for guests seeking an exceptional experience. 
+        Every element, from ambiance to service, is crafted to ensure comfort, elegance, and exclusivity.
+      </p>
+      <p>
+        Guests will enjoy a gourmet gala dinner prepared by renowned chefs, followed by world-class entertainment and a live DJ. 
+        The program is carefully paced to balance social connection and personal enjoyment.
+      </p>
+      <p>
+        VIP ticket holders enjoy reserved seating, exclusive lounge access, priority service, and premium bottle options. 
+        VIP access is intentionally limited to maintain exclusivity and comfort.
+      </p>
+      <p>
+        Advanced lighting, acoustics, and synchronized countdown effects enhance the midnight celebration, creating an unforgettable collective moment for all attendees.
+      </p>
+      <p>
+        The black-tie dress code elevates the event atmosphere, fostering elegance, sophistication, and memorable experiences.
+      </p>
+      <p>
+        Transparency and professionalism define the event, ensuring guests are well-informed and supported throughout the evening.
+      </p>
+    </div>
+  </div>
+</section>
+
       {/* FOOTER */}
-      <footer className="border-t border-neutral-800 bg-neutral-950/80 backdrop-blur-sm">
+      <footer className="border-t border-amber-900/40 bg-gradient-to-br from-black/95 via-[#1a0730]/90 to-[#2d1b09]/95 backdrop-blur-md">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-8 md:grid-cols-4 mb-8">
             {/* About */}
             <div>
-              <h3 className="font-bold text-lg text-amber-400 mb-4">About Gala</h3>
-              <p className="text-sm text-neutral-400">Experience the most luxurious New Year celebration with world-class entertainment and exquisite dining.</p>
+              <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 rounded-xl shadow-2xl border border-amber-500/20 p-6 h-full flex flex-col">
+                <h3 className="font-extrabold text-lg text-amber-400 mb-4 tracking-widest uppercase drop-shadow-glow">About Gala</h3>
+                <p className="text-sm text-amber-200 flex-1">Experience the most luxurious New Year celebration with world-class entertainment and exquisite dining.</p>
+              </div>
             </div>
-            
             {/* Quick Links */}
             <div>
-              <h3 className="font-bold text-lg text-amber-400 mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-sm text-neutral-400">
-                <li><Link href="/" className="hover:text-amber-400 transition">Home</Link></li>
-                <li><Link href="/checkout" className="hover:text-amber-400 transition">Tickets</Link></li>
-                <li><a href="/upcoming-events" className="hover:text-amber-400 transition">memories</a></li>
-                <li><a href="/contact-us" className="hover:text-amber-400 transition">Contact</a></li>
-              </ul>
+              <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 rounded-xl shadow-2xl border border-amber-500/20 p-6 h-full flex flex-col">
+                <h3 className="font-extrabold text-lg text-amber-400 mb-4 tracking-widest uppercase drop-shadow-glow">Quick Links</h3>
+                <ul className="space-y-2 text-sm text-amber-200 flex-1">
+                  <li>
+                    <Link href="/" className="flex items-center gap-2 hover:text-amber-400 transition group font-semibold">
+                      <FaStar className="text-amber-400 group-hover:scale-110 transition drop-shadow-glow" /> Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/checkout" className="flex items-center gap-2 hover:text-amber-400 transition group font-semibold">
+                      <FaCreditCardIcon className="text-amber-400 group-hover:scale-110 transition drop-shadow-glow" /> Tickets
+                    </Link>
+                  </li>
+                  <li>
+                    <a href="/upcoming-events" className="flex items-center gap-2 hover:text-amber-400 transition group font-semibold">
+                      <FaClockIcon className="text-amber-400 group-hover:scale-110 transition drop-shadow-glow" /> Memories
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/contact-us" className="flex items-center gap-2 hover:text-amber-400 transition group font-semibold">
+                      <FaEnvelope className="text-amber-400 group-hover:scale-110 transition drop-shadow-glow" /> Contact
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            
             {/* Contact Info */}
             <div>
-              <h3 className="font-bold text-lg text-amber-400 mb-4">Contact</h3>
-              <ul className="space-y-2 text-sm text-neutral-400">
-                <li className="flex items-center gap-2">
-                  <span>📧</span>
-                  <a href="mailto:vibesup.event@gmail.com" className="hover:text-amber-400 transition">vibesup.event@gmail.com</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>📱</span>
-                  <a href="tel:+19492479309" className="hover:text-amber-400 transition">+1 (949) 247-9309</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>📱</span>
-                  <a href="tel:+19178187850" className="hover:text-amber-400 transition">+1 (917) 818-7850</a>
-                </li>
-              </ul>
+              <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 rounded-xl shadow-2xl border border-amber-500/20 p-6 h-full flex flex-col">
+                <h3 className="font-extrabold text-lg text-amber-400 mb-4 tracking-widest uppercase drop-shadow-glow">Contact</h3>
+                <ul className="space-y-2 text-sm text-amber-200 flex-1">
+                  <li className="flex items-center gap-2">
+                    <FaEnvelope className="text-amber-400 drop-shadow-glow" />
+                    <a href="mailto:vibesup.event@gmail.com" className="hover:text-amber-400 transition font-semibold">vibesup.event@gmail.com</a>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FaPhoneAlt className="text-amber-400 drop-shadow-glow" />
+                    <a href="tel:+19492479309" className="hover:text-amber-400 transition font-semibold">+1 (949) 247-9309</a>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <FaPhoneAlt className="text-amber-400 drop-shadow-glow" />
+                    <a href="tel:+19178187850" className="hover:text-amber-400 transition font-semibold">+1 (917) 818-7850</a>
+                  </li>
+                </ul>
+                <div className="mt-4 flex items-center gap-2 text-xs text-amber-400">
+                  <FaMapMarkerAlt className="text-amber-400 drop-shadow-glow" />
+                  <span>Hilton Los Angeles/Universal City</span>
+                </div>
+              </div>
             </div>
-            
             {/* Social Media */}
             <div>
-              <h3 className="font-bold text-lg text-amber-400 mb-4">Follow Us</h3>
-              <div className="flex gap-4 text-2xl">
-                <a href="https://wa.me/19492479309" target="_blank" rel="noopener noreferrer">
-                  <FaWhatsapp className="text-green-500 hover:scale-110 transition" />
-                </a>
-                <a href="https://www.facebook.com/vibeupevents" target="_blank" rel="noopener noreferrer">
-                  <FaFacebook className="text-blue-600 hover:scale-110 transition" />
-                </a>
-                <a href="https://www.instagram.com/vibeupevent/?__pwa=1" target="_blank" rel="noopener noreferrer">
-                  <FaInstagram className="text-pink-500 hover:scale-110 transition" />
-                </a>
-                <a href="https://www.tiktok.com/@vibesupevent" target="_blank" rel="noopener noreferrer">
-                  <FaTiktok className="text-white hover:scale-110 transition" />
-                </a>
+              <div className="bg-gradient-to-br from-[#1a0730]/80 to-neutral-900/90 rounded-xl shadow-2xl border border-amber-500/20 p-6 h-full flex flex-col">
+                <h3 className="font-extrabold text-lg text-amber-400 mb-4 tracking-widest uppercase drop-shadow-glow">Follow Us</h3>
+                <div className="flex gap-4 text-2xl mb-2">
+                  <a
+                    href="https://wa.me/19492479309"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:scale-110 transition"
+                    aria-label="Whatsapp"
+                  >
+                    <FaWhatsapp className="text-green-500 drop-shadow-glow" />
+                  </a>
+                  <a
+                    href="https://www.facebook.com/vibeupevents"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:scale-110 transition"
+                    aria-label="Facebook"
+                  >
+                    <FaFacebook className="text-blue-600 drop-shadow-glow" />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/vibeupevent/?__pwa=1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:scale-110 transition"
+                    aria-label="Instagram"
+                  >
+                    <FaInstagram className="text-pink-500 drop-shadow-glow" />
+                  </a>
+                  <a
+                    href="https://www.tiktok.com/@vibesupevent"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:scale-110 transition"
+                    aria-label="Tiktok"
+                  >
+                    <FaTiktok className="text-white drop-shadow-glow" />
+                  </a>
+                </div>
+                <p className="text-xs text-amber-200 mt-2">
+                  Stay updated with our latest news and behind-the-scenes content
+                </p>
               </div>
-              <p className="text-xs text-neutral-500 mt-4">Stay updated with our latest news and behind-the-scenes content</p>
             </div>
           </div>
-          
           {/* Divider */}
-          <div className="border-t border-neutral-800 pt-8">
+          <div className="border-t border-amber-900/40 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-sm text-neutral-500">© 2025 New Year's Gala 2026. All rights reserved.</p>
-              <div className="flex gap-6 text-sm text-neutral-500">
+              <p className="text-sm text-amber-100">
+                © 2025 New Year's Gala 2026. All rights reserved.
+              </p>
+              <div className="flex gap-6 text-sm text-amber-200">
                 <a href="https://policies.google.com/privacy?hl=en-US" className="hover:text-amber-400 transition">Privacy Policy</a>
                 <a href="https://policies.google.com/terms?hl=en-US" className="hover:text-amber-400 transition">Terms of Service</a>
                 <a href="https://policies.google.com/privacy?hl=en-US" className="hover:text-amber-400 transition">Refund Policy</a>
               </div>
             </div>
           </div>
-          
           {/* Event Organizer */}
-          <div className="mt-6 pt-6 border-t border-neutral-800 text-center text-xs text-neutral-600">
+          <div className="mt-6 pt-6 border-t border-amber-900/40 text-center text-xs text-amber-300">
             <p>
               Presented by{" "}
               <a
                 href="https://www.instagram.com/fr3_fdn/?__pwa=1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold"
+                className="font-extrabold"
               >
-                <span className="text-purple-500">FR</span>
+                <span className="text-purple-400">FR</span>
                 <span className="text-amber-400">ع</span>
               </a>
+              {" "} | California Nights Entertainment
             </p>
           </div>
         </div>
@@ -648,3 +805,10 @@ export default function GalaPage() {
 }
 
 
+
+      {/* GLOW/SHADOW TAILWIND OVERRIDES */}
+      <style jsx global>{`
+        .drop-shadow-glow {
+          text-shadow: 0 0 12px #ffd70099, 0 2px 8px #000a;
+        }
+      `}</style>

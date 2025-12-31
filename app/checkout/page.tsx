@@ -66,15 +66,15 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+    <div className="min-h-screen bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 py-16 text-amber-200">
       {/* HEADER */}
-      <header className="border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-amber-700 bg-black/80 sticky top-0 z-50">
         <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition">
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-5 w-5 text-amber-400" />
             <span className="font-semibold">Back to Home</span>
           </Link>
-          <h1 className="text-2xl font-bold">Book Your Tickets</h1>
+          <h1 className="text-2xl font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400">Book Your Tickets</h1>
           <div className="w-24"></div>
         </div>
       </header>
@@ -83,37 +83,37 @@ export default function CheckoutPage() {
         <div className="grid gap-8 lg:grid-cols-3">
           {/* TICKET SELECTION */}
           <div className="lg:col-span-2">
-            <h2 className="text-2xl font-bold mb-6">Select Your Seating</h2>
+            <h2 className="text-2xl font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400 mb-6">Select Your Seating</h2>
             <div className="grid gap-4 md:grid-cols-2">
               {TICKETS.map(ticket => (
                 <div
                   key={ticket.id}
                   onClick={() => setSelectedTicket(ticket.id)}
-                  className={`relative cursor-pointer transition-all border rounded-lg ${
+                  className={`relative cursor-pointer transition-all duration-300 border rounded-lg hover:scale-105 ${
                     selectedTicket === ticket.id
-                      ? "border-amber-500 border-2 shadow-lg shadow-amber-500/30 bg-gradient-to-br from-amber-950/50 to-neutral-900"
-                      : "border-neutral-700 hover:border-amber-500/50"
+                      ? "border-amber-500 border-2 bg-gradient-to-br from-amber-950/50 to-neutral-900"
+                      : "border-amber-500/50 hover:border-amber-500"
                   }`}
                 >
-                  <Card className="bg-transparent border-0">
+                  <Card className="bg-transparent border-0 shadow-none">
                     <CardContent className="p-6">
                       {ticket.badge && <Badge className="absolute right-4 top-4 bg-amber-500 text-black text-xs">{ticket.badge}</Badge>}
                       <div className="flex items-center gap-3 mb-3">
                         <span className="text-3xl">{ticket.color}</span>
                         <div>
-                          <h3 className="font-bold text-lg">{ticket.name}</h3>
+                          <h3 className="font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400 text-lg">{ticket.name}</h3>
                         </div>
                       </div>
-                    <p className="text-sm text-neutral-400 mb-4">{ticket.description}</p>
-                    <p className="text-2xl font-extrabold text-amber-400">${ticket.price.toFixed(2)}</p>
-                    {selectedTicket === ticket.id && (
-                      <div className="mt-3 flex items-center justify-center gap-2 text-amber-400 text-sm">
-                        <div className="h-2 w-2 rounded-full bg-amber-400"></div>
-                        Selected
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                      <p className="text-amber-200 leading-relaxed whitespace-pre-line mb-4">{ticket.description}</p>
+                      <p className="text-2xl font-extrabold text-amber-400">${ticket.price.toFixed(2)}</p>
+                      {selectedTicket === ticket.id && (
+                        <div className="mt-3 flex items-center justify-center gap-2 text-amber-400 text-sm">
+                          <div className="h-2 w-2 rounded-full bg-amber-400"></div>
+                          Selected
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
               ))}
             </div>
@@ -121,36 +121,36 @@ export default function CheckoutPage() {
 
           {/* ORDER SUMMARY */}
           <div>
-            <Card className="bg-gradient-to-b from-neutral-900 to-neutral-950 border-amber-500/30 sticky top-24">
+            <Card className="bg-gradient-to-b from-black/80 via-black/70 to-amber-900/70 border border-amber-500/70 shadow-none sticky top-24">
               <CardContent className="p-6">
-                <h3 className="text-xl font-bold mb-6">Order Summary</h3>
+                <h3 className="text-xl font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400 mb-6">Order Summary</h3>
 
                 {ticket ? (
                   <>
                     {/* TICKET INFO */}
-                    <div className="space-y-4 mb-6 pb-6 border-b border-neutral-700">
+                    <div className="space-y-4 mb-6 pb-6 border-b border-amber-700">
                       <div className="flex justify-between">
-                        <span className="text-neutral-400">Ticket Type</span>
-                        <span className="font-semibold flex items-center gap-2">{ticket.color} {ticket.name}</span>
+                        <span className="text-amber-200">Ticket Type</span>
+                        <span className="font-semibold flex items-center gap-2 text-amber-400">{ticket.color} {ticket.name}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-neutral-400">Price per ticket</span>
-                        <span className="font-semibold">${ticket.price.toFixed(2)}</span>
+                        <span className="text-amber-200">Price per ticket</span>
+                        <span className="font-semibold text-amber-400">${ticket.price.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-neutral-400">Quantity</span>
+                        <span className="text-amber-200">Quantity</span>
                         <div className="flex items-center gap-2">
-                          <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 rounded">-</button>
-                          <span className="w-8 text-center font-semibold">{quantity}</span>
-                          <button onClick={() => setQuantity(quantity + 1)} className="px-2 py-1 bg-neutral-800 hover:bg-neutral-700 rounded">+</button>
+                          <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-2 py-1 bg-black/70 hover:bg-black/50 rounded text-amber-400 font-bold transition hover:scale-105">-</button>
+                          <span className="w-8 text-center font-semibold text-amber-400">{quantity}</span>
+                          <button onClick={() => setQuantity(quantity + 1)} className="px-2 py-1 bg-black/70 hover:bg-black/50 rounded text-amber-400 font-bold transition hover:scale-105">+</button>
                         </div>
                       </div>
                     </div>
 
                     {/* TOTAL */}
-                    <div className="mb-6 pb-6 border-b border-neutral-700">
+                    <div className="mb-6 pb-6 border-b border-amber-700">
                       <div className="flex justify-between items-center">
-                        <span className="text-lg font-semibold">Total</span>
+                        <span className="text-lg font-extrabold text-amber-400">Total</span>
                         <span className="text-3xl font-extrabold text-amber-400">${total.toFixed(2)}</span>
                       </div>
                     </div>
@@ -158,29 +158,29 @@ export default function CheckoutPage() {
                     {/* FORM */}
                     <div className="space-y-3 mb-6">
                       <div>
-                        <label className="text-xs text-neutral-400 mb-1 block">Full Name</label>
+                        <label className="text-xs text-amber-200 mb-1 block">Full Name</label>
                         <Input
                           placeholder="John Doe"
                           value={name}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-                          className="bg-neutral-800 border-neutral-700"
+                          className="bg-black/70 border-amber-700 text-amber-200 placeholder-amber-400"
                         />
                       </div>
                       <div>
-                        <label className="text-xs text-neutral-400 mb-1 block">Email Address</label>
+                        <label className="text-xs text-amber-200 mb-1 block">Email Address</label>
                         <Input
                           placeholder="john@example.com"
                           type="email"
                           value={email}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                          className="bg-neutral-800 border-neutral-700"
+                          className="bg-black/70 border-amber-700 text-amber-200 placeholder-amber-400"
                         />
                       </div>
                     </div>
 
                     {/* STATUS MESSAGE */}
                     {status && (
-                      <p className="mb-4 text-center text-sm text-neutral-300 animate-pulse">
+                      <p className="mb-4 text-center text-sm text-amber-300 animate-pulse">
                         {status}
                       </p>
                     )}
@@ -189,10 +189,10 @@ export default function CheckoutPage() {
                     <Button
                       onClick={handleCheckout}
                       disabled={loading}
-                      className={`w-full font-bold text-lg py-3 transition ${
+                      className={`w-full font-extrabold text-lg py-3 transition bg-gradient-to-br from-amber-500 to-amber-600 text-black hover:shadow-lg hover:shadow-amber-500/40 hover:scale-105 ${
                         loading
-                          ? "bg-neutral-700 cursor-not-allowed"
-                          : "bg-amber-500 hover:bg-amber-600 text-black"
+                          ? "bg-neutral-700 cursor-not-allowed shadow-none hover:shadow-none hover:scale-100"
+                          : ""
                       }`}
                     >
                       {loading ? (
@@ -205,7 +205,7 @@ export default function CheckoutPage() {
                     </Button>
 
                     {/* EVENT INFO */}
-                    <div className="mt-6 space-y-3 pt-6 border-t border-neutral-700 text-xs text-neutral-400">
+                    <div className="mt-6 space-y-3 pt-6 border-t border-amber-700 text-xs text-amber-200">
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-amber-400" />
                         <span>Dec 31, 2025 • 8:30 PM</span>
@@ -217,17 +217,14 @@ export default function CheckoutPage() {
                     </div>
                   </>
                 ) : (
-                  <div className="text-center py-8 text-neutral-400">
-                    <p className="text-sm">Select a ticket to get started</p>
+                  <div className="text-center py-8 text-amber-400">
+                    <p className="text-sm leading-relaxed whitespace-pre-line">Select a ticket to get started</p>
                   </div>
                 )}
               </CardContent>
             </Card>
           </div>
         </div>
-
-       
-        
       </main>
     </div>
   )

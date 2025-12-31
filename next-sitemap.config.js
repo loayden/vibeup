@@ -1,9 +1,9 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'http://localhost:3000', // أو رابط موقعك الفعلي
+  siteUrl: 'https://vibeup.com', // غيرها لدومينك
   generateRobotsTxt: true,
-  // خيارات إضافية:
-  sitemapSize: 5000,
-  changefreq: 'daily',
+  sitemapSize: 7000,
+  changefreq: 'weekly',
   priority: 0.7,
+  exclude: ['/email'], // لو مش عايز صفحة الإيميل في السايت ماب
 };
