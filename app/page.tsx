@@ -73,6 +73,7 @@ export default function GalaPage() {
   const [promo, setPromo] = useState("");
   const [subStatus, setSubStatus] = useState<null | string>(null);
   const [reserveStatus, setReserveStatus] = useState<null | string>(null);
+  const [shakeKey, setShakeKey] = useState(0);
 
   const [mounted, setMounted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -363,7 +364,7 @@ export default function GalaPage() {
         <div className="flex flex-col items-center mb-8">
           <div className="flex gap-3 w-full max-w-md mb-4">
             <Input
-              placeholder="Enter your email to reserve"
+              placeholder="Enter your email to book your tickets"
               value={email}
               onChange={e => setEmail(e.target.value)}
               className="bg-neutral-900 border-neutral-700 text-white placeholder:text-neutral-500 flex-1"
@@ -438,12 +439,24 @@ export default function GalaPage() {
 
         {/* Book Button */}
         <Button
-          onClick={() => startCheckout(t.id)}
-          className="w-full rounded-lg bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-black font-black flex items-center justify-center gap-2 uppercase tracking-widest shadow-lg hover:shadow-amber-400/60 hover:scale-105 transition-all duration-300"
+          key={shakeKey}
+          onClick={() => {
+            setShakeKey(prev => prev + 1);
+            if (!email || !email.includes("@")) {
+              setReserveStatus("ENTER_EMAIL_REQUIRED");
+              return;
+            }
+            startCheckout(t.id);
+          }}
+          className="w-full rounded-lg bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-black font-black flex items-center justify-center gap-2 uppercase tracking-widest shadow-lg hover:shadow-amber-400/60 transition-all duration-300 animate-shake"
           style={{ letterSpacing: '0.09em', textShadow: '0 0 8px #fffbe6a0' }}
-          disabled={!email || !email.includes("@")}
         >
-          <CreditCard className="h-4 w-4 drop-shadow-glow" /> Book Now
+          {reserveStatus === "ENTER_EMAIL_REQUIRED"
+            ? "Enter your email to book"
+            : <>
+                <CreditCard className="h-4 w-4 drop-shadow-glow" /> Book Now
+              </>
+          }
         </Button>
       </CardContent>
     </Card>
@@ -810,5 +823,17 @@ export default function GalaPage() {
       <style jsx global>{`
         .drop-shadow-glow {
           text-shadow: 0 0 12px #ffd70099, 0 2px 8px #000a;
+        }
+
+        @keyframes shake {
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-6px); }
+          50% { transform: translateX(6px); }
+          75% { transform: translateX(-6px); }
+          100% { transform: translateX(0); }
+        }
+
+        .animate-shake {
+          animation: shake 0.4s ease-in-out;
         }
       `}</style>

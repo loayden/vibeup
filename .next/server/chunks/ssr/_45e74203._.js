@@ -1,3 +1,0 @@
-module.exports=[35112,(a,b,c)=>{"use strict";b.exports=a.r(42602).vendored["react-ssr"].ReactDOM},40695,a=>{"use strict";var b=a.i(87924);function c({children:a,className:c="",variant:d,size:e,...f}){return(0,b.jsx)("button",{className:`inline-flex items-center justify-center px-4 py-2 rounded ${c}`,...f,children:a})}a.s(["Button",()=>c])},3130,a=>{"use strict";var b=a.i(87924);function c({children:a,className:c=""}){return(0,b.jsx)("div",{className:`rounded-lg shadow-sm ${c}`,children:a})}function d({children:a,className:c=""}){return(0,b.jsx)("div",{className:`p-4 ${c}`,children:a})}a.s(["Card",()=>c,"CardContent",()=>d])}];
-
-//# sourceMappingURL=_45e74203._.js.map

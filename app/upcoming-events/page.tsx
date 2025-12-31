@@ -288,7 +288,7 @@ export default function UpcomingEventsPage() {
       {/* Interview Video with title and description */}
       <SquareVideoSection
         src="/VIBEUP1.mp4"
-        title="🎶 Behind the Music – Exclusive Interview 🎤"
+        title=""
         description={
           <>
             Right after the unforgettable night of Voices of Legends, we interviewed
@@ -312,7 +312,7 @@ export default function UpcomingEventsPage() {
         ]}
         heading={
           <>
-           Here’s Part 4 of our amazing guests at Bedouin White Party 🌙🔥
+           
           </>
         }
         text={
