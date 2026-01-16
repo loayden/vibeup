@@ -3,7 +3,7 @@ import { FaWhatsapp, FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
 
 export default function ContactUs() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 py-16 px-8">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-black py-16 px-8">
       <h1 className="text-6xl font-extrabold tracking-wider uppercase text-amber-400 drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] mb-4 text-center">Contact Us</h1>
       <div className="w-24 h-1 bg-amber-400 mb-12 mx-auto rounded border-b border-amber-500/30"></div>
       <div className="max-w-md w-full text-center mb-12 space-y-6">

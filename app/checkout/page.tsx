@@ -66,9 +66,9 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 py-16 text-amber-200">
+    <div className="min-h-screen bg-black py-16 text-amber-200">
       {/* HEADER */}
-      <header className="border-b border-amber-700 bg-black/80 sticky top-0 z-50">
+      <header className="border-b border-amber-700 bg-black sticky top-0 z-50">
         <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition">
             <ArrowLeft className="h-5 w-5 text-amber-400" />
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
                   onClick={() => setSelectedTicket(ticket.id)}
                   className={`relative cursor-pointer transition-all duration-300 border rounded-lg hover:scale-105 ${
                     selectedTicket === ticket.id
-                      ? "border-amber-500 border-2 bg-gradient-to-br from-amber-950/50 to-neutral-900"
+                      ? "border-amber-500 border-2 bg-black/80"
                       : "border-amber-500/50 hover:border-amber-500"
                   }`}
                 >
@@ -121,7 +121,7 @@ export default function CheckoutPage() {
 
           {/* ORDER SUMMARY */}
           <div>
-            <Card className="bg-gradient-to-b from-black/80 via-black/70 to-amber-900/70 border border-amber-500/70 shadow-none sticky top-24">
+            <Card className="bg-black/80 border border-amber-500/70 shadow-none sticky top-24">
               <CardContent className="p-6">
                 <h3 className="text-xl font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400 mb-6">Order Summary</h3>
 
@@ -140,9 +140,9 @@ export default function CheckoutPage() {
                       <div className="flex justify-between items-center">
                         <span className="text-amber-200">Quantity</span>
                         <div className="flex items-center gap-2">
-                          <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-2 py-1 bg-black/70 hover:bg-black/50 rounded text-amber-400 font-bold transition hover:scale-105">-</button>
+                          <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-2 py-1 bg-black hover:bg-neutral-900 rounded text-amber-400 font-bold transition hover:scale-105">-</button>
                           <span className="w-8 text-center font-semibold text-amber-400">{quantity}</span>
-                          <button onClick={() => setQuantity(quantity + 1)} className="px-2 py-1 bg-black/70 hover:bg-black/50 rounded text-amber-400 font-bold transition hover:scale-105">+</button>
+                          <button onClick={() => setQuantity(quantity + 1)} className="px-2 py-1 bg-black hover:bg-neutral-900 rounded text-amber-400 font-bold transition hover:scale-105">+</button>
                         </div>
                       </div>
                     </div>
@@ -189,7 +189,7 @@ export default function CheckoutPage() {
                     <Button
                       onClick={handleCheckout}
                       disabled={loading}
-                      className={`w-full font-extrabold text-lg py-3 transition bg-gradient-to-br from-amber-500 to-amber-600 text-black hover:shadow-lg hover:shadow-amber-500/40 hover:scale-105 ${
+                      className={`w-full font-extrabold text-lg py-3 transition bg-amber-400 text-black hover:shadow-lg hover:shadow-amber-500/40 hover:scale-105 ${
                         loading
                           ? "bg-neutral-700 cursor-not-allowed shadow-none hover:shadow-none hover:scale-100"
                           : ""

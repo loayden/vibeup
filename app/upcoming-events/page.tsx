@@ -2,14 +2,29 @@
 
 import { useRef, useEffect, useState } from "react";
 
-function GoldFrameVideo({ src, className }: { src: string; className?: string }) {
+function GoldFrameVideo({
+  src,
+  className,
+  videosMuted,
+  videoRefs,
+}: {
+  src: string;
+  className?: string;
+  videosMuted: boolean;
+  videoRefs: React.MutableRefObject<HTMLVideoElement[]>;
+}) {
   return (
     <div className={`relative border-[1px] border-amber-400 ${className || ""}`} style={{ minWidth: 0, minHeight: 0 }}>
       <video
+        ref={(el) => {
+          if (el && !videoRefs.current.includes(el)) {
+            videoRefs.current.push(el);
+          }
+        }}
         src={src}
         autoPlay
         loop
-        muted
+        muted={videosMuted}
         playsInline
         className="w-full h-full object-cover"
       />
@@ -135,10 +150,14 @@ function SquareVideoSection({
   src,
   title,
   description,
+  videosMuted,
+  videoRefs,
 }: {
   src: string;
   title: React.ReactNode;
   description?: React.ReactNode;
+  videosMuted: boolean;
+  videoRefs: React.MutableRefObject<HTMLVideoElement[]>;
 }) {
   return (
     <section className="max-w-4xl mx-auto py-16 px-4 relative">
@@ -148,10 +167,15 @@ function SquareVideoSection({
 
       <div className="relative z-10 aspect-square border-[1px] border-amber-400 overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
         <video
+          ref={(el) => {
+            if (el && !videoRefs.current.includes(el)) {
+              videoRefs.current.push(el);
+            }
+          }}
           src={src}
           autoPlay
           loop
-          muted
+          muted={videosMuted}
           playsInline
           className="w-full h-full object-cover"
         />
@@ -173,63 +197,76 @@ function Separator() {
 }
 
 export default function UpcomingEventsPage() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [videosMuted, setVideosMuted] = useState(false);
+  const videoRefs = useRef<HTMLVideoElement[]>([]);
 
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.12;
-      audioRef.current.play().catch(() => {});
-    }
+    videoRefs.current.forEach((video) => {
+      if (!video) return;
+      video.volume = 0.15;
+      if (videosMuted) {
+        video.muted = true;
+      } else {
+        video.muted = false;
+        video.play().catch(() => {});
+      }
+    });
+  }, [videosMuted]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target as HTMLVideoElement;
+          if (!video) return;
+
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      },
+      {
+        threshold: 0.6,
+      }
+    );
+
+    videoRefs.current.forEach((video) => {
+      if (video) observer.observe(video);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 py-16 text-amber-400 font-semibold">
-      <audio ref={audioRef} autoPlay loop preload="auto">
-        <source src="/luxury-ambient.mp3" type="audio/mpeg" />
-      </audio>
+    <div className="bg-black py-16 text-amber-400 font-semibold">
 
-      <button
-        onClick={() => {
-          if (!audioRef.current) return;
-          if (audioRef.current.paused) {
-            audioRef.current.play();
-          } else {
-            audioRef.current.pause();
-          }
-        }}
-        className="
-          fixed bottom-6 right-6 z-[9999]
-          w-12 h-12 rounded-full
-          bg-gradient-to-br from-amber-600 to-yellow-400
-          text-black
-          flex items-center justify-center
-          shadow-[0_0_10px_rgba(255,191,0,0.9)]
-          hover:scale-110 hover:brightness-110 transition
-        "
-        aria-label="Toggle sound"
-      >
-        🔊
-      </button>
       {/* Hero Video with gold frame */}
       <section className="w-full py-16 px-4 relative">
         <div className="relative z-10 mx-auto aspect-square border-[1px] border-amber-400 overflow-hidden"
           style={{ width: "80vw", maxWidth: "100%", minWidth: "240px", minHeight: 0 }}>
           <video
+            ref={(el) => {
+              if (el && !videoRefs.current.includes(el)) {
+                videoRefs.current.push(el);
+              }
+            }}
             src="/VIBEUP.mp4"
             autoPlay
             loop
-            muted
+            muted={videosMuted}
             playsInline
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
         </div>
         <h1 className="uppercase text-center mt-6 text-4xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.7)]">
-          BE WITH OUR MEMORIES
+          Stay alive in our memories
         </h1>
         <p className="text-center mt-4 text-amber-300 max-w-xl mx-auto leading-relaxed">
-          and come to galaevent
-            This is it… the final call of the year.
-            One night. One celebration. One unforgettable New Year Gala Dinner 2026. Luxury black & gold décor, live Arabic stars, a five-star gala dinner, DJ, shows, and a countdown you’ll never forget.
+          Let the moments we shared continue to live on in our hearts and memories, keeping the magic of this night alive forever.
         </p>
       </section>
 
@@ -242,10 +279,15 @@ export default function UpcomingEventsPage() {
       <section className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8">
         <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
           <video
+            ref={(el) => {
+              if (el && !videoRefs.current.includes(el)) {
+                videoRefs.current.push(el);
+              }
+            }}
             src="/VIBEUP2.mp4"
             autoPlay
             loop
-            muted
+            muted={videosMuted}
             playsInline
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
@@ -297,6 +339,8 @@ export default function UpcomingEventsPage() {
             back to life on stage. ✨
           </>
         }
+        videosMuted={videosMuted}
+        videoRefs={videoRefs}
       />
 
       <Separator />
@@ -328,10 +372,15 @@ export default function UpcomingEventsPage() {
       <section className="max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8">
         <div className="w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden" style={{ minWidth: 0, minHeight: 0 }}>
           <video
+            ref={(el) => {
+              if (el && !videoRefs.current.includes(el)) {
+                videoRefs.current.push(el);
+              }
+            }}
             src="/VIBEUP4.mp4"
             autoPlay
             loop
-            muted
+            muted={videosMuted}
             playsInline
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
@@ -340,6 +389,41 @@ export default function UpcomingEventsPage() {
           The National Arab Orchestra beautifully led by Maestro Michael Ibrahim, for an unforgettable Voices of Legend Um Kalthoum concert. And a heartfelt thanks to the superstar Eman Abdel Ghani for adding that special magic to the evening. We’re truly grateful for your amazing performances!” A night to remember, filled with music, magic, and timeless legends 🎶
         </div>
       </section>
+
+         <Separator />
+
+<SquareVideoSection
+        src="/VIBEUP9.mp4"
+        title=""
+        description={
+          <>
+             heartfelt thank you to the incredible @abdelkrimhamdan for lighting up the stage and giving us a performance filled with soul, passion, and unforgettable moments. ✨🎶
+          </>
+        }
+        videosMuted={videosMuted}
+        videoRefs={videoRefs}
+      />
+        <Separator />
+
+      <SingleImageCarousel
+        images={[
+          "VIBEUP21.jpeg",
+          "VIBEUP22.jpeg",
+          "VIBEUP23.jpeg",
+          "VIBEUP24.jpeg",
+          "VIBEUP25.jpeg",
+          "VIBEUP26.jpeg",
+          "VIBEUP27.jpeg",
+        ]}
+        heading={
+          <>
+           An unforgettable night ✨🥂
+From the first moment to the final countdown, this New Year’s Gala was pure magic.
+A special thank you to our incredible stars, Abdelkarim Hamdan and Sherine Zaza, and to our amazing audience who made this night truly legendary. 🎆 
+          </>
+        }
+      />
+
     </div>
   );
 }

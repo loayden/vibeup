@@ -11,24 +11,33 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 "use client";
 ;
 ;
-function GoldFrameVideo({ src, className }) {
+function GoldFrameVideo({ src, className, videosMuted, videoRefs }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: `relative border-[1px] border-amber-400 ${className || ""}`,
+        style: {
+            minWidth: 0,
+            minHeight: 0
+        },
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
+            ref: (el)=>{
+                if (el && !videoRefs.current.includes(el)) {
+                    videoRefs.current.push(el);
+                }
+            },
             src: src,
             autoPlay: true,
             loop: true,
-            muted: true,
+            muted: videosMuted,
             playsInline: true,
             className: "w-full h-full object-cover"
         }, void 0, false, {
             fileName: "[project]/app/upcoming-events/page.tsx",
-            lineNumber: 8,
+            lineNumber: 18,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/upcoming-events/page.tsx",
-        lineNumber: 7,
+        lineNumber: 17,
         columnNumber: 5
     }, this);
 }
@@ -37,24 +46,24 @@ function TextSection() {
         className: "max-w-5xl mx-auto text-center py-10 px-4",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                className: "text-center text-6xl font-bold text-amber-400 mb-12",
+                className: "uppercase text-center text-6xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.7)] mb-12 text-amber-400",
                 children: "Memories"
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 23,
+                lineNumber: 38,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "mt-6"
+                className: "mt-6 text-amber-300 leading-relaxed"
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 24,
+                lineNumber: 39,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/upcoming-events/page.tsx",
-        lineNumber: 22,
+        lineNumber: 37,
         columnNumber: 5
     }, this);
 }
@@ -67,10 +76,14 @@ function SingleImageCarousel({ images, heading, text }) {
         setCurrentIndex((prev)=>prev === images.length - 1 ? 0 : prev + 1);
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-        className: "max-w-6xl mx-auto py-12 px-4 flex flex-col md:flex-row items-center gap-8 bg-black",
+        className: "max-w-6xl mx-auto py-12 px-4 flex flex-col md:flex-row items-center gap-8",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "relative w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden flex items-center justify-center",
+                className: "relative w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden flex items-center justify-center",
+                style: {
+                    minWidth: 0,
+                    minHeight: 0
+                },
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                         src: `/${images[currentIndex]}`,
@@ -78,7 +91,7 @@ function SingleImageCarousel({ images, heading, text }) {
                         className: "w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 53,
+                        lineNumber: 68,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -88,7 +101,7 @@ function SingleImageCarousel({ images, heading, text }) {
                         children: "←"
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 58,
+                        lineNumber: 73,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -98,13 +111,13 @@ function SingleImageCarousel({ images, heading, text }) {
                         children: "→"
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 65,
+                        lineNumber: 80,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 52,
+                lineNumber: 67,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -112,13 +125,13 @@ function SingleImageCarousel({ images, heading, text }) {
                 children: text || heading
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 73,
+                lineNumber: 88,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/upcoming-events/page.tsx",
-        lineNumber: 51,
+        lineNumber: 66,
         columnNumber: 5
     }, this);
 }
@@ -140,14 +153,14 @@ function PhotoScroller({ images, heading }) {
         }
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-        className: "relative py-12 bg-black",
+        className: "relative py-12",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                className: "absolute inset-0 flex items-center justify-center text-4xl font-bold text-amber-400/15 tracking-widest uppercase text-center px-4 select-none pointer-events-none",
+                className: "absolute inset-0 flex items-center justify-center uppercase text-4xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.15)] text-amber-400/15 text-center px-4 select-none pointer-events-none",
                 children: heading
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 103,
+                lineNumber: 118,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -157,24 +170,28 @@ function PhotoScroller({ images, heading }) {
                     scrollSnapType: "x mandatory"
                 },
                 children: images.map((img)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "min-w-[280px] hover:scale-105 transition-transform duration-500 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden cursor-pointer flex-shrink-0 scroll-snap-align-start",
+                        className: "min-w-[280px] hover:scale-105 transition-transform duration-500 aspect-square border-[1px] border-amber-400 overflow-hidden cursor-pointer flex-shrink-0 scroll-snap-align-start",
+                        style: {
+                            minWidth: 0,
+                            minHeight: 0
+                        },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                             src: `/${img}`,
                             alt: img,
                             className: "w-full h-full object-cover"
                         }, void 0, false, {
                             fileName: "[project]/app/upcoming-events/page.tsx",
-                            lineNumber: 117,
+                            lineNumber: 133,
                             columnNumber: 13
                         }, this)
                     }, img, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 113,
+                        lineNumber: 128,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 107,
+                lineNumber: 122,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -184,196 +201,215 @@ function PhotoScroller({ images, heading }) {
                 children: "➜"
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 122,
+                lineNumber: 138,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/upcoming-events/page.tsx",
-        lineNumber: 102,
+        lineNumber: 117,
         columnNumber: 5
     }, this);
 }
-function SquareVideoSection({ src, title, description }) {
+function SquareVideoSection({ src, title, description, videosMuted, videoRefs }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         className: "max-w-4xl mx-auto py-16 px-4 relative",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                className: "absolute inset-0 flex items-center justify-center text-3xl font-bold text-amber-400/15 tracking-widest uppercase text-center select-none pointer-events-none",
+                className: "absolute inset-0 flex items-center justify-center uppercase text-3xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.15)] text-amber-400 select-none pointer-events-none",
                 children: title
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 144,
+                lineNumber: 164,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "relative z-10 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden",
+                className: "relative z-10 aspect-square border-[1px] border-amber-400 overflow-hidden",
+                style: {
+                    minWidth: 0,
+                    minHeight: 0
+                },
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
+                    ref: (el)=>{
+                        if (el && !videoRefs.current.includes(el)) {
+                            videoRefs.current.push(el);
+                        }
+                    },
                     src: src,
                     autoPlay: true,
                     loop: true,
-                    muted: true,
+                    muted: videosMuted,
                     playsInline: true,
                     className: "w-full h-full object-cover"
                 }, void 0, false, {
                     fileName: "[project]/app/upcoming-events/page.tsx",
-                    lineNumber: 149,
+                    lineNumber: 169,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 148,
+                lineNumber: 168,
                 columnNumber: 7
             }, this),
             description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "text-center mt-6 text-gray-300 leading-relaxed max-w-3xl mx-auto whitespace-pre-line",
+                className: "text-center mt-6 text-amber-300 leading-relaxed max-w-3xl mx-auto whitespace-pre-line",
                 children: description
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 160,
+                lineNumber: 185,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/upcoming-events/page.tsx",
-        lineNumber: 143,
+        lineNumber: 163,
         columnNumber: 5
     }, this);
 }
 function Separator() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("hr", {
-        className: "my-8 border-0 h-[1px] bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 shadow-[0_0_8px_rgba(255,191,0,0.6)]"
+        className: "my-8 border-0 h-[1px] bg-gradient-to-r from-amber-400/40 via-yellow-300/40 to-amber-400/40"
     }, void 0, false, {
         fileName: "[project]/app/upcoming-events/page.tsx",
-        lineNumber: 170,
+        lineNumber: 195,
         columnNumber: 5
     }, this);
 }
 function UpcomingEventsPage() {
-    const audioRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const [videosMuted, setVideosMuted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const videoRefs = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])([]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (audioRef.current) {
-            audioRef.current.volume = 0.12;
-            audioRef.current.play().catch(()=>{});
-        }
+        videoRefs.current.forEach((video)=>{
+            if (!video) return;
+            video.volume = 0.15;
+            if (videosMuted) {
+                video.muted = true;
+            } else {
+                video.muted = false;
+                video.play().catch(()=>{});
+            }
+        });
+    }, [
+        videosMuted
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const observer = new IntersectionObserver((entries)=>{
+            entries.forEach((entry)=>{
+                const video = entry.target;
+                if (!video) return;
+                if (entry.isIntersecting) {
+                    video.play().catch(()=>{});
+                } else {
+                    video.pause();
+                }
+            });
+        }, {
+            threshold: 0.6
+        });
+        videoRefs.current.forEach((video)=>{
+            if (video) observer.observe(video);
+        });
+        return ()=>{
+            observer.disconnect();
+        };
     }, []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "bg-black text-white",
+        className: "bg-black py-16 text-amber-400 font-semibold",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("audio", {
-                ref: audioRef,
-                autoPlay: true,
-                loop: true,
-                preload: "auto",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("source", {
-                    src: "/luxury-ambient.mp3",
-                    type: "audio/mpeg"
-                }, void 0, false, {
-                    fileName: "[project]/app/upcoming-events/page.tsx",
-                    lineNumber: 187,
-                    columnNumber: 9
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 186,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                onClick: ()=>{
-                    if (!audioRef.current) return;
-                    if (audioRef.current.paused) {
-                        audioRef.current.play();
-                    } else {
-                        audioRef.current.pause();
-                    }
-                },
-                className: " fixed bottom-6 right-6 z-[9999] w-12 h-12 rounded-full bg-black border border-amber-400 text-amber-400 flex items-center justify-center shadow-[0_0_20px_rgba(255,191,0,0.6)] hover:scale-110 transition ",
-                "aria-label": "Toggle sound",
-                children: "🔊"
-            }, void 0, false, {
-                fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 190,
-                columnNumber: 7
-            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 className: "w-full py-16 px-4 relative",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "relative z-10 mx-auto aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden",
+                        className: "relative z-10 mx-auto aspect-square border-[1px] border-amber-400 overflow-hidden",
                         style: {
                             width: "80vw",
                             maxWidth: "100%",
-                            minWidth: "240px"
+                            minWidth: "240px",
+                            minHeight: 0
                         },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
+                            ref: (el)=>{
+                                if (el && !videoRefs.current.includes(el)) {
+                                    videoRefs.current.push(el);
+                                }
+                            },
                             src: "/VIBEUP.mp4",
                             autoPlay: true,
                             loop: true,
-                            muted: true,
+                            muted: videosMuted,
                             playsInline: true,
-                            className: "w-full h-full object-cover"
+                            className: "w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                         }, void 0, false, {
                             fileName: "[project]/app/upcoming-events/page.tsx",
-                            lineNumber: 217,
+                            lineNumber: 251,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 215,
+                        lineNumber: 249,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                        className: "text-center mt-6 text-4xl font-bold text-amber-400",
-                        children: "BE WITH OUR MEMORIES"
+                        className: "uppercase text-center mt-6 text-4xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(255,191,0,0.7)]",
+                        children: "Stay alive in our memories"
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 226,
+                        lineNumber: 265,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: "text-center mt-4 text-sm text-gray-300 max-w-xl mx-auto",
-                        children: "and come to galaevent This is it… the final call of the year. One night. One celebration. One unforgettable New Year Gala Dinner 2026. Luxury black & gold décor, live Arabic stars, a five-star gala dinner, DJ, shows, and a countdown you’ll never forget."
+                        className: "text-center mt-4 text-amber-300 max-w-xl mx-auto leading-relaxed",
+                        children: "Let the moments we shared continue to live on in our hearts and memories, keeping the magic of this night alive forever."
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 229,
+                        lineNumber: 268,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 214,
+                lineNumber: 248,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Separator, {}, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 236,
+                lineNumber: 273,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(TextSection, {}, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 239,
+                lineNumber: 276,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 className: "max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden",
+                        className: "w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden",
+                        style: {
+                            minWidth: 0,
+                            minHeight: 0
+                        },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
+                            ref: (el)=>{
+                                if (el && !videoRefs.current.includes(el)) {
+                                    videoRefs.current.push(el);
+                                }
+                            },
                             src: "/VIBEUP2.mp4",
                             autoPlay: true,
                             loop: true,
-                            muted: true,
+                            muted: videosMuted,
                             playsInline: true,
-                            className: "w-full h-full object-cover"
+                            className: "w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                         }, void 0, false, {
                             fileName: "[project]/app/upcoming-events/page.tsx",
-                            lineNumber: 244,
+                            lineNumber: 281,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 243,
+                        lineNumber: 280,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -381,18 +417,18 @@ function UpcomingEventsPage() {
                         children: `A big thank you to the National Arab Orchestra beautifully led by Maestro Michael Ibrahim, for an unforgettable Voices of Legend Um Kalthoum concert. And a heartfelt thanks to the superstar Eman Abdel Ghani for adding that special magic to the evening. We’re truly grateful for your amazing performances! A night to remember`
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 253,
+                        lineNumber: 295,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 242,
+                lineNumber: 279,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Separator, {}, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 258,
+                lineNumber: 300,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SingleImageCarousel, {
@@ -416,28 +452,30 @@ function UpcomingEventsPage() {
                 }, void 0, false)
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 261,
+                lineNumber: 303,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Separator, {}, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 286,
+                lineNumber: 328,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SquareVideoSection, {
                 src: "/VIBEUP1.mp4",
-                title: "🎶 Behind the Music – Exclusive Interview 🎤",
+                title: "",
                 description: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: "Right after the unforgettable night of Voices of Legends, we interviewed Maestro Michael Ibrahim and soprano Eman Abdel Ghani to share their thoughts, emotions, and the magic of bringing timeless Arabic classics back to life on stage. ✨"
-                }, void 0, false)
+                }, void 0, false),
+                videosMuted: videosMuted,
+                videoRefs: videoRefs
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 289,
+                lineNumber: 331,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Separator, {}, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 302,
+                lineNumber: 346,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SingleImageCarousel, {
@@ -448,42 +486,49 @@ function UpcomingEventsPage() {
                     "VIBEUP4.jpg",
                     "VIBEUP5.jpg"
                 ],
-                heading: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                    children: "Here’s Part 4 of our amazing guests at Bedouin White Party 🌙🔥"
-                }, void 0, false),
+                heading: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {}, void 0, false),
                 text: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                    children: "“Excited to bring the Bedouin White Party to Huntington Beach 🏝️ for the first time in California and United states 🇺🇸 🌟 Let the magic begin! #BedouinWhiteParty"
+                    children: "Excited to bring the Bedouin White Party to Huntington Beach 🏝️ for the first time in California and United states 🇺🇸 🌟 Let the magic begin! #BedouinWhiteParty"
                 }, void 0, false)
             }, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 305,
+                lineNumber: 349,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Separator, {}, void 0, false, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 325,
+                lineNumber: 369,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 className: "max-w-6xl mx-auto py-16 px-4 flex flex-col md:flex-row items-center gap-8",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "w-full md:w-1/2 aspect-square border-[1px] border-amber-400/60 shadow-[0_0_60px_rgba(255,191,0,0.15)] overflow-hidden",
+                        className: "w-full md:w-1/2 aspect-square border-[1px] border-amber-400 overflow-hidden",
+                        style: {
+                            minWidth: 0,
+                            minHeight: 0
+                        },
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
+                            ref: (el)=>{
+                                if (el && !videoRefs.current.includes(el)) {
+                                    videoRefs.current.push(el);
+                                }
+                            },
                             src: "/VIBEUP4.mp4",
                             autoPlay: true,
                             loop: true,
-                            muted: true,
+                            muted: videosMuted,
                             playsInline: true,
-                            className: "w-full h-full object-cover"
+                            className: "w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                         }, void 0, false, {
                             fileName: "[project]/app/upcoming-events/page.tsx",
-                            lineNumber: 330,
+                            lineNumber: 374,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 329,
+                        lineNumber: 373,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -491,19 +536,60 @@ function UpcomingEventsPage() {
                         children: "The National Arab Orchestra beautifully led by Maestro Michael Ibrahim, for an unforgettable Voices of Legend Um Kalthoum concert. And a heartfelt thanks to the superstar Eman Abdel Ghani for adding that special magic to the evening. We’re truly grateful for your amazing performances!” A night to remember, filled with music, magic, and timeless legends 🎶"
                     }, void 0, false, {
                         fileName: "[project]/app/upcoming-events/page.tsx",
-                        lineNumber: 339,
+                        lineNumber: 388,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/upcoming-events/page.tsx",
-                lineNumber: 328,
+                lineNumber: 372,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Separator, {}, void 0, false, {
+                fileName: "[project]/app/upcoming-events/page.tsx",
+                lineNumber: 393,
+                columnNumber: 10
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SquareVideoSection, {
+                src: "/VIBEUP9.mp4",
+                title: "",
+                description: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                    children: "heartfelt thank you to the incredible @abdelkrimhamdan for lighting up the stage and giving us a performance filled with soul, passion, and unforgettable moments. ✨🎶"
+                }, void 0, false),
+                videosMuted: videosMuted,
+                videoRefs: videoRefs
+            }, void 0, false, {
+                fileName: "[project]/app/upcoming-events/page.tsx",
+                lineNumber: 395,
+                columnNumber: 1
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Separator, {}, void 0, false, {
+                fileName: "[project]/app/upcoming-events/page.tsx",
+                lineNumber: 406,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(SingleImageCarousel, {
+                images: [
+                    "VIBEUP21.jpeg",
+                    "VIBEUP22.jpeg",
+                    "VIBEUP23.jpeg",
+                    "VIBEUP24.jpeg",
+                    "VIBEUP25.jpeg",
+                    "VIBEUP26.jpeg",
+                    "VIBEUP27.jpeg"
+                ],
+                heading: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                    children: "An unforgettable night ✨🥂 From the first moment to the final countdown, this New Year’s Gala was pure magic. A special thank you to our incredible stars, Abdelkarim Hamdan and Sherine Zaza, and to our amazing audience who made this night truly legendary. 🎆"
+                }, void 0, false)
+            }, void 0, false, {
+                fileName: "[project]/app/upcoming-events/page.tsx",
+                lineNumber: 408,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/upcoming-events/page.tsx",
-        lineNumber: 185,
+        lineNumber: 245,
         columnNumber: 5
     }, this);
 }

@@ -10,5 +10,6 @@
   "/email/page": "/email",
   "/favicon.ico/route": "/favicon.ico",
   "/page": "/",
+  "/services/page": "/services",
   "/upcoming-events/page": "/upcoming-events"
 }
