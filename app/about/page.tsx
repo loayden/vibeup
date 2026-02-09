@@ -44,6 +44,16 @@ export default function AboutPage() {
           <p className="text-amber-200 text-xl">
             A Celebration of Arab Music, Heritage & Elegance
           </p>
+          <div className="mt-10 flex justify-center">
+            <div className="relative rounded-2xl overflow-hidden border border-amber-500/40 shadow-[0_0_40px_rgba(255,191,0,0.35)] max-w-3xl">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40 pointer-events-none"></div>
+              <img
+                src="/arabnights.jpeg"
+                alt="Layali Al Arab Event"
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          </div>
         </div>
       </section>
 

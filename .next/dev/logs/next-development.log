@@ -1,17 +1,2 @@
-[00:00:00.759] Server  LOG     ✓ Ready in 535ms
-[00:00:03.572] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:21.561] Server  LOG     ✓ Compiled in 440ms
-[00:01:28.108] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:18.301] Server  LOG     ✓ Compiled in 148ms
-[00:04:57.483] Server  LOG     ✓ Compiled in 94ms
-[00:05:49.117] Server  LOG     ✓ Compiled in 80ms
-[52:30:48.261] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[52:41:28.343] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[52:43:34.886] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[52:43:41.732] Server  LOG     ✓ Compiled in 43ms
-[52:46:55.227] Server  LOG     ✓ Compiled in 157ms
-[52:47:05.877] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[52:47:20.599] Server  LOG     ✓ Compiled in 82ms
-[52:47:59.744] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[52:49:34.913] Server  LOG     ✓ Compiled in 110ms
-[52:49:42.718] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:00.804] Server  LOG     ✓ Ready in 575ms
+[00:00:04.647] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
