@@ -236,7 +236,7 @@ export default function GalaPage() {
           {/* Hero Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
             <Link
-              href="/checkout"
+              href="https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
               className="px-10 py-4 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-400 text-black font-black text-lg rounded-xl shadow-2xl shadow-amber-400/30 hover:from-yellow-400 hover:to-amber-500 hover:shadow-amber-400/60 hover:scale-105 border-2 border-amber-300/60 transition-all duration-300 flex items-center gap-2 uppercase tracking-widest"
               style={{ letterSpacing: '0.13em', textShadow: '0 0 12px #fffbe6a0' }}
             >
@@ -437,116 +437,8 @@ export default function GalaPage() {
           </ul>
         </div>
       </section>
-{/* Divider */}
-<div className="border-t border-amber-500/30 my-12"></div>
-      {/* DETAILS */}
-      {/* PRICING */}
-      <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="mb-2 text-3xl font-bold text-center uppercase tracking-widest text-amber-400 drop-shadow-glow">Seating Chart & Pricing</h2>
-        <p className="text-center text-amber-200 mb-12 font-medium">Choose your perfect seating location</p>
-        <div className="flex flex-col items-center mb-8">
-          <div className="flex gap-3 w-full max-w-md mb-4">
-            <Input
-              placeholder="Enter your email to book your tickets"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="bg-neutral-900 border-neutral-700 text-white placeholder:text-neutral-500 flex-1"
-            />
-          </div>
-          {reserveStatus && (
-            <p className={`text-xs mt-2 ${reserveStatus.includes("success") ? "text-green-400" : "text-red-400"}`}>{reserveStatus}</p>
-          )}
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-  {tickets.map((t) => (
-    <Card
-      key={t.id}
-      className="relative bg-gradient-to-br from-yellow-400/40 via-yellow-600/20 to-black/80 border border-amber-500/30 rounded-xl shadow-2xl shadow-black/40 hover:shadow-amber-400/50 hover:scale-105 transition-all duration-300"
-    >
-      <CardContent className="p-6">
-        {/* Badge */}
-        {t.badge && (
-          <Badge
-            className="absolute right-4 top-4 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-600 text-black text-xs font-extrabold uppercase tracking-[0.11em] shadow-lg shadow-amber-300/40 border border-amber-200/60"
-            // boxShadow: '0 0 16px #ffd70055' is handled by shadow-lg + shadow-amber-300/40
-          >
-            {t.badge}
-          </Badge>
-        )}
-        {/* Ticket Header */}
-        <div className="flex items-center gap-3 mb-4">
-          <span
-            className={`w-6 h-6 rounded-full flex-shrink-0 shadow-lg`}
-            style={{
-              backgroundColor:
-                t.color === "🔴"
-                  ? "#F87171"
-                  : t.color === "🔵"
-                  ? "#60A5FA"
-                  : t.color === "🟢"
-                  ? "#34D399"
-                  : t.color === "🟡"
-                  ? "#FACC15"
-                  : t.color === "🟣"
-                  ? "#A78BFA"
-                  : "#6B7280",
-              boxShadow: '0 0 12px #ffd70066, 0 2px 8px #0008'
-            }}
-          ></span>
-          <div>
-            <h3 className="text-xl font-extrabold text-white uppercase tracking-wider drop-shadow-glow">{t.name}</h3>
-            {t.id === "group" && (
-              <p className="text-xs text-neutral-400">4 or more people</p>
-            )}
-          </div>
-        </div>
 
-        {/* Price */}
-        <div className="border-t border-amber-400/30 pt-4 mb-4">
-          <p className="text-3xl font-black text-amber-400 drop-shadow-glow">${t.price.toFixed(2)}</p>
-          <p className="text-xs text-neutral-400 mt-1">Per person</p>
-        </div>
 
-        {/* Features */}
-        <ul className="space-y-2 text-sm mb-6 text-amber-100 font-semibold">
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-amber-400 drop-shadow-glow" /> Reserved Seating
-          </li>
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-amber-400 drop-shadow-glow" /> Full Event Access
-          </li>
-          <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-amber-400 drop-shadow-glow" /> Dinner & Show
-          </li>
-        </ul>
-
-        {/* Book Button */}
-        <Button
-          key={shakeKey}
-          onClick={() => {
-            setShakeKey(prev => prev + 1);
-            if (!email || !email.includes("@")) {
-              setReserveStatus("ENTER_EMAIL_REQUIRED");
-              return;
-            }
-            startCheckout(t.id);
-          }}
-          className="w-full rounded-lg bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 hover:from-yellow-400 hover:to-amber-500 text-black font-black flex items-center justify-center gap-2 uppercase tracking-widest shadow-lg hover:shadow-amber-400/60 transition-all duration-300 animate-shake"
-          style={{ letterSpacing: '0.09em', textShadow: '0 0 8px #fffbe6a0' }}
-        >
-          {reserveStatus === "ENTER_EMAIL_REQUIRED"
-            ? "Enter your email to book"
-            : <>
-                <CreditCard className="h-4 w-4 drop-shadow-glow" /> Book Now
-              </>
-          }
-        </Button>
-      </CardContent>
-    </Card>
-  ))}
-      </div>
-</section>
-{/* Divider */}
 <div className="border-t border-amber-500/30 my-12"></div>
       {/* SOCIAL PROOF & CTA */}
       <section className="mx-auto max-w-6xl px-6 py-16">

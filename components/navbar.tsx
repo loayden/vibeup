@@ -50,7 +50,7 @@ export function Navbar() {
             </Link>
             
             <Link
-              href="/checkout"
+              href="https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
               className="bg-amber-400 border-2 border-amber-500 font-extrabold tracking-wider text-black rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110 px-6 py-2 transition"
             >
               Tickets
@@ -105,7 +105,7 @@ export function Navbar() {
             </Link>
             
             <Link
-              href="/checkout"
+              href="https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
               className="block mt-4 bg-amber-400 border-2 border-amber-500 font-extrabold tracking-wider text-black rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110 px-6 py-2 transition text-center"
               onClick={() => setIsOpen(false)}
             >
