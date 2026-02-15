@@ -180,74 +180,53 @@ export default function GalaPage() {
 
       {/* HERO SECTION */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg')` }}
-        >
-          {/* Luxury overlay: deep purple-black gradient with gold shimmer */}
-         <div className="absolute inset-0 bg-black/60" />
-        </div>
+        <video
+          className="absolute inset-0 z-0 object-cover w-full h-full filter brightness-50 blur-[1px]"
+          src="/arab.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
-          <div className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-amber-600/20 via-amber-400/10 to-amber-900/20 border border-amber-500/40 rounded-full mb-8 backdrop-blur-md shadow-lg shadow-amber-400/10">
-            <Star className="w-5 h-5 text-amber-400 drop-shadow-glow" />
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-black/70 border border-amber-500/40 rounded-full mb-8 backdrop-blur-md">
+            <Star className="w-5 h-5 text-amber-400" />
             <span className="text-amber-200 text-sm font-semibold tracking-widest uppercase" style={{ letterSpacing: '0.12em' }}>Limited Tickets Available</span>
           </div>
-          <h1 className="relative z-10 max-w-4xl mx-auto text-center py-20">
+          <h1 className="max-w-4xl mx-auto text-center py-6">
             {/* Subheadline */}
-            <span
-              className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 text-lg md:text-xl font-serif tracking-widest uppercase mb-4 opacity-0 animate-fadeIn delay-100"
-              style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}
-            >
+            <span className="block text-amber-200 text-lg md:text-xl font-serif tracking-widest uppercase mb-4">
               VibeUp Events &amp; Services
             </span>
-
             {/* Main Headline */}
-            <span
-              className="block text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-snug md:leading-tight mb-4 opacity-0 animate-fadeIn delay-200"
-              style={{
-                textShadow: '0 0 12px rgba(255,215,64,0.3), 0 2px 8px rgba(0,0,0,0.5)'
-              }}
-            >
+            <span className="block text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-snug md:leading-tight mb-4">
               Creating Unforgettable Experiences
             </span>
-
             {/* Tagline */}
-            <span
-              className="block text-amber-200/90 text-sm md:text-base font-medium max-w-2xl mx-auto leading-relaxed opacity-0 animate-fadeIn delay-300"
-              style={{ letterSpacing: '0.04em' }}
-            >
-              Premium end-to-end event experiences, delivered flawlessly.
-            </span>
+           {/* Tagline with arrow */}
+<div className="relative inline-block mx-auto">
+  <span className="block text-amber-200 text-sm md:text-base font-medium max-w-2xl leading-relaxed">
+    Join us for Abdel Karim's Arab Nights on March 28th! Click the "Upcoming Events" button below to see all details.
+  </span>
+  {/* Downward pointing arrow */}
+  <div className="absolute left-1/2 transform -translate-x-1/2 mt-2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-amber-400 animate-bounce"></div>
+</div>
           </h1>
-          <style jsx>{`
-            @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(20px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-
-            .animate-fadeIn {
-              animation: fadeIn 1s ease forwards;
-            }
-
-            .delay-100 { animation-delay: 0.1s; }
-            .delay-200 { animation-delay: 0.3s; }
-            .delay-300 { animation-delay: 0.5s; }
-          `}</style>
           {/* Hero Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-2">
+            <Link
+              href="/about"
+              className="px-10 py-4 bg-white/10 text-white font-bold text-lg rounded-xl border-2 border-white/30 hover:bg-white/20 hover:text-amber-400 hover:scale-105 transition-all duration-300 flex items-center gap-2 uppercase tracking-widest shadow-lg"
+              style={{ letterSpacing: '0.11em', textShadow: '0 0 8px #fffbe6a0' }}
+            >
+              <FaClockIcon className="mr-2 h-5 w-5" /> Upcoming Events <span className="ml-1">→</span>
+            </Link>
             <Link
               href="https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
               className="px-10 py-4 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-400 text-black font-black text-lg rounded-xl shadow-2xl shadow-amber-400/30 hover:from-yellow-400 hover:to-amber-500 hover:shadow-amber-400/60 hover:scale-105 border-2 border-amber-300/60 transition-all duration-300 flex items-center gap-2 uppercase tracking-widest"
               style={{ letterSpacing: '0.13em', textShadow: '0 0 12px #fffbe6a0' }}
             >
-              <FaCreditCardIcon className="mr-2 h-5 w-5 drop-shadow-glow" /> Buy Tickets Now
-            </Link>
-            <Link
-              href="/about"
-              className="px-10 py-4 bg-white/10 backdrop-blur-sm text-white font-bold text-lg rounded-xl border-2 border-white/30 hover:bg-white/20 hover:text-amber-400 hover:scale-105 transition-all duration-300 flex items-center gap-2 uppercase tracking-widest shadow-lg"
-              style={{ letterSpacing: '0.11em', textShadow: '0 0 8px #fffbe6a0' }}
-            >
-              <FaClockIcon className="mr-2 h-5 w-5 drop-shadow-glow" /> Upcoming Events
+              <FaCreditCardIcon className="mr-2 h-5 w-5" /> Buy Tickets Now
             </Link>
           </div>
         </div>
