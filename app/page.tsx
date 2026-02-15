@@ -181,7 +181,7 @@ export default function GalaPage() {
       {/* HERO SECTION */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <video
-          className="absolute inset-0 z-0 object-cover w-full h-full filter brightness-50 blur-[1px]"
+          className="absolute inset-0 z-0 object-cover w-full h-full filter brightness-50"
           src="/arab.mp4"
           autoPlay
           loop
