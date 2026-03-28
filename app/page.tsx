@@ -76,7 +76,7 @@ export default function HomePage() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-6">
               <Link
-                href="/events"
+                href="/upcoming-events"
                 className="flex items-center justify-center gap-2 transition-all duration-300"
                 style={{
                   background: "linear-gradient(135deg, rgba(255,191,0,0.22), rgba(255,191,0,0.08))",
@@ -110,7 +110,7 @@ export default function HomePage() {
               </Link>
 
               <Link
-                href="/tickets"
+                href="/https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
                 className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-8 py-3 rounded-full font-light tracking-wider transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110 flex items-center justify-center gap-2"
                 style={{
                   fontFamily: "'Jost', sans-serif",
@@ -433,7 +433,7 @@ export default function HomePage() {
             </p>
 
             <Link
-              href="/tickets"
+              href="/https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
               className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-8 py-3 rounded-full font-light tracking-wider transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110 inline-block"
               style={{
                 fontFamily: "'Jost', sans-serif",

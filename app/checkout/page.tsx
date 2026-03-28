@@ -1,22 +1,37 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { CreditCard, MapPin, Clock, Users, DollarSign, ArrowLeft } from "lucide-react"
 import Link from "next/link"
-import { supabase } from '@/lib/supabase'
+import { supabase } from "@/lib/supabase"
 
 const TICKETS = [
-  { id: "vip-red", name: "VIP Red", price: 250, color: "🔴", badge: "Premium", description: "Best view of the stage with priority service" },
-  { id: "blue", name: "Blue", price: 200, color: "🔵", badge: "Popular", description: "Great sightlines and premium experience" },
-  { id: "green", name: "Green", price: 175, color: "🟢", description: "Excellent value with full access" },
-  { id: "yellow", name: "Yellow", price: 150, color: "🟡", description: "Affordable premium seating" },
-  { id: "purple", name: "Purple", price: 120, color: "🟣", description: "Budget-friendly option" },
-  { id: "group", name: "Group (4+ People)", price: 145, color: "🟢", badge: "Best Value", description: "Save when booking 4+ tickets together" },
+  { id: "vip-red", name: "VIP Red", price: 250 },
+  { id: "blue", name: "Blue", price: 200 },
+  { id: "green", name: "Green", price: 175 },
+  { id: "yellow", name: "Yellow", price: 150 },
+  { id: "purple", name: "Purple", price: 120 },
 ]
+
+function Orbs() {
+  return (
+    <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
+      <div style={{
+        position:"absolute", width:700, height:700, top:"-15%", right:"-10%",
+        background:"radial-gradient(circle, rgba(198,169,98,0.07) 0%, transparent 65%)",
+        filter:"blur(90px)", animation:"orbA 26s ease-in-out infinite",
+      }} />
+      <div style={{
+        position:"absolute", width:550, height:550, bottom:"5%", left:"-8%",
+        background:"radial-gradient(circle, rgba(150,140,220,0.05) 0%, transparent 65%)",
+        filter:"blur(80px)", animation:"orbB 32s ease-in-out infinite",
+      }} />
+      <style>{`
+        @keyframes orbA { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-28px,22px)} }
+        @keyframes orbB { 0%,100%{transform:translate(0,0)} 50%{transform:translate(32px,-18px)} }
+      `}</style>
+    </div>
+  )
+}
 
 export default function CheckoutPage() {
   const [selectedTicket, setSelectedTicket] = useState<string | null>(null)
@@ -31,208 +46,171 @@ export default function CheckoutPage() {
 
   const handleCheckout = async () => {
     if (!name || !email || !selectedTicket) {
-      setStatus("⚠️ Please fill all fields and select a ticket");
-      return;
+      setStatus("Please complete all fields")
+      return
     }
 
-    setLoading(true);
-    setStatus("moment …");
+    setLoading(true)
 
     try {
-      // Option 1: Insert new reservation
-      // await supabase.from('reservations').insert([{ email, ticket_id: selectedTicketId, full_name: userFullName, quantity: selectedQuantity }]);
+      await supabase.from("reservations").upsert([
+        {
+          email,
+          full_name: name,
+          ticket_id: selectedTicket,
+          quantity
+        }
+      ])
 
-      // Option 2: Upsert reservation (update if exists)
-      await supabase
-        .from('reservations')
-        .upsert(
-          [
-            {
-              email,
-              full_name: name,
-              ticket_id: selectedTicket,
-              quantity
-            }
-          ],
-          { onConflict: 'email,ticket_id' } // ensure table has UNIQUE(email, ticket_id)
-        );
-      
-      setStatus(`Reservation successful! check your email`);
+      setStatus("Reservation confirmed")
     } catch (err: any) {
-      setStatus(`Error processing reservation: ${err.message}`);
+      setStatus(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-black py-16 text-amber-200">
-      {/* HEADER */}
-      <header className="border-b border-amber-700 bg-black sticky top-0 z-50">
-        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition">
-            <ArrowLeft className="h-5 w-5 text-amber-400" />
-            <span className="font-semibold">Back to Home</span>
-          </Link>
-          <h1 className="text-2xl font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400">Book Your Tickets</h1>
-          <div className="w-24"></div>
-        </div>
-      </header>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300&display=swap');
+        body { background:#080808 }
+      `}</style>
 
-      <main className="mx-auto max-w-6xl px-6 py-12">
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* TICKET SELECTION */}
-          <div className="lg:col-span-2">
-            <h2 className="text-2xl font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400 mb-6">Select Your Seating</h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              {TICKETS.map(ticket => (
+      <main className="relative min-h-screen bg-[#080808] text-white" style={{fontFamily:"'Jost',sans-serif"}}>
+        <Orbs />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
+
+          {/* HEADER */}
+          <div className="mb-16 text-center">
+            <p className="text-white/20 text-[9px] tracking-[0.45em] uppercase mb-4">
+              Checkout
+            </p>
+
+            <h1 style={{
+              fontFamily:"'Cormorant Garamond',serif",
+              fontSize:"clamp(2.5rem,6vw,4.5rem)",
+              fontWeight:300,
+              letterSpacing:"0.04em"
+            }}>
+              Book Your <em style={{color:"#C6A962"}}>Seat</em>
+            </h1>
+
+            <div className="mt-6 mx-auto w-16 h-px"
+              style={{background:"linear-gradient(90deg,transparent,rgba(198,169,98,0.5),transparent)"}} />
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-10">
+
+            {/* TICKETS */}
+            <div className="space-y-6">
+              {TICKETS.map(t => (
                 <div
-                  key={ticket.id}
-                  onClick={() => setSelectedTicket(ticket.id)}
-                  className={`relative cursor-pointer transition-all duration-300 border rounded-lg hover:scale-105 ${
-                    selectedTicket === ticket.id
-                      ? "border-amber-500 border-2 bg-black/80"
-                      : "border-amber-500/50 hover:border-amber-500"
-                  }`}
+                  key={t.id}
+                  onClick={() => setSelectedTicket(t.id)}
+                  className="relative p-6 rounded-2xl cursor-pointer transition"
+                  style={{
+                    background:"linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))",
+                    backdropFilter:"blur(24px)",
+                    border:selectedTicket === t.id
+                      ? "1px solid rgba(198,169,98,0.4)"
+                      : "1px solid rgba(255,255,255,0.08)"
+                  }}
                 >
-                  <Card className="bg-transparent border-0 shadow-none">
-                    <CardContent className="p-6">
-                      {ticket.badge && <Badge className="absolute right-4 top-4 bg-amber-500 text-black text-xs">{ticket.badge}</Badge>}
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-3xl">{ticket.color}</span>
-                        <div>
-                          <h3 className="font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400 text-lg">{ticket.name}</h3>
-                        </div>
-                      </div>
-                      <p className="text-amber-200 leading-relaxed whitespace-pre-line mb-4">{ticket.description}</p>
-                      <p className="text-2xl font-extrabold text-amber-400">${ticket.price.toFixed(2)}</p>
-                      {selectedTicket === ticket.id && (
-                        <div className="mt-3 flex items-center justify-center gap-2 text-amber-400 text-sm">
-                          <div className="h-2 w-2 rounded-full bg-amber-400"></div>
-                          Selected
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                  <div className="absolute inset-x-5 top-0 h-px"
+                    style={{background:"linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)"}} />
+
+                  <h3 style={{
+                    fontFamily:"'Cormorant Garamond',serif",
+                    fontSize:"1.5rem",
+                    fontWeight:300
+                  }}>
+                    {t.name}
+                  </h3>
+
+                  <p className="text-white/30 text-sm mt-2">
+                    ${t.price}
+                  </p>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* ORDER SUMMARY */}
-          <div>
-            <Card className="bg-black/80 border border-amber-500/70 shadow-none sticky top-24">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-extrabold uppercase tracking-wider drop-shadow-[0_0_12px_rgba(255,191,0,0.8)] text-amber-400 mb-6">Order Summary</h3>
+            {/* SUMMARY */}
+            <div className="relative p-8 rounded-2xl"
+              style={{
+                background:"linear-gradient(135deg, rgba(198,169,98,0.16), rgba(198,169,98,0.05))",
+                backdropFilter:"blur(20px)",
+                border:"1px solid rgba(198,169,98,0.25)"
+              }}
+            >
+              <div className="absolute inset-x-5 top-0 h-px"
+                style={{background:"linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)"}} />
 
-                {ticket ? (
-                  <>
-                    {/* TICKET INFO */}
-                    <div className="space-y-4 mb-6 pb-6 border-b border-amber-700">
-                      <div className="flex justify-between">
-                        <span className="text-amber-200">Ticket Type</span>
-                        <span className="font-semibold flex items-center gap-2 text-amber-400">{ticket.color} {ticket.name}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-amber-200">Price per ticket</span>
-                        <span className="font-semibold text-amber-400">${ticket.price.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-amber-200">Quantity</span>
-                        <div className="flex items-center gap-2">
-                          <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-2 py-1 bg-black hover:bg-neutral-900 rounded text-amber-400 font-bold transition hover:scale-105">-</button>
-                          <span className="w-8 text-center font-semibold text-amber-400">{quantity}</span>
-                          <button onClick={() => setQuantity(quantity + 1)} className="px-2 py-1 bg-black hover:bg-neutral-900 rounded text-amber-400 font-bold transition hover:scale-105">+</button>
-                        </div>
-                      </div>
-                    </div>
+              <h2 style={{
+                fontFamily:"'Cormorant Garamond',serif",
+                fontSize:"2rem",
+                fontWeight:300
+              }}>
+                Order <em style={{color:"#C6A962"}}>Summary</em>
+              </h2>
 
-                    {/* TOTAL */}
-                    <div className="mb-6 pb-6 border-b border-amber-700">
-                      <div className="flex justify-between items-center">
-                        <span className="text-lg font-extrabold text-amber-400">Total</span>
-                        <span className="text-3xl font-extrabold text-amber-400">${total.toFixed(2)}</span>
-                      </div>
-                    </div>
+              {ticket && (
+                <>
+                  <p className="mt-6 text-white/40 text-sm">
+                    {ticket.name} × {quantity}
+                  </p>
 
-                    {/* FORM */}
-                    <div className="space-y-3 mb-6">
-                      <div>
-                        <label className="text-xs text-amber-200 mb-1 block">Full Name</label>
-                        <Input
-                          placeholder="John Doe"
-                          value={name}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-                          className="bg-black/70 border-amber-700 text-amber-200 placeholder-amber-400"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-xs text-amber-200 mb-1 block">Email Address</label>
-                        <Input
-                          placeholder="john@example.com"
-                          type="email"
-                          value={email}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                          className="bg-black/70 border-amber-700 text-amber-200 placeholder-amber-400"
-                        />
-                      </div>
-                    </div>
+                  <p className="text-3xl mt-4" style={{color:"#C6A962"}}>
+                    ${total}
+                  </p>
 
-                    {/* STATUS MESSAGE */}
-                    {status && (
-                      <p className="mb-4 text-center text-sm text-amber-300 animate-pulse">
-                        {status}
-                      </p>
-                    )}
-
-                    {/* PAYMENT BUTTON */}
-                    <Button
-                      onClick={handleCheckout}
-                      disabled={loading}
-                      className={`w-full font-extrabold text-lg py-3 transition bg-amber-400 text-black hover:shadow-lg hover:shadow-amber-500/40 hover:scale-105 ${
-                        loading
-                          ? "bg-neutral-700 cursor-not-allowed shadow-none hover:shadow-none hover:scale-100"
-                          : ""
-                      }`}
-                    >
-                      {loading ? (
-                        <>booking...</>
-                      ) : (
-                        <>
-                          Book
-                        </>
-                      )}
-                    </Button>
-
-                    {/* EVENT INFO */}
-                    <div className="mt-6 space-y-3 pt-6 border-t border-amber-700 text-xs text-amber-200">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-amber-400" />
-                        <span>Dec 31, 2025 • 8:30 PM</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-amber-400" />
-                        <span>Hilton Los Angeles</span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-center py-8 text-amber-400">
-                    <p className="text-sm leading-relaxed whitespace-pre-line">Select a ticket to get started</p>
+                  <div className="mt-8 space-y-4">
+                    <input
+                      placeholder="Full Name"
+                      value={name}
+                      onChange={e=>setName(e.target.value)}
+                      className="w-full glass-input"
+                    />
+                    <input
+                      placeholder="Email"
+                      value={email}
+                      onChange={e=>setEmail(e.target.value)}
+                      className="w-full glass-input"
+                    />
                   </div>
-                )}
-              </CardContent>
-            </Card>
+
+                  {status && (
+                    <p className="text-white/30 text-xs mt-4">
+                      {status}
+                    </p>
+                  )}
+
+                  <button
+                    onClick={handleCheckout}
+                    disabled={loading}
+                    className="mt-8 w-full"
+                    style={{
+                      background:"linear-gradient(135deg, rgba(198,169,98,0.22), rgba(198,169,98,0.08))",
+                      backdropFilter:"blur(16px)",
+                      border:"1px solid rgba(198,169,98,0.35)",
+                      borderRadius:9999,
+                      padding:"14px 32px",
+                      color:"#C6A962",
+                      fontSize:"10px",
+                      letterSpacing:"0.32em",
+                      textTransform:"uppercase"
+                    }}
+                  >
+                    {loading ? "Processing" : "Confirm"}
+                  </button>
+                </>
+              )}
+            </div>
+
           </div>
         </div>
       </main>
-    </div>
+    </>
   )
 }
-
-// Calendar icon since it's not in lucide-react imports
-const Calendar = ({ className }: { className: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-  </svg>
-)
