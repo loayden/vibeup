@@ -154,3 +154,6 @@ export function AccountPage() {
     </main>
   )
 }
+
+
+export default HomePage
