@@ -8,69 +8,50 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 w-full z-50" style={{ fontFamily: "'Jost', sans-serif" }}>
-      {/* Glass nav background */}
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 border-b border-amber-500/20"
-        style={{
-          backdropFilter: "blur(24px) saturate(160%)",
-          WebkitBackdropFilter: "blur(24px) saturate(160%)",
-        }}
-      />
-
-      {/* Specular top line */}
-      <div
-        className="absolute inset-x-0 top-0 h-px pointer-events-none"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(255,191,0,0.30), transparent)" }}
-      />
-
-      {/* Content */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 py-4">
+    <nav className="fixed top-0 w-full bg-black backdrop-blur-sm border-b border-amber-900/40 z-50">
+      <div className="mx-auto max-w-6xl px-6 py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img
-              src="vibeup-logo.png"
-              alt="VIBEUP Events Organizer"
-              className="h-10 w-auto transition-transform duration-300 hover:scale-105"
-            />
+            <img src="vibeup-logo.png" alt="VIBEUP Events Organizer" className="h-16 w-auto hover:scale-110 transition-transform duration-300" />
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-10">
-            {[
-              { href: "/", label: "Home" },
-              { href: "/events", label: "Upcoming Events" },
-              { href: "/about", label: "About Us" },
-              { href: "/contact", label: "Contact" },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="transition-colors duration-300 text-amber-400 hover:text-amber-500"
-                style={{
-                  fontFamily: "'Jost', sans-serif",
-                  fontSize: "11px",
-                  letterSpacing: "0.18em",
-                  fontWeight: 300,
-                  textTransform: "uppercase",
-                }}
-              >
-                {item.label}
-              </Link>
-            ))}
-
-            {/* Amber pill CTA */}
+          <div className="hidden md:flex items-center gap-8">
             <Link
-              href="/tickets"
-              className="bg-gradient-to-r from-amber-500 to-amber-600 text-black px-6 py-2 rounded-full font-light tracking-wider transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110"
-              style={{
-                fontFamily: "'Jost', sans-serif",
-                fontSize: "10px",
-                letterSpacing: "0.28em",
-                fontWeight: 300,
-                textTransform: "uppercase",
-              }}
+              href="/"
+              className="font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+            >
+              Home
+            </Link>
+            <Link
+              href="/about"
+              className="font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+            >
+              Exclusive events
+            </Link>
+            <Link
+              href="/upcoming-events"
+              className="font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+            >
+              Gallery
+            </Link>
+            <Link
+              href="/contact-us"
+              className="font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+            >
+              Contact Us
+            </Link>
+             <Link
+              href="/services"
+              className="font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300 mr-6"
+            >
+              Services
+            </Link>
+            
+            <Link
+              href="https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
+              className="bg-amber-400 border-2 border-amber-500 font-extrabold tracking-wider text-black rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110 px-6 py-2 transition"
             >
               Tickets
             </Link>
@@ -79,58 +60,53 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-amber-400 transition-colors duration-300"
+            className="md:hidden text-amber-400"
           >
-            {isOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div
-            className="md:hidden mt-4 space-y-3 pb-4 rounded-2xl overflow-hidden"
-            style={{
-              background: "linear-gradient(135deg, rgba(18,18,20,0.94) 0%, rgba(10,10,12,0.97) 100%)",
-              backdropFilter: "blur(32px) saturate(180%)",
-              border: "1px solid rgba(255,255,255,0.09)",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.10)",
-              padding: "16px",
-            }}
-          >
-            {[
-              { href: "/", label: "Home" },
-              { href: "/events", label: "Upcoming Events" },
-              { href: "/about", label: "About Us" },
-              { href: "/contact", label: "Contact" },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="block py-2 text-amber-400 hover:text-amber-500 transition-colors duration-300"
-                style={{
-                  fontFamily: "'Jost', sans-serif",
-                  fontSize: "11px",
-                  letterSpacing: "0.18em",
-                  fontWeight: 300,
-                  textTransform: "uppercase",
-                }}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-
-            {/* Amber pill CTA for mobile */}
+          <div className="md:hidden mt-4 space-y-3 pb-4 bg-black backdrop-blur-sm rounded-lg p-4">
             <Link
-              href="/tickets"
-              className="block bg-gradient-to-r from-amber-500 to-amber-600 text-black px-6 py-2 rounded-full text-center font-light tracking-wider transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110 mt-3"
-              style={{
-                fontFamily: "'Jost', sans-serif",
-                fontSize: "10px",
-                letterSpacing: "0.28em",
-                fontWeight: 300,
-                textTransform: "uppercase",
-              }}
+              href="/"
+              className="block font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/about"
+              className="block font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+             Exclusive events
+            </Link>
+            <Link
+              href="/upcoming-events"
+              className="block font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              Gallery
+            </Link>
+            <Link
+              href="/contact-us"
+              className="block font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+            >
+              Contact Us
+            </Link>
+              <Link
+              href="/services"
+              className="font-extrabold tracking-wider uppercase text-amber-400 hover:text-amber-500 transition-all duration-300"
+            >
+              Services
+            </Link>
+            
+            <Link
+              href="https://vibesup.org/events/arab-nights?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnWQs1Mvd95ByZN4s8Yeqmf7FXwG_T2f7w-rlURYmCZweC6A10lUGQxCCTX_g_aem_G-3aaqjxga85jL1r59pnDQ"
+              className="block mt-4 bg-amber-400 border-2 border-amber-500 font-extrabold tracking-wider text-black rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-amber-500/50 hover:brightness-110 px-6 py-2 transition text-center"
               onClick={() => setIsOpen(false)}
             >
               Tickets
