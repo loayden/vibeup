@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Volume2, VolumeX } from "lucide-react";
 
@@ -76,10 +77,12 @@ function SingleImageCarousel({
           className="absolute inset-x-5 top-0 h-px pointer-events-none"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)" }}
         />
-        <img
+        <Image
           src={`/${images[currentIndex]}`}
           alt={images[currentIndex]}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          fill
+          sizes="(min-width: 768px) 50vw, 100vw"
+          className="object-cover transition-transform duration-500 hover:scale-105"
         />
         <button
           onClick={prevImage}
@@ -147,13 +150,11 @@ function SingleImageCarousel({
 
 function SquareVideoSection({
   src,
-  title,
   description,
   videosMuted,
   videoRefs,
 }: {
   src: string;
-  title: React.ReactNode;
   description?: React.ReactNode;
   videosMuted: boolean;
   videoRefs: React.MutableRefObject<HTMLVideoElement[]>;
@@ -384,7 +385,7 @@ export default function MemoriesPage() {
                 lineHeight: "1.9",
                 letterSpacing: "0.03em"
               }}>
-                A big thank you to the National Arab Orchestra beautifully led by Maestro Michael Ibrahim, for an unforgettable Voices of Legend Um Kalthoum concert. And a heartfelt thanks to the superstar Eman Abdel Ghani for adding that special magic to the evening. We're truly grateful for your amazing performances! A night to remember.
+                A big thank you to the National Arab Orchestra beautifully led by Maestro Michael Ibrahim, for an unforgettable Voices of Legend Um Kalthoum concert. And a heartfelt thanks to the superstar Eman Abdel Ghani for adding that special magic to the evening. We&apos;re truly grateful for your amazing performances! A night to remember.
               </div>
             </div>
           </section>
@@ -420,7 +421,6 @@ export default function MemoriesPage() {
           {/* Interview Video */}
           <SquareVideoSection
             src="/VIBEUP1.mp4"
-            title=""
             description={
               <>
                 Right after the unforgettable night of Voices of Legends, we interviewed Maestro Michael Ibrahim and soprano Eman Abdel Ghani to share their thoughts, emotions, and the magic of bringing timeless Arabic classics back to life on stage. ✨
@@ -467,7 +467,7 @@ export default function MemoriesPage() {
                 lineHeight: "1.9",
                 letterSpacing: "0.03em"
               }}>
-                The National Arab Orchestra beautifully led by Maestro Michael Ibrahim, for an unforgettable Voices of Legend Um Kalthoum concert. And a heartfelt thanks to the superstar Eman Abdel Ghani for adding that special magic to the evening. We're truly grateful for your amazing performances! A night to remember, filled with music, magic, and timeless legends 🎶
+                The National Arab Orchestra beautifully led by Maestro Michael Ibrahim, for an unforgettable Voices of Legend Um Kalthoum concert. And a heartfelt thanks to the superstar Eman Abdel Ghani for adding that special magic to the evening. We&apos;re truly grateful for your amazing performances! A night to remember, filled with music, magic, and timeless legends 🎶
               </div>
             </div>
           </section>
@@ -477,7 +477,6 @@ export default function MemoriesPage() {
           {/* Artist Highlight Video */}
           <SquareVideoSection
             src="/VIBEUP9.mp4"
-            title=""
             description={
               <>
                 A heartfelt thank you to the incredible Abdel Karim Hamdan for lighting up the stage and giving us a performance filled with soul, passion, and unforgettable moments. ✨🎶
@@ -503,7 +502,7 @@ export default function MemoriesPage() {
             heading={
               <>
                 An unforgettable night ✨🥂
-                From the first moment to the final countdown, this New Year's Gala was pure magic.
+                From the first moment to the final countdown, this New Year&apos;s Gala was pure magic.
                 A special thank you to our incredible stars, Abdelkarim Hamdan and Sherine Zaza, and to our amazing audience who made this night truly legendary. 🎆
               </>
             }

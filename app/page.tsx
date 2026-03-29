@@ -14,13 +14,11 @@ import { supabase } from "@/lib/supabase";
 const EVENT_DATE = new Date("2025-12-31T20:30:00");
 
 function useCountdown(target: Date) {
-  const [now, setNow] = useState<number | null>(null);
+  const [now, setNow] = useState<number>(() => Date.now());
   useEffect(() => {
-    setNow(Date.now());
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
-  if (now === null) return { d: 0, h: 0, m: 0, s: 0 };
   const diff = Math.max(0, target.getTime() - now);
   return {
     d: Math.floor(diff / 86400000),
@@ -273,7 +271,7 @@ export default function GalaPage() {
               className="text-white/35 font-light mb-10 max-w-md leading-relaxed"
               style={{ fontSize:"0.88rem", letterSpacing:"0.10em" }}
             >
-              Join us for Abdel Karim's Arab Nights — March 28th.<br />Limited tickets available.
+              Join us for Abdel Karim&apos;s Arab Nights — March 28th.<br />Limited tickets available.
             </motion.p>
 
             <motion.div

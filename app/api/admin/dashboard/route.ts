@@ -1,0 +1,79 @@
+import { NextRequest } from "next/server";
+
+import { requireAdmin } from "@/lib/auth";
+import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
+import { createAdminClient } from "@/lib/supabase-server";
+
+export async function GET(request: NextRequest) {
+  try {
+    const authResult = await requireAdmin(request);
+
+    if (!authResult.ok) {
+      return errorResponse(authResult.error, authResult.status, {
+        origin: request.headers.get("origin"),
+      });
+    }
+
+    const supabase = createAdminClient();
+    const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+    const [
+      paidOrdersResult,
+      activeTicketsResult,
+      newEnquiriesResult,
+      subscriptionsResult,
+      revenueResult,
+      publishedEventsResult,
+    ] = await Promise.all([
+      supabase
+        .from("orders")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "paid")
+        .gte("created_at", monthAgo),
+      supabase
+        .from("tickets")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "valid"),
+      supabase
+        .from("enquiries")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "new"),
+      supabase
+        .from("subscriptions")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "active"),
+      supabase
+        .from("orders")
+        .select("total")
+        .eq("status", "paid")
+        .gte("created_at", monthAgo),
+      supabase
+        .from("events")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "published"),
+    ]);
+
+    const revenue = (revenueResult.data || []).reduce(
+      (sum, order) => sum + order.total,
+      0,
+    );
+
+    return jsonResponse(
+      {
+        stats: {
+          orders_this_month: paidOrdersResult.count || 0,
+          active_tickets: activeTicketsResult.count || 0,
+          new_enquiries: newEnquiriesResult.count || 0,
+          total_subscribers: subscriptionsResult.count || 0,
+          published_events: publishedEventsResult.count || 0,
+          revenue_this_month: Number(revenue.toFixed(2)),
+        },
+      },
+      {
+        origin: request.headers.get("origin"),
+      },
+    );
+  } catch (error) {
+    return handleRouteError(request, error, "Unable to fetch dashboard stats");
+  }
+}

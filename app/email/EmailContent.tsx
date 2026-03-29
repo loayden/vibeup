@@ -30,7 +30,7 @@ export default function EmailContent() {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.from("subscriptions").insert([{ email: emailToSubmit }]);
+      const { error } = await supabase.from("subscriptions").insert([{ email: emailToSubmit }]);
 
       if (error) {
         if (error.code === "23505") {
@@ -43,8 +43,12 @@ export default function EmailContent() {
         setStatus("🎉 Email saved! Redirecting to tickets...");
         setTimeout(() => router.push("/checkout"), 1000);
       }
-    } catch (err: any) {
-      setStatus(`❌ Subscription failed: ${err.message || err}`);
+    } catch (error) {
+      setStatus(
+        `❌ Subscription failed: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
+      );
     } finally {
       setLoading(false);
     }

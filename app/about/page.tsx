@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image";
 import React, { useRef, useEffect, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 
@@ -86,10 +87,13 @@ export default function AboutPage() {
                 className="absolute inset-x-5 top-0 h-px pointer-events-none"
                 style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)" }}
               />
-              <img
+              <Image
                 src="/arabnights.jpeg"
                 alt="Layali Al Arab Event"
-                className="w-full h-auto object-cover"
+                width={1600}
+                height={900}
+                priority
+                className="h-auto w-full object-cover"
               />
             </div>
           </div>

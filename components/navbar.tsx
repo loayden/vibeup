@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
@@ -24,9 +25,11 @@ export function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
-          <img
-            src="vibeup-logo.png"
+          <Image
+            src="/vibeup-logo.png"
             alt="VIBEUP"
+            width={224}
+            height={56}
             className="h-14 w-auto transition duration-500 hover:scale-110"
           />
         </Link>

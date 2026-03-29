@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { supabase } from "@/lib/supabase"
 
 const TICKETS = [
@@ -35,7 +34,7 @@ function Orbs() {
 
 export default function CheckoutPage() {
   const [selectedTicket, setSelectedTicket] = useState<string | null>(null)
-  const [quantity, setQuantity] = useState(1)
+  const quantity = 1
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
   const [status, setStatus] = useState<string | null>(null)
@@ -63,8 +62,8 @@ export default function CheckoutPage() {
       ])
 
       setStatus("Reservation confirmed")
-    } catch (err: any) {
-      setStatus(err.message)
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Checkout failed")
     } finally {
       setLoading(false)
     }

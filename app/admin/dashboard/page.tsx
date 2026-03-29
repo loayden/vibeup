@@ -1,18 +1,26 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import { QrCode, Users, DollarSign, CheckCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+
+const SalesChart = dynamic(() => import("./sales-chart").then((mod) => mod.SalesChart), {
+  ssr: false,
+  loading: () => <div className="h-full w-full animate-pulse rounded-md bg-neutral-800/60" />,
+})
 
 export default function AdminDashboard() {
   const [subscribers, setSubscribers] = useState<{ email: string, created_at: string }[]>([])
   const [loading, setLoading] = useState(true)
 
-  const fetchSubscribers = async () => {
-    setLoading(true)
+  const fetchSubscribers = async (showLoader = true) => {
+    if (showLoader) {
+      setLoading(true)
+    }
+
     const { data, error } = await supabase
       .from('pre_checkout_emails')
       .select('*')
@@ -26,7 +34,11 @@ export default function AdminDashboard() {
   }
 
   useEffect(() => {
-    fetchSubscribers()
+    const loadSubscribers = async () => {
+      await fetchSubscribers(false)
+    }
+
+    void loadSubscribers()
   }, [])
 
   const totalSubscribers = subscribers.length
@@ -120,22 +132,15 @@ export default function AdminDashboard() {
       <Card className="bg-neutral-900/70 p-4">
         <CardContent>
           <h2 className="mb-4 text-xl font-semibold">Sales (sample)</h2>
-          <div style={{ width: '100%', height: 250 }}>
-            <ResponsiveContainer>
-              <BarChart data={sampleData}>
-                <XAxis dataKey="name" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" />
-                <Tooltip />
-                <Bar dataKey="sales" fill="#F59E0B" />
-              </BarChart>
-            </ResponsiveContainer>
+          <div style={{ width: '100%', height: 250, minWidth: 0 }}>
+            <SalesChart data={sampleData} />
           </div>
         </CardContent>
       </Card>
 
       {/* Actions */}
       <div className="mt-6 flex gap-2">
-        <Button onClick={fetchSubscribers} className="rounded-md">Refresh</Button>
+        <Button onClick={() => void fetchSubscribers()} className="rounded-md">Refresh</Button>
         <Button variant="outline" onClick={() => alert('Export CSV not implemented')} className="rounded-md">Export</Button>
       </div>
     </div>

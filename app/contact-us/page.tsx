@@ -69,7 +69,7 @@ export default function ContactUs() {
               color: "rgba(255,255,255,0.65)",
               lineHeight: "1.8"
             }}>
-              We'd love to hear from you. For inquiries, ticket bookings, collaborations, or VIP experiences, our team is ready to assist you anytime.
+              We&apos;d love to hear from you. For inquiries, ticket bookings, collaborations, or VIP experiences, our team is ready to assist you anytime.
             </p>
           </div>
 
