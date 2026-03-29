@@ -1,0 +1,278 @@
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, MapPin, BriefcaseBusiness } from "lucide-react";
+import { useRef, useState } from "react";
+
+import { GlassCard, LiquidButton } from "@/components/site/liquid";
+import type { OPEN_POSITIONS } from "@/lib/site-data";
+
+type BannerState = {
+  type: "success" | "error";
+  message: string;
+};
+
+type Position = (typeof OPEN_POSITIONS)[number];
+
+type CareersBoardProps = {
+  positions: readonly Position[];
+};
+
+export function CareersBoard({ positions }: CareersBoardProps) {
+  const [selectedRole, setSelectedRole] = useState<string>(positions[0]?.role || "");
+  const [banner, setBanner] = useState<BannerState | null>(null);
+  const [loading, setLoading] = useState(false);
+  const formRef = useRef<HTMLDivElement | null>(null);
+  const [form, setForm] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    role: string;
+    portfolio_url: string;
+    linkedin_url: string;
+    resume_url: string;
+    message: string;
+  }>({
+    name: "",
+    email: "",
+    phone: "",
+    role: positions[0]?.role || "",
+    portfolio_url: "",
+    linkedin_url: "",
+    resume_url: "",
+    message: "",
+  });
+
+  function focusForm(role: string) {
+    setSelectedRole(role);
+    setForm((current) => ({ ...current, role }));
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setLoading(true);
+    setBanner(null);
+
+    try {
+      const response = await fetch("/api/applications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          phone: form.phone || null,
+          portfolio_url: form.portfolio_url || null,
+          linkedin_url: form.linkedin_url || null,
+          resume_url: form.resume_url || null,
+          message: form.message || null,
+        }),
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | { message?: string; error?: string }
+        | null;
+
+      if (!response.ok) {
+        setBanner({
+          type: "error",
+          message: payload?.error || "Unable to submit your application.",
+        });
+        return;
+      }
+
+      setBanner({
+        type: "success",
+        message: payload?.message || "Application submitted successfully.",
+      });
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        role: selectedRole,
+        portfolio_url: "",
+        linkedin_url: "",
+        resume_url: "",
+        message: "",
+      });
+    } catch {
+      setBanner({
+        type: "error",
+        message: "Unable to submit your application.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-10">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {positions.map((position, index) => (
+          <motion.div
+            key={position.role}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <GlassCard hover className="h-full px-6 py-6">
+              <div className="flex flex-wrap gap-3">
+                <span className="liquid-button-gold px-4 py-2 !text-[9px]">{position.type}</span>
+                <span className="liquid-button-ghost px-4 py-2 !text-[9px]">{position.location}</span>
+              </div>
+              <h3 className="mt-5 font-serif text-[2rem] font-light tracking-[0.05em] text-white">
+                {position.role}
+              </h3>
+              <div className="gold-divider-left mt-4 h-px w-20" />
+              <div className="mt-5 flex items-center gap-3">
+                <MapPin className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                <p className="body-copy text-white/65">{position.location}</p>
+              </div>
+              <div className="mt-3 flex items-center gap-3">
+                <BriefcaseBusiness className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                <p className="body-copy text-white/65">{position.type}</p>
+              </div>
+              <p className="body-copy mt-5">{position.summary}</p>
+              <button
+                className="liquid-button-gold mt-7"
+                onClick={() => focusForm(position.role)}
+                data-cursor="hover"
+              >
+                Apply Now
+              </button>
+            </GlassCard>
+          </motion.div>
+        ))}
+      </div>
+
+      <div ref={formRef}>
+        <GlassCard gold className="px-6 py-7 md:px-8">
+          <p className="eyebrow mb-4">Application Form</p>
+          <h3 className="section-title text-[2.3rem]">
+            Apply for <em>{selectedRole || "VibeUp"}</em>
+          </h3>
+          <p className="body-copy mt-5 max-w-2xl">
+            We prefer concise, thoughtful applications. Share the role you want, links that
+            demonstrate your work, and a note on the kind of event environment you want to help
+            build.
+          </p>
+
+          <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
+            <AnimatePresence>
+              {banner ? (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -8, height: 0 }}
+                  className="overflow-hidden rounded-[18px] px-4 py-3"
+                  style={{
+                    background:
+                      banner.type === "success"
+                        ? "rgba(52,211,153,0.08)"
+                        : "rgba(255,60,60,0.07)",
+                    border:
+                      banner.type === "success"
+                        ? "1px solid rgba(52,211,153,0.18)"
+                        : "1px solid rgba(255,80,80,0.18)",
+                  }}
+                >
+                  <p className="body-copy text-[0.8rem] text-white/70">{banner.message}</p>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <input
+                className="glass-input"
+                placeholder="Full Name"
+                value={form.name}
+                onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+                required
+              />
+              <input
+                className="glass-input"
+                placeholder="Email Address"
+                type="email"
+                value={form.email}
+                onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+                required
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <input
+                className="glass-input"
+                placeholder="Phone Number"
+                value={form.phone}
+                onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+              />
+              <select
+                className="glass-input"
+                value={form.role}
+                onChange={(event) => {
+                  setSelectedRole(event.target.value);
+                  setForm((current) => ({ ...current, role: event.target.value }));
+                }}
+              >
+                {positions.map((position) => (
+                  <option key={position.role} value={position.role} className="bg-[#121214] text-white">
+                    {position.role}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <input
+                className="glass-input"
+                placeholder="Portfolio URL"
+                type="url"
+                value={form.portfolio_url}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, portfolio_url: event.target.value }))
+                }
+              />
+              <input
+                className="glass-input"
+                placeholder="LinkedIn URL"
+                type="url"
+                value={form.linkedin_url}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, linkedin_url: event.target.value }))
+                }
+              />
+            </div>
+
+            <input
+              className="glass-input"
+              placeholder="Resume Link (Drive, Dropbox, or portfolio page)"
+              type="url"
+              value={form.resume_url}
+              onChange={(event) => setForm((current) => ({ ...current, resume_url: event.target.value }))}
+            />
+
+            <textarea
+              className="glass-input min-h-[160px] resize-none"
+              placeholder="Tell us why you want to work with VibeUp."
+              value={form.message}
+              onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
+            />
+
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <p className="body-copy max-w-xl text-[0.78rem]">
+                Share links instead of attachments when possible. It keeps review faster and
+                helps us evaluate your work in context.
+              </p>
+              <LiquidButton gold type="submit" disabled={loading}>
+                <span className="inline-flex items-center gap-2">
+                  {loading ? "Submitting" : "Submit Application"}
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                </span>
+              </LiquidButton>
+            </div>
+          </form>
+        </GlassCard>
+      </div>
+    </div>
+  );
+}

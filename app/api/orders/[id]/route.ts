@@ -7,11 +7,11 @@ import { normalizeEmail } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ orderNumber: string }> },
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { orderNumber } = await context.params;
-    const order = await getOrderWithRelationsByNumber(orderNumber);
+    const { id } = await context.params;
+    const order = await getOrderWithRelationsByNumber(id);
     const authResult = await getAuthUser(request);
     const email = request.nextUrl.searchParams.get("email");
 

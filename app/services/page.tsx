@@ -1,134 +1,243 @@
-"use client"
-import React from "react";
+import { ArrowRight, Layers3, Megaphone, Sparkles, Wand2 } from "lucide-react";
+import Image from "next/image";
 
-const services = [
-  {
-    title: "Event Planning & Management",
-    points: [
-      "Full-service event planning and execution",
-      "Corporate events, private parties, concerts, cultural and social events",
-      "Timeline creation and on-site event coordination",
-      "Vendor and supplier management (sound, lighting, staging, décor)",
-    ],
-    image: "widding.jpg",
-  },
-  {
-    title: "Artist & Talent Management",
-    points: [
-      "Booking and coordination of artists, DJs, performers, and hosts",
-      "Contract management and scheduling",
-      "Artist hospitality and performance coordination",
-    ],
-    image: "dj.jpg",
-  },
-  {
-    title: "Event Marketing & Promotion",
-    points: [
-      "Digital marketing campaigns for events",
-      "Social media management",
-      "Audience targeting and engagement strategies",
-      "Influencer and media collaborations",
-    ],
-    image: "pexels-ardit-mbrati-216809103-16966362.jpg",
-  },
-  {
-    title: "Ticketing & Guest Management",
-    points: [
-      "Ticket sales setup and management",
-      "Digital invitations and RSVP systems",
-      "Guest list management and check-in solutions",
-      "VIP access coordination",
-    ],
-    image: "stage.jpg",
-  },
-];
+import { LiquidAccordion } from "@/components/site/accordion";
+import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
+import { ServiceCatalog } from "@/components/site/service-catalog";
+import {
+  SERVICE_ADDONS,
+  SERVICE_PACKAGES,
+  SERVICE_PROCESS,
+  SERVICES,
+} from "@/lib/site-data";
 
-function Orbs() {
-  return (
-    <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
-      <div style={{
-        position:"absolute", width:700, height:700, top:"-15%", right:"-10%",
-        background:"radial-gradient(circle, rgba(198,169,98,0.07) 0%, transparent 65%)",
-        filter:"blur(90px)"
-      }} />
-      <div style={{
-        position:"absolute", width:550, height:550, bottom:"5%", left:"-8%",
-        background:"radial-gradient(circle, rgba(150,140,220,0.05) 0%, transparent 65%)",
-        filter:"blur(80px)"
-      }} />
-    </div>
-  );
-}
+const serviceFaq = [
+  {
+    question: "Do you only produce public ticketed events?",
+    answer:
+      "No. VibeUp produces public, private, corporate, and partner-led experiences. The same production standards can be scaled to intimate dinners or large live events.",
+  },
+  {
+    question: "Can you handle creative direction as well as logistics?",
+    answer:
+      "Yes. We regularly lead both the visual narrative and the operational system so the event feels coherent from brand language to on-site timing.",
+  },
+  {
+    question: "Do you work with existing vendors or only your own network?",
+    answer:
+      "Both. We can integrate trusted client vendors when they meet project requirements, or we can build the partner stack from our own network.",
+  },
+  {
+    question: "How involved are you on event day?",
+    answer:
+      "We stay deeply involved on event day. Production leadership, coordination, troubleshooting, and guest-facing rhythm are part of the service, not an afterthought.",
+  },
+  {
+    question: "Can you support sponsorship strategy and partner moments?",
+    answer:
+      "Yes. Sponsorship planning, activation design, placement strategy, and partner reporting are part of our commercial support offering.",
+  },
+  {
+    question: "Do you help with recurring event series?",
+    answer:
+      "Yes. We can help structure a full event line with repeatable standards, creative evolution, stronger data capture, and better long-term growth decisions.",
+  },
+] as const;
 
 export default function ServicesPage() {
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@200;300&display=swap');
-        body { background:#080808; }
-      `}</style>
-
-      <main className="relative min-h-screen text-white px-6 md:px-20 py-24" style={{fontFamily:"'Jost',sans-serif"}}>
-        <Orbs />
-
-        <div className="relative z-10 max-w-5xl mx-auto text-center mb-20">
-          <p className="text-white/20 text-[9px] tracking-[0.45em] uppercase mb-4">
-            Services
-          </p>
-
-          <h1 style={{
-            fontFamily:"'Cormorant Garamond',serif",
-            fontSize:"clamp(2.5rem,6vw,4.5rem)",
-            fontWeight:300
-          }}>
-            VibeUp <em style={{color:"#C6A962"}}>Services</em>
-          </h1>
-
-          <div className="mt-6 h-px w-20 mx-auto" style={{
-            background:"linear-gradient(90deg,transparent,#C6A962,transparent)"
-          }}/>
-
-          <p className="text-white/40 mt-6 text-sm max-w-2xl mx-auto leading-relaxed">
-            Delivering exceptional events with precision and creativity, blending strategy, production, and unforgettable experiences.
-          </p>
-        </div>
-
-        <div className="relative z-10 grid gap-10 md:grid-cols-2">
-          {services.map((service, i) => (
-            <div key={i} className="relative p-6 rounded-2xl overflow-hidden"
-              style={{
-                background:"linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))",
-                backdropFilter:"blur(20px)",
-                border:"1px solid rgba(255,255,255,0.09)"
-              }}
-            >
-              <div className="absolute inset-x-5 top-0 h-px"
-                style={{background:"linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)"}} />
-
-              <h2 className="mb-4 text-lg"
-                style={{
-                  fontFamily:"'Cormorant Garamond',serif",
-                  fontWeight:300
-                }}>
-                {service.title}
-              </h2>
-
-              <div className="h-px mb-4"
-                style={{background:"linear-gradient(90deg,#C6A962,transparent)"}} />
-
-              <ul className="space-y-2 text-white/50 text-sm">
-                {service.points.map((point, idx) => (
-                  <li key={idx}>— {point}</li>
-                ))}
-              </ul>
+    <main className="overflow-x-hidden pb-20">
+      <PageHero
+        eyebrow="Services"
+        title="Luxury production for events that need more"
+        goldWord="control"
+        description="We provide planning, creative direction, marketing, technical production, hospitality, and operating structure for events that need to look refined, feel smooth, and perform well commercially."
+        media={
+          <GlassCard className="overflow-hidden p-3">
+            <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
+              <Image
+                src="/stage.jpg"
+                alt="VibeUp services"
+                fill
+                priority
+                sizes="(min-width: 1024px) 42vw, 100vw"
+                className="object-cover"
+              />
             </div>
+          </GlassCard>
+        }
+        actions={
+          <>
+            <LiquidLinkButton href="/contact-us" gold>
+              Request A Quote <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+            </LiquidLinkButton>
+            <LiquidLinkButton href="/events">See Live Examples</LiquidLinkButton>
+          </>
+        }
+      />
+
+      <section className="px-6 py-8 md:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
+          {[
+            {
+              icon: Sparkles,
+              label: "Event Planning",
+              body: "Luxury strategy and guest flow architecture.",
+            },
+            {
+              icon: Megaphone,
+              label: "Marketing",
+              body: "Audience positioning, launch, and conversion support.",
+            },
+            {
+              icon: Layers3,
+              label: "Production",
+              body: "Sound, stage, vendors, staffing, and execution control.",
+            },
+            {
+              icon: Wand2,
+              label: "Creative",
+              body: "Visual language, experience styling, and premium presentation.",
+            },
+          ].map((item) => (
+            <GlassCard key={item.label} gold className="h-full px-5 py-5">
+              <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+              <p className="eyebrow mb-2">{item.label}</p>
+              <p className="body-copy text-white/68">{item.body}</p>
+            </GlassCard>
           ))}
         </div>
+      </section>
 
-        <footer className="relative z-10 mt-24 text-center text-white/30 text-xs">
-          © 2026 VibeUp — Luxury experiences
-        </footer>
-      </main>
-    </>
+      <section className="px-6 py-20 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeader
+            eyebrow="Capabilities"
+            title="The full service"
+            goldWord="catalog"
+            subtitle="Select a category to view the operating areas we handle most often for luxury public nights, private events, and branded experiences."
+          />
+          <ServiceCatalog services={SERVICES} />
+        </div>
+      </section>
+
+      <section className="px-6 py-20 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeader
+            eyebrow="Process"
+            title="A cleaner path from idea to live"
+            goldWord="execution"
+            subtitle="The experience feels smooth for guests because the work is structured carefully behind the scenes."
+          />
+
+          <div className="grid gap-5 lg:grid-cols-5">
+            {SERVICE_PROCESS.map((step) => (
+              <GlassCard key={step.title} hover className="h-full px-5 py-6">
+                <p className="eyebrow mb-3">{step.title}</p>
+                <h3 className="font-serif text-[1.8rem] font-light tracking-[0.05em] text-white">
+                  {step.title}
+                </h3>
+                <div className="gold-divider-left mt-4 h-px w-16" />
+                <p className="body-copy mt-5">{step.body}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-20 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeader
+            eyebrow="Packages"
+            title="Flexible support at the right"
+            goldWord="scale"
+            subtitle="Pricing is shaped by guest count, technical complexity, creative ambition, and commercial scope. These tiers help frame the conversation."
+          />
+
+          <div className="grid gap-5 lg:grid-cols-3">
+            {SERVICE_PACKAGES.map((pkg, index) => (
+              <GlassCard
+                key={pkg.title}
+                gold={index === 1}
+                hover
+                className="h-full px-6 py-7"
+              >
+                <p className="eyebrow mb-3">{pkg.title}</p>
+                <h3 className="font-serif text-[2.1rem] font-light tracking-[0.05em] text-white">
+                  {pkg.title}
+                </h3>
+                <p className="mt-4 font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)]">
+                  {pkg.price}
+                </p>
+                <div className="gold-divider-left mt-5 h-px w-20" />
+                <p className="body-copy mt-5">{pkg.body}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-10 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-6xl">
+          <GlassCard gold className="px-6 py-7 md:px-8">
+            <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr]">
+              <div>
+                <p className="eyebrow mb-4">Add-On Services</p>
+                <h3 className="section-title text-[2.3rem]">
+                  Enhancements that elevate the guest <em>memory</em>
+                </h3>
+                <p className="body-copy mt-5">
+                  These add-ons are frequently layered into private or high-visibility events to
+                  sharpen perceived value and strengthen guest retention.
+                </p>
+              </div>
+
+              <div className="grid gap-3">
+                {SERVICE_ADDONS.map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-[18px] border border-[rgba(198,169,98,0.2)] bg-[rgba(198,169,98,0.05)] px-4 py-4"
+                  >
+                    <p className="body-copy text-white/70">{item}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+      </section>
+
+      <section className="px-6 py-20 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-5xl">
+          <SectionHeader
+            eyebrow="Questions"
+            title="Common service"
+            goldWord="answers"
+            subtitle="A few of the questions clients ask before we move into consultation, planning, and proposal development."
+          />
+          <LiquidAccordion items={serviceFaq} />
+        </div>
+      </section>
+
+      <section className="px-6 pt-8 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-5xl">
+          <GlassCard warm className="px-6 py-8 text-center md:px-10 md:py-10">
+            <p className="eyebrow mb-4">Next Step</p>
+            <h2 className="section-title">
+              Request a custom <em>quote</em>
+            </h2>
+            <p className="body-copy mx-auto mt-5 max-w-2xl">
+              If you have a date range, venue direction, guest estimate, or a rough budget, that is
+              enough to start a serious conversation with us.
+            </p>
+            <div className="mt-8 flex justify-center">
+              <LiquidLinkButton href="/contact-us" gold>
+                Request A Custom Quote
+              </LiquidLinkButton>
+            </div>
+          </GlassCard>
+        </div>
+      </section>
+    </main>
   );
 }

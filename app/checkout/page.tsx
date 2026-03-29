@@ -1,215 +1,109 @@
-"use client"
+import { ArrowRight, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import Image from "next/image";
 
-import { useState } from "react"
-import { supabase } from "@/lib/supabase"
-
-const TICKETS = [
-  { id: "vip-red", name: "VIP Red", price: 250 },
-  { id: "blue", name: "Blue", price: 200 },
-  { id: "green", name: "Green", price: 175 },
-  { id: "yellow", name: "Yellow", price: 150 },
-  { id: "purple", name: "Purple", price: 120 },
-]
-
-function Orbs() {
-  return (
-    <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
-      <div style={{
-        position:"absolute", width:700, height:700, top:"-15%", right:"-10%",
-        background:"radial-gradient(circle, rgba(198,169,98,0.07) 0%, transparent 65%)",
-        filter:"blur(90px)", animation:"orbA 26s ease-in-out infinite",
-      }} />
-      <div style={{
-        position:"absolute", width:550, height:550, bottom:"5%", left:"-8%",
-        background:"radial-gradient(circle, rgba(150,140,220,0.05) 0%, transparent 65%)",
-        filter:"blur(80px)", animation:"orbB 32s ease-in-out infinite",
-      }} />
-      <style>{`
-        @keyframes orbA { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-28px,22px)} }
-        @keyframes orbB { 0%,100%{transform:translate(0,0)} 50%{transform:translate(32px,-18px)} }
-      `}</style>
-    </div>
-  )
-}
+import { CheckoutExperience } from "@/components/site/checkout-experience";
+import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
+import { SITE } from "@/lib/site-data";
 
 export default function CheckoutPage() {
-  const [selectedTicket, setSelectedTicket] = useState<string | null>(null)
-  const quantity = 1
-  const [email, setEmail] = useState("")
-  const [name, setName] = useState("")
-  const [status, setStatus] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-
-  const ticket = selectedTicket ? TICKETS.find(t => t.id === selectedTicket) : null
-  const total = ticket ? ticket.price * quantity : 0
-
-  const handleCheckout = async () => {
-    if (!name || !email || !selectedTicket) {
-      setStatus("Please complete all fields")
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      await supabase.from("reservations").upsert([
-        {
-          email,
-          full_name: name,
-          ticket_id: selectedTicket,
-          quantity
-        }
-      ])
-
-      setStatus("Reservation confirmed")
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Checkout failed")
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300&display=swap');
-        body { background:#080808 }
-      `}</style>
-
-      <main className="relative min-h-screen bg-[#080808] text-white" style={{fontFamily:"'Jost',sans-serif"}}>
-        <Orbs />
-
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
-
-          {/* HEADER */}
-          <div className="mb-16 text-center">
-            <p className="text-white/20 text-[9px] tracking-[0.45em] uppercase mb-4">
-              Checkout
-            </p>
-
-            <h1 style={{
-              fontFamily:"'Cormorant Garamond',serif",
-              fontSize:"clamp(2.5rem,6vw,4.5rem)",
-              fontWeight:300,
-              letterSpacing:"0.04em"
-            }}>
-              Book Your <em style={{color:"#C6A962"}}>Seat</em>
-            </h1>
-
-            <div className="mt-6 mx-auto w-16 h-px"
-              style={{background:"linear-gradient(90deg,transparent,rgba(198,169,98,0.5),transparent)"}} />
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-10">
-
-            {/* TICKETS */}
-            <div className="space-y-6">
-              {TICKETS.map(t => (
-                <div
-                  key={t.id}
-                  onClick={() => setSelectedTicket(t.id)}
-                  className="relative p-6 rounded-2xl cursor-pointer transition"
-                  style={{
-                    background:"linear-gradient(135deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02))",
-                    backdropFilter:"blur(24px)",
-                    border:selectedTicket === t.id
-                      ? "1px solid rgba(198,169,98,0.4)"
-                      : "1px solid rgba(255,255,255,0.08)"
-                  }}
-                >
-                  <div className="absolute inset-x-5 top-0 h-px"
-                    style={{background:"linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)"}} />
-
-                  <h3 style={{
-                    fontFamily:"'Cormorant Garamond',serif",
-                    fontSize:"1.5rem",
-                    fontWeight:300
-                  }}>
-                    {t.name}
-                  </h3>
-
-                  <p className="text-white/30 text-sm mt-2">
-                    ${t.price}
-                  </p>
-                </div>
-              ))}
+    <main className="overflow-x-hidden pb-20">
+      <PageHero
+        eyebrow="Checkout"
+        title="Reserve your place before the room"
+        goldWord="fills"
+        description="Choose the ticket tiers that fit your night, save your reservation, and continue into final purchase. This experience is designed to keep ticket selection calm, clear, and premium from the first click."
+        media={
+          <GlassCard className="overflow-hidden p-3">
+            <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
+              <Image
+                src="/arabnights.jpeg"
+                alt="Arab Nights checkout"
+                fill
+                priority
+                sizes="(min-width: 1024px) 42vw, 100vw"
+                className="object-cover"
+              />
             </div>
+          </GlassCard>
+        }
+        actions={
+          <>
+            <LiquidLinkButton href={SITE.buyUrl} gold external>
+              Official Ticket Page <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+            </LiquidLinkButton>
+            <LiquidLinkButton href="/events/arab-nights">View Event Detail</LiquidLinkButton>
+          </>
+        }
+      />
 
-            {/* SUMMARY */}
-            <div className="relative p-8 rounded-2xl"
-              style={{
-                background:"linear-gradient(135deg, rgba(198,169,98,0.16), rgba(198,169,98,0.05))",
-                backdropFilter:"blur(20px)",
-                border:"1px solid rgba(198,169,98,0.25)"
-              }}
-            >
-              <div className="absolute inset-x-5 top-0 h-px"
-                style={{background:"linear-gradient(90deg, transparent, rgba(255,255,255,0.20), transparent)"}} />
-
-              <h2 style={{
-                fontFamily:"'Cormorant Garamond',serif",
-                fontSize:"2rem",
-                fontWeight:300
-              }}>
-                Order <em style={{color:"#C6A962"}}>Summary</em>
-              </h2>
-
-              {ticket && (
-                <>
-                  <p className="mt-6 text-white/40 text-sm">
-                    {ticket.name} × {quantity}
-                  </p>
-
-                  <p className="text-3xl mt-4" style={{color:"#C6A962"}}>
-                    ${total}
-                  </p>
-
-                  <div className="mt-8 space-y-4">
-                    <input
-                      placeholder="Full Name"
-                      value={name}
-                      onChange={e=>setName(e.target.value)}
-                      className="w-full glass-input"
-                    />
-                    <input
-                      placeholder="Email"
-                      value={email}
-                      onChange={e=>setEmail(e.target.value)}
-                      className="w-full glass-input"
-                    />
-                  </div>
-
-                  {status && (
-                    <p className="text-white/30 text-xs mt-4">
-                      {status}
-                    </p>
-                  )}
-
-                  <button
-                    onClick={handleCheckout}
-                    disabled={loading}
-                    className="mt-8 w-full"
-                    style={{
-                      background:"linear-gradient(135deg, rgba(198,169,98,0.22), rgba(198,169,98,0.08))",
-                      backdropFilter:"blur(16px)",
-                      border:"1px solid rgba(198,169,98,0.35)",
-                      borderRadius:9999,
-                      padding:"14px 32px",
-                      color:"#C6A962",
-                      fontSize:"10px",
-                      letterSpacing:"0.32em",
-                      textTransform:"uppercase"
-                    }}
-                  >
-                    {loading ? "Processing" : "Confirm"}
-                  </button>
-                </>
-              )}
-            </div>
-
-          </div>
+      <section className="px-6 py-8 md:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+          {[
+            {
+              icon: ShieldCheck,
+              label: "Secure Flow",
+              body: "Reservation details are captured before final payment so your ticket intent is clear and trackable.",
+            },
+            {
+              icon: CheckCircle2,
+              label: "Fast Confirmation",
+              body: "Once payment is completed, the system is prepared to issue instant order confirmation and QR-based delivery.",
+            },
+            {
+              icon: Sparkles,
+              label: "Luxury Access",
+              body: "Every tier is structured around arrival quality, room feel, and a stronger guest-experience standard.",
+            },
+          ].map((item) => (
+            <GlassCard key={item.label} gold className="px-5 py-5">
+              <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+              <p className="eyebrow mb-2">{item.label}</p>
+              <p className="body-copy text-white/68">{item.body}</p>
+            </GlassCard>
+          ))}
         </div>
-      </main>
-    </>
-  )
+      </section>
+
+      <section className="px-6 py-20 md:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeader
+            eyebrow="Ticket Selection"
+            title="Build your order with more"
+            goldWord="clarity"
+            subtitle="Select quantity by tier, save your contact details, and move to the official payment step with a cleaner understanding of what you are buying."
+          />
+          <CheckoutExperience />
+        </div>
+      </section>
+
+      <section className="px-6 py-10 md:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-3">
+          {[
+            {
+              title: "Arrival Standard",
+              body: "Doors open into a guided guest journey with a stronger sense of ceremony, room control, and premium hospitality.",
+            },
+            {
+              title: "Ticket Delivery",
+              body: "Paid orders are prepared for immediate confirmation, QR ticket generation, and entrance validation at the event.",
+            },
+            {
+              title: "Support",
+              body: "If you need group coordination, a private table, or concierge help, contact the team before finalizing your order.",
+            },
+          ].map((item) => (
+            <GlassCard key={item.title} warm className="h-full px-6 py-6">
+              <p className="eyebrow mb-3">{item.title}</p>
+              <h3 className="font-serif text-[1.9rem] font-light tracking-[0.05em] text-white">
+                {item.title}
+              </h3>
+              <div className="gold-divider-left mt-4 h-px w-20" />
+              <p className="body-copy mt-5">{item.body}</p>
+            </GlassCard>
+          ))}
+        </div>
+      </section>
+    </main>
+  );
 }

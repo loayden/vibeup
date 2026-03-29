@@ -1,14 +1,31 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, Jost } from "next/font/google";
+
+import { SiteFooter } from "@/components/site/footer";
+import { LuxuryCursor } from "@/components/site/luxury-cursor";
+import { Orbs } from "@/components/site/orbs";
 import { Navbar } from "@/components/navbar";
+import { SITE } from "@/lib/site-data";
 import "./globals.css";
 
-const raceSans = { variable: "--font-race-sans", fontFamily: "'Race Sans', sans-serif" };
-const raceSerif = { variable: "--font-race-serif", fontFamily: "'Race Serif', serif" };
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["200", "300", "400"],
+  variable: "--font-jost",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  variable: "--font-cormorant",
+});
 
 export const metadata: Metadata = {
-  title: "VIBEUP",
-  description:
-    "Celebrate New Year’s Eve in style. Luxury black‑tie gala with dinner, live DJ, VIP experience, and midnight countdown,vibeup,VIBEUP,party,parties,arab party,usa arab party.",
+  title: {
+    default: SITE.name,
+    template: `%s | ${SITE.shortName}`,
+  },
+  description: SITE.description,
 };
 
 export default function RootLayout({
@@ -18,13 +35,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${raceSans.variable} ${raceSerif.variable} antialiased bg-gradient-to-br from-black/80 via-[#1a0730]/70 to-[#2d1b09]/80 py-16 text-amber-200`}
-      >
+      <body className={`${jost.variable} ${cormorant.variable} antialiased`}>
+        <LuxuryCursor />
+        <Orbs />
         <Navbar />
-        <div className="pt-16">
-          <div className="text-amber-400">{children}</div>
-        </div>
+        <div className="relative z-10 min-h-screen">{children}</div>
+        <SiteFooter />
       </body>
     </html>
   );
