@@ -12,22 +12,38 @@ import {
 import { createAdminClient } from "@/lib/supabase-server";
 import { normalizeEmail, sanitizeOptionalText, sanitizeText } from "@/lib/utils";
 
-const reservationSchema = z.object({
+const reservationItemSchema = z.object({
+  id: z.string().min(1).max(100),
+  name: z.string().min(1).max(120),
+  quantity: z.number().int().min(1).max(10),
+});
+
+const modernReservationSchema = z.object({
   full_name: z.string().min(2).max(100),
   email: z.string().email(),
   phone: z.string().max(30).optional(),
   promo: z.string().max(40).optional().nullable(),
-  items: z
-    .array(
-      z.object({
-        id: z.string().min(1).max(100),
-        name: z.string().min(1).max(120),
-        quantity: z.number().int().min(1).max(10),
-      }),
-    )
-    .min(1)
-    .max(10),
+  items: z.array(reservationItemSchema).min(1).max(10),
 });
+
+const legacyReservationSchema = z.object({
+  full_name: z.string().min(2).max(100).optional(),
+  name: z.string().min(2).max(100).optional(),
+  email: z.string().email(),
+  phone: z.string().max(30).optional().nullable(),
+  promo: z.string().max(40).optional().nullable(),
+  ticketId: z.string().min(1).max(100).optional(),
+  ticketName: z.string().min(1).max(120).optional(),
+  ticket_type: z.string().min(1).max(100).optional(),
+  quantity: z.coerce.number().int().min(1).max(10).optional(),
+});
+
+const reservationSchema = z.union([
+  modernReservationSchema,
+  legacyReservationSchema,
+]);
+
+type ReservationPayload = z.infer<typeof reservationSchema>;
 
 type ReservationInput = {
   fullName: string;
@@ -41,17 +57,46 @@ type ReservationInput = {
   }>;
 };
 
-function normalizeReservationInput(payload: z.infer<typeof reservationSchema>): ReservationInput {
+function normalizeReservationInput(payload: ReservationPayload): ReservationInput {
+  if ("items" in payload) {
+    return {
+      fullName: sanitizeText(payload.full_name, 100),
+      email: normalizeEmail(payload.email),
+      phone: sanitizeOptionalText(payload.phone, 30),
+      promo: sanitizeOptionalText(payload.promo, 40),
+      items: payload.items.map((item) => ({
+        id: sanitizeText(item.id, 100),
+        name: sanitizeText(item.name, 120),
+        quantity: item.quantity,
+      })),
+    };
+  }
+
+  const fallbackName = sanitizeText(
+    payload.full_name || payload.name || payload.email.split("@")[0] || "Guest",
+    100,
+  );
+  const fallbackTicketId = sanitizeText(
+    payload.ticketId || payload.ticket_type || "general-admission",
+    100,
+  );
+  const fallbackTicketName = sanitizeText(
+    payload.ticketName || payload.ticketId || payload.ticket_type || "Ticket Reservation",
+    120,
+  );
+
   return {
-    fullName: sanitizeText(payload.full_name, 100),
+    fullName: fallbackName,
     email: normalizeEmail(payload.email),
     phone: sanitizeOptionalText(payload.phone, 30),
     promo: sanitizeOptionalText(payload.promo, 40),
-    items: payload.items.map((item) => ({
-      id: sanitizeText(item.id, 100),
-      name: sanitizeText(item.name, 120),
-      quantity: item.quantity,
-    })),
+    items: [
+      {
+        id: fallbackTicketId,
+        name: fallbackTicketName,
+        quantity: payload.quantity || 1,
+      },
+    ],
   };
 }
 

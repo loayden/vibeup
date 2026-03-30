@@ -6,6 +6,7 @@ import {
   sendAdminNotification,
   sendEnquiryConfirmation,
 } from "@/lib/email";
+import { saveLeadBackupToReservations } from "@/lib/lead-backups";
 import { isBackupEligibleSupabaseError } from "@/lib/supabase-errors";
 import { createAdminClient } from "@/lib/supabase-server";
 import {
@@ -100,10 +101,41 @@ async function sendEnquiryBackup(input: EnquiryInput) {
   }
 }
 
+async function persistEnquiryFallback(input: EnquiryInput) {
+  const emailBackupSent = await sendEnquiryBackup(input);
+
+  if (emailBackupSent) {
+    return true;
+  }
+
+  const details = [
+    `company: ${input.company || "not provided"}`,
+    `event_type: ${input.eventType || "not provided"}`,
+    `guest_count: ${input.guestCount || "not provided"}`,
+    `event_date: ${input.eventDate || "not provided"}`,
+    `budget: ${input.budget || "not provided"}`,
+    `phone: ${input.phone || "not provided"}`,
+    `source: ${input.source}`,
+    `message: ${input.message}`,
+  ].join("\n");
+
+  const backup = await saveLeadBackupToReservations({
+    category: "enquiry",
+    email: input.email,
+    fullName: input.name,
+    title: input.eventType || input.company || "general-enquiry",
+    details,
+  });
+
+  return backup.success;
+}
+
 export async function POST(request: NextRequest) {
+  let input: EnquiryInput | null = null;
+
   try {
     const payload = enquirySchema.parse(await request.json());
-    const input = normalizeEnquiryInput(payload);
+    input = normalizeEnquiryInput(payload);
     const supabase = createAdminClient();
 
     const { data: enquiry, error } = await supabase
@@ -125,13 +157,13 @@ export async function POST(request: NextRequest) {
 
     if (error || !enquiry) {
       if (isBackupEligibleSupabaseError(error)) {
-        const backupSent = await sendEnquiryBackup(input);
+        const backupSent = await persistEnquiryFallback(input);
 
         if (backupSent) {
           return jsonResponse(
             {
               message:
-                "Enquiry received through the backup channel. Our team will respond within 24 hours.",
+                "Enquiry received successfully. Our team will respond within 24 hours.",
             },
             {
               status: 201,
@@ -180,7 +212,22 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
-    if (isBackupEligibleSupabaseError(error)) {
+    if (isBackupEligibleSupabaseError(error) && input) {
+      const backupSent = await persistEnquiryFallback(input);
+
+      if (backupSent) {
+        return jsonResponse(
+          {
+            message:
+              "Enquiry received successfully. Our team will respond within 24 hours.",
+          },
+          {
+            status: 201,
+            origin: request.headers.get("origin"),
+          },
+        );
+      }
+
       return errorResponse(
         "Enquiry delivery failed because Supabase is unavailable and email backup is not configured.",
         500,

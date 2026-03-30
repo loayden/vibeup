@@ -6,6 +6,7 @@ import {
   sendAdminNotification,
   sendApplicationConfirmation,
 } from "@/lib/email";
+import { saveLeadBackupToReservations } from "@/lib/lead-backups";
 import { isBackupEligibleSupabaseError } from "@/lib/supabase-errors";
 import { createAdminClient } from "@/lib/supabase-server";
 import {
@@ -92,10 +93,39 @@ async function sendApplicationBackup(input: ApplicationInput) {
   }
 }
 
+async function persistApplicationFallback(input: ApplicationInput) {
+  const emailBackupSent = await sendApplicationBackup(input);
+
+  if (emailBackupSent) {
+    return true;
+  }
+
+  const details = [
+    `role: ${input.role}`,
+    `phone: ${input.phone || "not provided"}`,
+    `portfolio: ${input.portfolioUrl || "not provided"}`,
+    `linkedin: ${input.linkedinUrl || "not provided"}`,
+    `resume: ${input.resumeUrl || "not provided"}`,
+    `message: ${input.message || "not provided"}`,
+  ].join("\n");
+
+  const backup = await saveLeadBackupToReservations({
+    category: "application",
+    email: input.email,
+    fullName: input.name,
+    title: input.role,
+    details,
+  });
+
+  return backup.success;
+}
+
 export async function POST(request: NextRequest) {
+  let input: ApplicationInput | null = null;
+
   try {
     const payload = applicationSchema.parse(await request.json());
-    const input = normalizeApplicationInput(payload);
+    input = normalizeApplicationInput(payload);
     const supabase = createAdminClient();
 
     const { data: application, error } = await supabase
@@ -115,13 +145,13 @@ export async function POST(request: NextRequest) {
 
     if (error || !application) {
       if (isBackupEligibleSupabaseError(error)) {
-        const backupSent = await sendApplicationBackup(input);
+        const backupSent = await persistApplicationFallback(input);
 
         if (backupSent) {
           return jsonResponse(
             {
               message:
-                "Application received through the backup channel. Our team will review it and follow up shortly.",
+                "Application received successfully. Our team will review it and follow up shortly.",
             },
             {
               status: 201,
@@ -174,7 +204,22 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
-    if (isBackupEligibleSupabaseError(error)) {
+    if (isBackupEligibleSupabaseError(error) && input) {
+      const backupSent = await persistApplicationFallback(input);
+
+      if (backupSent) {
+        return jsonResponse(
+          {
+            message:
+              "Application received successfully. Our team will review it and follow up shortly.",
+          },
+          {
+            status: 201,
+            origin: request.headers.get("origin"),
+          },
+        );
+      }
+
       return errorResponse(
         "Application delivery failed because Supabase is unavailable and email backup is not configured.",
         500,

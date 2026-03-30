@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
       paidOrdersResult,
       activeTicketsResult,
       newEnquiriesResult,
+      backupEnquiriesResult,
       subscriptionsResult,
       revenueResult,
       publishedEventsResult,
@@ -56,6 +57,10 @@ export async function GET(request: NextRequest) {
         .from("enquiries")
         .select("id", { count: "exact", head: true })
         .eq("status", "new"),
+      supabase
+        .from("reservations")
+        .select("id", { count: "exact", head: true })
+        .in("status", ["backup_enquiry", "backup_application"]),
       supabase
         .from("subscriptions")
         .select("id", { count: "exact", head: true })
@@ -80,6 +85,7 @@ export async function GET(request: NextRequest) {
       paidOrdersResult,
       activeTicketsResult,
       newEnquiriesResult,
+      backupEnquiriesResult,
       subscriptionsResult,
       revenueResult,
       publishedEventsResult,
@@ -101,7 +107,10 @@ export async function GET(request: NextRequest) {
         stats: {
           orders_this_month: paidOrdersResult.count || 0,
           active_tickets: activeTicketsResult.count || 0,
-          new_enquiries: newEnquiriesResult.count || 0,
+          new_enquiries:
+            newEnquiriesResult.count ||
+            backupEnquiriesResult.count ||
+            0,
           total_subscribers: subscriptionsResult.count || 0,
           published_events: publishedEventsResult.count || 0,
           revenue_this_month: Number(revenue.toFixed(2)),
