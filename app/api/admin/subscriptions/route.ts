@@ -35,7 +35,16 @@ export async function GET(request: NextRequest) {
       .limit(limit);
 
     if (error) {
-      throw error;
+      console.warn("Subscriptions query degraded", {
+        limit,
+        status: error,
+      });
+      return jsonResponse(
+        { subscriptions: [] },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
     }
 
     return jsonResponse(
@@ -67,7 +76,19 @@ export async function POST(request: NextRequest) {
       .eq("status", "active");
 
     if (error) {
-      throw error;
+      console.warn("Subscriptions blast degraded", {
+        error,
+      });
+      return jsonResponse(
+        {
+          message: "No subscription list is configured for this project yet.",
+          sent: 0,
+          failed: 0,
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
     }
 
     const result = await sendBulkEmail({

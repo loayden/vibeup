@@ -3,7 +3,8 @@ import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 
-import { getJwtExpiresIn, getServerEnv } from "@/lib/env";
+import { getAdminNotificationEmail, getJwtExpiresIn, getServerEnv } from "@/lib/env";
+import { isMissingSupabaseTableError } from "@/lib/supabase-errors";
 import { createAdminClient, createPublicServerClient } from "@/lib/supabase-server";
 import { normalizeEmail } from "@/lib/utils";
 import type { TableRow } from "@/types/database";
@@ -35,6 +36,31 @@ type SessionPayload = {
 
 function getJwtSecret() {
   return new TextEncoder().encode(getServerEnv("JWT_SECRET"));
+}
+
+export function isPrimaryAdminEmail(email: string) {
+  return normalizeEmail(email) === normalizeEmail(getAdminNotificationEmail());
+}
+
+export function buildFallbackProfile(input: {
+  id: string;
+  email: string;
+  fullName?: string | null;
+}): AuthProfile {
+  const now = new Date().toISOString();
+
+  return {
+    id: input.id,
+    full_name: input.fullName?.trim() || "VibeUp Admin",
+    email: normalizeEmail(input.email),
+    phone: null,
+    avatar_url: null,
+    role: isPrimaryAdminEmail(input.email) ? "super_admin" : "customer",
+    email_verified: true,
+    marketing_opt_in: false,
+    created_at: now,
+    updated_at: now,
+  };
 }
 
 export async function signSessionToken(payload: SessionPayload) {
@@ -90,6 +116,22 @@ export async function getAuthUser(request: NextRequest) {
       .select("*")
       .eq("id", payload.sub)
       .single<AuthProfile>();
+
+    if (isMissingSupabaseTableError(error)) {
+      const fallbackProfile = buildFallbackProfile({
+        id: payload.sub,
+        email: payload.email,
+      });
+
+      return {
+        ok: true,
+        user: {
+          id: fallbackProfile.id,
+          email: fallbackProfile.email,
+        },
+        profile: fallbackProfile,
+      } satisfies AuthSuccess;
+    }
 
     if (error || !profile) {
       return { ok: false, error: "Unauthorized", status: 401 } satisfies AuthFailure;

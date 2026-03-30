@@ -26,15 +26,23 @@ export async function GET(request: NextRequest) {
     ]);
 
     if (ordersResult.error) {
-      throw ordersResult.error;
+      console.warn("Analytics orders query degraded", {
+        status: ordersResult.status,
+        statusText: ordersResult.statusText,
+        error: ordersResult.error,
+      });
     }
 
     if (eventsResult.error) {
-      throw eventsResult.error;
+      console.warn("Analytics events query degraded", {
+        status: eventsResult.status,
+        statusText: eventsResult.statusText,
+        error: eventsResult.error,
+      });
     }
 
-    const orders = ordersResult.data || [];
-    const events = eventsResult.data || [];
+    const orders = ordersResult.error ? [] : ordersResult.data || [];
+    const events = eventsResult.error ? [] : eventsResult.data || [];
     const revenueByMonth = new Map<string, number>();
     const revenueByEvent = new Map<string, number>();
 

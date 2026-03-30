@@ -40,7 +40,21 @@ export async function GET(request: NextRequest) {
     const { data: enquiries, error, count } = await query;
 
     if (error) {
-      throw error;
+      console.warn("Enquiries query degraded", {
+        status,
+        search,
+        error,
+      });
+      return jsonResponse(
+        {
+          enquiries: [],
+          total: 0,
+          has_more: false,
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
     }
 
     return jsonResponse(

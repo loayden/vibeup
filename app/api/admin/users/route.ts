@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 
-import { requireAdmin } from "@/lib/auth";
+import { buildFallbackProfile, requireAdmin } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
+import { isMissingSupabaseTableError } from "@/lib/supabase-errors";
 import { createAdminClient } from "@/lib/supabase-server";
 import { clamp, parseInteger, sanitizeText } from "@/lib/utils";
 
@@ -43,6 +44,68 @@ export async function GET(request: NextRequest) {
     const { data: users, error, count } = await query;
 
     if (error) {
+      if (isMissingSupabaseTableError(error)) {
+        const authUsersResult = await supabase.auth.admin.listUsers({
+          page: Math.floor(offset / limit) + 1,
+          perPage: limit,
+        });
+
+        if (authUsersResult.error) {
+          throw authUsersResult.error;
+        }
+
+        const term = search ? sanitizeText(search, 120).toLowerCase() : null;
+        const fallbackUsers = authUsersResult.data.users
+          .filter((user) => {
+            if (role && role !== "super_admin" && role !== "customer") {
+              return false;
+            }
+
+            const profile = buildFallbackProfile({
+              id: user.id,
+              email: user.email || "",
+              fullName:
+                typeof user.user_metadata?.full_name === "string"
+                  ? user.user_metadata.full_name
+                  : user.email || "VibeUp User",
+            });
+
+            if (role && profile.role !== sanitizeText(role, 30)) {
+              return false;
+            }
+
+            if (!term) {
+              return true;
+            }
+
+            return (
+              profile.email.toLowerCase().includes(term) ||
+              (profile.full_name || "").toLowerCase().includes(term)
+            );
+          })
+          .map((user) =>
+            buildFallbackProfile({
+              id: user.id,
+              email: user.email || "",
+              fullName:
+                typeof user.user_metadata?.full_name === "string"
+                  ? user.user_metadata.full_name
+                  : user.email || "VibeUp User",
+            }),
+          );
+
+        return jsonResponse(
+          {
+            users: fallbackUsers,
+            total: fallbackUsers.length,
+            has_more: false,
+          },
+          {
+            origin: request.headers.get("origin"),
+          },
+        );
+      }
+
       throw error;
     }
 

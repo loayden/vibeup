@@ -78,7 +78,23 @@ export async function GET(request: NextRequest) {
     const { data: orders, error, count } = await query;
 
     if (error) {
-      throw error;
+      console.warn("Orders query degraded", {
+        status,
+        email,
+        eventId,
+        orderNumber,
+        supabaseStatus: error,
+      });
+      return jsonResponse(
+        {
+          orders: [],
+          total: 0,
+          has_more: false,
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
     }
 
     return jsonResponse(

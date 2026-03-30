@@ -3,10 +3,12 @@ import { z } from "zod";
 
 import {
   applySessionCookie,
+  buildFallbackProfile,
   signInWithSupabase,
   signSessionToken,
 } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
+import { isMissingSupabaseTableError } from "@/lib/supabase-errors";
 import { createAdminClient } from "@/lib/supabase-server";
 import { normalizeEmail, sanitizeText } from "@/lib/utils";
 
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
     const authUser = signInResult.data.user;
     const supabase = createAdminClient();
 
-    const { data: profile } = await supabase
+    const profileResult = await supabase
       .from("profiles")
       .upsert(
         {
@@ -44,6 +46,21 @@ export async function POST(request: NextRequest) {
       )
       .select("*")
       .single();
+
+    let profile = profileResult.data;
+
+    if (!profile && isMissingSupabaseTableError(profileResult.error)) {
+      profile = buildFallbackProfile({
+        id: authUser.id,
+        email: payload.email,
+        fullName:
+          authUser.user_metadata?.full_name || authUser.email || "VibeUp Guest",
+      });
+    }
+
+    if (!profile && profileResult.error) {
+      throw profileResult.error;
+    }
 
     const sessionToken = await signSessionToken({
       sub: authUser.id,

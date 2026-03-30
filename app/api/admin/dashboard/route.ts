@@ -58,6 +58,26 @@ export async function GET(request: NextRequest) {
       0,
     );
 
+    const degradedResults = [
+      paidOrdersResult,
+      activeTicketsResult,
+      newEnquiriesResult,
+      subscriptionsResult,
+      revenueResult,
+      publishedEventsResult,
+    ].filter((result) => result.error);
+
+    if (degradedResults.length > 0) {
+      console.warn(
+        "Admin dashboard is running in degraded data mode",
+        degradedResults.map((result) => ({
+          status: result.status,
+          statusText: result.statusText,
+          error: result.error,
+        })),
+      );
+    }
+
     return jsonResponse(
       {
         stats: {
