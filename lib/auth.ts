@@ -38,12 +38,17 @@ function getJwtSecret() {
 }
 
 export async function signSessionToken(payload: SessionPayload) {
-  return new SignJWT({ email: payload.email })
+  const expiresIn = getJwtExpiresIn();
+  let jwt = new SignJWT({ email: payload.email })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(payload.sub)
-    .setIssuedAt()
-    .setExpirationTime(getJwtExpiresIn())
-    .sign(getJwtSecret());
+    .setIssuedAt();
+
+  if (expiresIn) {
+    jwt = jwt.setExpirationTime(expiresIn);
+  }
+
+  return jwt.sign(getJwtSecret());
 }
 
 export async function verifySessionToken(token: string) {
@@ -140,6 +145,8 @@ export async function requireStaff(request: NextRequest) {
 }
 
 export function applySessionCookie(response: NextResponse, token: string) {
+  const expiresIn = getJwtExpiresIn();
+
   response.cookies.set({
     name: SESSION_COOKIE_NAME,
     value: token,
@@ -147,7 +154,7 @@ export function applySessionCookie(response: NextResponse, token: string) {
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: expiresIn ? 60 * 60 * 24 * 7 : 60 * 60 * 24 * 365 * 10,
   });
 
   return response;

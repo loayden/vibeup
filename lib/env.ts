@@ -25,7 +25,17 @@ export function getAllowedOrigin() {
 }
 
 export function getJwtExpiresIn() {
-  return process.env.JWT_EXPIRES_IN || "7d";
+  const value = process.env.JWT_EXPIRES_IN?.trim();
+
+  if (!value) {
+    return "7d";
+  }
+
+  if (["no expires", "no-expiry", "never", "none"].includes(value.toLowerCase())) {
+    return null;
+  }
+
+  return value;
 }
 
 export function getAdminNotificationEmail() {
