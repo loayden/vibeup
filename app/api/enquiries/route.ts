@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
+import { rateLimit, getRateLimitStatus } from "@/lib/rate-limit";
 import {
   sendAdminNotification,
   sendEnquiryConfirmation,
@@ -131,6 +132,26 @@ async function persistEnquiryFallback(input: EnquiryInput) {
 }
 
 export async function POST(request: NextRequest) {
+  // ✅ Add rate limiting
+  const clientIp = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown";
+  
+  if (!rateLimit(clientIp, { maxRequests: 5, windowSeconds: 60 })) {
+    const status = getRateLimitStatus(clientIp, 5);
+    return new Response(
+      JSON.stringify({
+        error: "Too many enquiries submitted. Please try again later.",
+        retryAfter: status.reset,
+      }),
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(status.reset),
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
   let input: EnquiryInput | null = null;
 
   try {

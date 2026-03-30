@@ -1,14 +1,21 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 
 type CountdownTimerProps = {
   targetDate: Date;
   label?: string;
 };
 
-function CountdownBlock({ value, label }: { value: number; label: string }) {
+// ✅ Memoize the block to prevent unnecessary re-renders
+const CountdownBlock = memo(function CountdownBlock({
+  value,
+  label,
+}: {
+  value: number;
+  label: string;
+}) {
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="glass-card glass-card-gold relative flex h-20 w-20 items-center justify-center rounded-[18px] md:h-24 md:w-24">
@@ -29,21 +36,36 @@ function CountdownBlock({ value, label }: { value: number; label: string }) {
       <p className="eyebrow text-white/28">{label}</p>
     </div>
   );
-}
+});
 
-export function CountdownTimer({ targetDate, label }: CountdownTimerProps) {
+export const CountdownTimer = memo(function CountdownTimer({
+  targetDate,
+  label,
+}: CountdownTimerProps) {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const interval = window.setInterval(() => setNow(Date.now()), 1000);
-    return () => window.clearInterval(interval);
+    // ✅ Detect low-end devices and adjust update frequency
+    const isLowEndDevice =
+      navigator.deviceMemory !== undefined && navigator.deviceMemory <= 2;
+
+    // ✅ Use longer interval on low-end devices (5s instead of 1s) to reduce re-renders
+    const updateInterval = isLowEndDevice ? 5000 : 1000;
+
+    const intervalId = window.setInterval(() => setNow(Date.now()), updateInterval);
+    return () => window.clearInterval(intervalId);
   }, []);
 
-  const difference = Math.max(targetDate.getTime() - now, 0);
-  const days = Math.floor(difference / 86_400_000);
-  const hours = Math.floor((difference / 3_600_000) % 24);
-  const minutes = Math.floor((difference / 60_000) % 60);
-  const seconds = Math.floor((difference / 1_000) % 60);
+  // ✅ Use useMemo to prevent recalculation on every render
+  const { days, hours, minutes, seconds } = useMemo(() => {
+    const difference = Math.max(targetDate.getTime() - now, 0);
+    return {
+      days: Math.floor(difference / 86_400_000),
+      hours: Math.floor((difference / 3_600_000) % 24),
+      minutes: Math.floor((difference / 60_000) % 60),
+      seconds: Math.floor((difference / 1_000) % 60),
+    };
+  }, [now, targetDate]);
 
   return (
     <div className="space-y-8">
@@ -56,4 +78,4 @@ export function CountdownTimer({ targetDate, label }: CountdownTimerProps) {
       </div>
     </div>
   );
-}
+});

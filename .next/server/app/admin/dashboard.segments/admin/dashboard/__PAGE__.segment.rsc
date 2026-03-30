@@ -1,9 +1,6 @@
 1:"$Sreact.fragment"
-2:I[47257,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/6153d1a363729c2c.js"],"ClientPageRoot"]
-3:I[20383,["/_next/static/chunks/5cb0b95f0b94c886.js","/_next/static/chunks/1b0f2e7ee772c1ab.js","/_next/static/chunks/7c2ee1da151735f4.js","/_next/static/chunks/1d3411f21d21111c.js"],"default"]
-6:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/6153d1a363729c2c.js"],"OutletBoundary"]
-7:"$Sreact.suspense"
-0:{"buildId":"hBuSmxkDkpWT-qsMJ8Lyu","rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/_next/static/chunks/1b0f2e7ee772c1ab.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/7c2ee1da151735f4.js","async":true}],["$","script","script-2",{"src":"/_next/static/chunks/1d3411f21d21111c.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"loading":null,"isPartial":false}
-4:{}
-5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
-8:null
+2:I[7129,["/_next/static/chunks/67548fa1a77432fd.js","/_next/static/chunks/cff4c5ae7d5197a7.js","/_next/static/chunks/393089ff5871e1b9.js"],"AdminDashboardClient"]
+3:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"buildId":"gmVbXEf6RJhEB6i714mmC","rsc":["$","$1","c",{"children":[["$","main",null,{"className":"overflow-x-hidden pb-20","children":[["$","section",null,{"className":"relative px-6 pb-18 pt-32 md:px-10 lg:px-16 lg:pt-36","children":["$","div",null,{"className":"mx-auto grid max-w-7xl gap-10 ","children":[["$","div",null,{"className":"text-center lg:col-span-2","children":[["$","p",null,{"className":"eyebrow mx-auto mb-5","children":"Admin Dashboard"}],["$","h1",null,{"className":"display-title","children":["Monitor users, revenue, and operational"," ",["$","em",null,{"children":"signals"}]]}],["$","div",null,{"className":"mt-6 h-px w-24 mx-auto gold-divider-centered"}],["$","p",null,{"className":"body-copy mt-7 max-w-2xl text-[0.92rem] leading-8 mx-auto text-center","children":"This dashboard is designed for administrators who need a cleaner view of profiles, subscriptions, enquiries, order flow, and event performance inside the VibeUp system."}],null]}],null]}]}],["$","section",null,{"className":"px-6 py-6 md:px-10 lg:px-16","children":["$","div",null,{"className":"mx-auto max-w-7xl","children":["$","$L2",null,{}]}]}]]}],[["$","script","script-0",{"src":"/_next/static/chunks/393089ff5871e1b9.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+5:null

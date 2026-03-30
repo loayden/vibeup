@@ -46,15 +46,32 @@ export default function HomePage() {
   return (
     <main className="overflow-x-hidden">
       <section className="relative min-h-screen overflow-hidden">
+        {/* ✅ Fallback image while video loads */}
+        <Image
+          src="/arabnights.jpeg"
+          alt="Hero background"
+          fill
+          className="absolute inset-0 object-cover"
+          priority
+          quality={75}
+        />
+
+        {/* ✅ Video with poster image for quick display */}
         <video
           className="absolute inset-0 h-full w-full object-cover"
-          src={SITE.heroVideo}
           autoPlay
           loop
           muted
           playsInline
+          poster="/arab.jpg"
+          preload="metadata"
           style={{ filter: "brightness(0.34) saturate(0.88)" }}
-        />
+        >
+          {/* ✅ Multiple formats for better browser support and compression */}
+          <source src={SITE.heroVideo.replace(".mp4", ".webm")} type="video/webm" />
+          <source src={SITE.heroVideo} type="video/mp4" />
+        </video>
+
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.62)_82%)]" />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(180deg,transparent,#080808)]" />
 

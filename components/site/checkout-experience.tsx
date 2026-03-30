@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Minus, Plus, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { CountdownTimer } from "@/components/site/countdown";
 import { GlassCard, LiquidButton, LiquidLinkButton } from "@/components/site/liquid";
@@ -30,6 +30,16 @@ export function CheckoutExperience() {
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [banner, setBanner] = useState<BannerState | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // ✅ Track in-flight requests
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // ✅ Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
 
   const selectedTickets = TICKET_TYPES.filter((ticket) => quantities[ticket.id] > 0).map(
     (ticket) => ({
@@ -98,6 +108,11 @@ export function CheckoutExperience() {
     setLoading(true);
     setBanner(null);
 
+    // ✅ Cancel previous request
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
     try {
       const response = await fetch("/api/reservations", {
         method: "POST",
@@ -116,15 +131,40 @@ export function CheckoutExperience() {
             quantity: ticket.quantity,
           })),
         }),
+        signal,
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { error?: string; message?: string }
-        | null;
+      if (signal.aborted) return;
+
+      let errorMessage = "Unable to save your reservation right now.";
 
       if (!response.ok) {
-        throw new Error(payload?.error || "Unable to save your reservation right now.");
+        try {
+          // ✅ Proper error message extraction
+          const payload = (await response.json()) as { error?: string; message?: string };
+          errorMessage = payload?.error || payload?.message || errorMessage;
+        } catch (parseError) {
+          // ✅ Handle parse errors properly
+          console.error("Response parse error", {
+            status: response.status,
+            statusText: response.statusText,
+          });
+
+          if (response.status === 500) {
+            errorMessage = "Server error. Please try again later.";
+          } else if (response.status === 429) {
+            errorMessage = "Too many requests. Please wait before trying again.";
+          }
+        }
+
+        setBanner({
+          type: "error",
+          message: errorMessage,
+        });
+        return;
       }
+
+      const payload = (await response.json()) as { message?: string };
 
       setBanner({
         type: "success",
@@ -141,12 +181,14 @@ export function CheckoutExperience() {
       setAppliedPromo(null);
       setQuantities(initialQuantities);
     } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return;
+      }
+      console.error("Checkout error", error);
       setBanner({
         type: "error",
         message:
-          error instanceof Error
-            ? error.message
-            : "Unable to save your reservation right now.",
+          error instanceof Error ? error.message : "Unable to save your reservation right now.",
       });
     } finally {
       setLoading(false);

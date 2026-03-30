@@ -17,7 +17,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { GlassCard, LiquidButton } from "@/components/site/liquid";
 
@@ -139,61 +139,119 @@ export function AdminDashboardClient() {
   const [reservationDetail, setReservationDetail] = useState<ReservationDetail | null>(null);
   const [reservationLoading, setReservationLoading] = useState(false);
 
+  // ✅ Track in-flight requests to prevent setState on unmounted components
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const loadDashboardAbortRef = useRef<AbortController | null>(null);
+
   async function loadDashboardData() {
     setLoading(true);
     setBanner(null);
 
-    try {
-      const [statsResponse, analyticsResponse, ordersResponse, subscriptionsResponse, enquiriesResponse, usersResponse, reservationsResponse] =
-        await Promise.all([
-          fetch("/api/admin/dashboard", { credentials: "include" }),
-          fetch("/api/admin/analytics", { credentials: "include" }),
-          fetch("/api/admin/orders?limit=8", { credentials: "include" }),
-          fetch("/api/admin/subscriptions?limit=8", { credentials: "include" }),
-          fetch("/api/admin/enquiries?limit=8", { credentials: "include" }),
-          fetch("/api/admin/users?limit=8", { credentials: "include" }),
-          fetch("/api/admin/reservations?limit=8", { credentials: "include" }),
-        ]);
+    // ✅ Cancel previous dashboard load if still in-flight
+    loadDashboardAbortRef.current?.abort();
+    loadDashboardAbortRef.current = new AbortController();
+    const signal = loadDashboardAbortRef.current.signal;
 
-      if ([statsResponse, analyticsResponse, ordersResponse, subscriptionsResponse, enquiriesResponse, usersResponse, reservationsResponse].some((response) => !response.ok)) {
-        throw new Error("Unable to load dashboard data.");
+    try {
+      // ✅ Use Promise.allSettled for partial failure handling
+      const responses = await Promise.allSettled([
+        fetch("/api/admin/dashboard", { credentials: "include", signal }).then((r) =>
+          r.json()
+        ),
+        fetch("/api/admin/analytics", { credentials: "include", signal }).then((r) =>
+          r.json()
+        ),
+        fetch("/api/admin/orders?limit=8", { credentials: "include", signal }).then((r) =>
+          r.json()
+        ),
+        fetch("/api/admin/subscriptions?limit=8", { credentials: "include", signal }).then(
+          (r) => r.json()
+        ),
+        fetch("/api/admin/enquiries?limit=8", { credentials: "include", signal }).then((r) =>
+          r.json()
+        ),
+        fetch("/api/admin/users?limit=8", { credentials: "include", signal }).then((r) =>
+          r.json()
+        ),
+        fetch("/api/admin/reservations?limit=8", { credentials: "include", signal }).then(
+          (r) => r.json()
+        ),
+      ]);
+
+      // ✅ Check if request was cancelled
+      if (signal.aborted) return;
+
+      // ✅ Extract results with fallbacks for failures
+      const [
+        statsResult,
+        analyticsResult,
+        ordersResult,
+        subscriptionsResult,
+        enquiriesResult,
+        usersResult,
+        reservationsResult,
+      ] = responses;
+
+      // ✅ Set each piece of state independently
+      if (statsResult.status === "fulfilled") {
+        setStats(statsResult.value.stats);
+      }
+      if (analyticsResult.status === "fulfilled") {
+        setAnalytics(analyticsResult.value);
+      }
+      if (ordersResult.status === "fulfilled") {
+        setOrders(ordersResult.value.orders || []);
+      }
+      if (subscriptionsResult.status === "fulfilled") {
+        setSubscriptions(subscriptionsResult.value.subscriptions || []);
+      }
+      if (enquiriesResult.status === "fulfilled") {
+        setEnquiries(enquiriesResult.value.enquiries || []);
+      }
+      if (usersResult.status === "fulfilled") {
+        setUsers(usersResult.value.users || []);
+      }
+      if (reservationsResult.status === "fulfilled") {
+        setReservations(reservationsResult.value.reservations || []);
       }
 
-      const statsPayload = (await statsResponse.json()) as { stats: DashboardStats };
-      const analyticsPayload = (await analyticsResponse.json()) as AnalyticsPayload;
-      const ordersPayload = (await ordersResponse.json()) as { orders: Order[] };
-      const subscriptionsPayload = (await subscriptionsResponse.json()) as {
-        subscriptions: Subscription[];
-      };
-      const enquiriesPayload = (await enquiriesResponse.json()) as { enquiries: Enquiry[] };
-      const usersPayload = (await usersResponse.json()) as { users: Profile[] };
-      const reservationsPayload = (await reservationsResponse.json()) as {
-        reservations: ReservationSummary[];
-      };
-
-      setStats(statsPayload.stats);
-      setAnalytics(analyticsPayload);
-      setOrders(ordersPayload.orders || []);
-      setSubscriptions(subscriptionsPayload.subscriptions || []);
-      setEnquiries(enquiriesPayload.enquiries || []);
-      setUsers(usersPayload.users || []);
-      setReservations(reservationsPayload.reservations || []);
+      // ✅ Show warning if some endpoints failed
+      const failedFetches = responses.filter((r) => r.status === "rejected");
+      if (failedFetches.length > 0) {
+        setBanner({
+          type: "info",
+          message: `Some dashboard data is unavailable (${failedFetches.length}/${responses.length} sections offline). Showing available data.`,
+        });
+      }
     } catch (error) {
-      setBanner({
-        type: "error",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Unable to load dashboard data.",
-      });
+      if (error instanceof Error && error.name === "AbortError") {
+        return; // ✅ Request cancelled, don't setState
+      }
+      if (!signal.aborted) {
+        setBanner({
+          type: "error",
+          message:
+            error instanceof Error ? error.message : "Unable to load dashboard data.",
+        });
+      }
     } finally {
       setLoading(false);
     }
   }
 
   async function checkAuth() {
+    // ✅ Cancel previous auth check
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+    const signal = abortControllerRef.current.signal;
+
     try {
-      const response = await fetch("/api/auth/me", { credentials: "include" });
+      const response = await fetch("/api/auth/me", {
+        credentials: "include",
+        signal,
+      });
+
+      if (signal.aborted) return;
 
       if (response.status === 401) {
         setAuthStatus("unauthenticated");
@@ -214,10 +272,21 @@ export function AdminDashboardClient() {
 
       setAuthProfile(payload.profile);
       setAuthStatus("ready");
-    } catch {
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
+        return;
+      }
       setAuthStatus("unauthenticated");
     }
   }
+
+  // ✅ Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+      loadDashboardAbortRef.current?.abort();
+    };
+  }, []);
 
   useEffect(() => {
     void checkAuth();
@@ -242,14 +311,30 @@ export function AdminDashboardClient() {
         body: JSON.stringify(loginForm),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { error?: string; message?: string }
-        | null;
+      let errorMessage = "Invalid login credentials.";
 
       if (!response.ok) {
+        try {
+          // ✅ Proper error message extraction
+          const payload = (await response.json()) as { error?: string; message?: string };
+          errorMessage = payload?.error || payload?.message || errorMessage;
+        } catch (parseError) {
+          // ✅ Handle parse errors properly
+          console.error("Response parse error", {
+            status: response.status,
+            statusText: response.statusText,
+          });
+
+          if (response.status === 500) {
+            errorMessage = "Server error. Please try again later.";
+          } else if (response.status === 429) {
+            errorMessage = "Too many login attempts. Please wait before trying again.";
+          }
+        }
+
         setBanner({
           type: "error",
-          message: payload?.error || "Invalid login credentials.",
+          message: errorMessage,
         });
         return;
       }
@@ -259,6 +344,15 @@ export function AdminDashboardClient() {
         message: "Session confirmed. Loading dashboard.",
       });
       await checkAuth();
+    } catch (error) {
+      console.error("Login error", error);
+      setBanner({
+        type: "error",
+        message:
+          error instanceof Error && error.name === "AbortError"
+            ? "Request cancelled."
+            : "Unable to connect to server.",
+      });
     } finally {
       setLoggingIn(false);
     }

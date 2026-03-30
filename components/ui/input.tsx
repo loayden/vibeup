@@ -1,8 +1,11 @@
 import React from 'react'
 
-export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
+export function Input({ className = '', ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <input {...props} className={`border border-neutral-700 bg-transparent px-3 py-2 rounded ${props.className ?? ''}`} />
+    <input
+      {...props}
+      className={`glass-input ${className}`}
+    />
   )
 }
 

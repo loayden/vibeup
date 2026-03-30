@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 export default function EmailContent() {
@@ -21,9 +20,8 @@ export default function EmailContent() {
   const handleSubmit = async (emailToSubmit: string) => {
     setStatus(null);
 
-    // التحقق من صحة البريد الإلكتروني
     if (!emailToSubmit || !/\S+@\S+\.\S+/.test(emailToSubmit)) {
-      setStatus("❌ Please enter a valid email address.");
+      setStatus("Please enter a valid email address.");
       return;
     }
 
@@ -34,18 +32,18 @@ export default function EmailContent() {
 
       if (error) {
         if (error.code === "23505") {
-          setStatus("⚠️ This email is already subscribed.");
+          setStatus("This email is already subscribed.");
         } else {
-          setStatus(`❌ Subscription failed: ${error.message}`);
+          setStatus(`Subscription failed: ${error.message}`);
         }
       } else {
         localStorage.setItem("preCheckoutEmail", emailToSubmit);
-        setStatus("🎉 Email saved! Redirecting to tickets...");
+        setStatus("Email saved — redirecting to tickets…");
         setTimeout(() => router.push("/checkout"), 1000);
       }
     } catch (error) {
       setStatus(
-        `❌ Subscription failed: ${
+        `Subscription failed: ${
           error instanceof Error ? error.message : "Unknown error"
         }`,
       );
@@ -54,31 +52,50 @@ export default function EmailContent() {
     }
   };
 
+  const isSuccess = status?.includes("saved");
+
   return (
-    <div className="min-w-0 min-h-0 max-w-md w-full bg-neutral-900/70 backdrop-blur-md p-8 rounded-2xl border border-amber-500/30 text-center">
-      <h1 className="text-4xl font-extrabold text-amber-400 mb-4 animate-pulse">🎫 Reserve Your Spot!</h1>
-      <p className="text-neutral-400 mb-6">
-        Enter your email to get updates and confirm your ticket reservation.
+    <div className="glass-card-warm w-full max-w-md px-8 py-10 text-center">
+      {/* Spec line accent */}
+      <div className="spec-line" />
+
+      <p className="eyebrow mb-5">Exclusive Access</p>
+
+      <h1 className="section-title mb-4">
+        Reserve Your <em>Spot</em>
+      </h1>
+
+      <p className="body-copy mx-auto mb-8 max-w-xs">
+        Enter your email to receive updates and confirm your ticket reservation.
       </p>
 
-      <Input
+      <input
+        className="glass-input mb-4"
         placeholder="your@email.com"
+        type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="bg-neutral-800 border border-amber-500 text-white placeholder:text-neutral-400 mb-4 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
+        onKeyDown={(e) => { if (e.key === "Enter") void handleSubmit(email); }}
         disabled={loading}
       />
 
-      <Button
-        onClick={() => handleSubmit(email)}
-        className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-black font-extrabold py-3 mb-2 rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-amber-500/40 transition-all"
+      <button
+        className="liquid-button-gold w-full justify-center"
+        onClick={() => void handleSubmit(email)}
         disabled={loading}
       >
-        {loading ? "Submitting..." : "Continue to Tickets"}
-      </Button>
+        <span className="inline-flex items-center gap-2">
+          {loading ? "Submitting…" : "Continue to Tickets"}
+          <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+        </span>
+      </button>
 
       {status && (
-        <p className={`mt-4 text-sm font-medium ${status.includes("saved") ? "text-green-400" : "text-amber-400"}`}>
+        <p
+          className={`body-copy mt-5 text-[0.8rem] ${
+            isSuccess ? "text-emerald-300/80" : "text-[var(--gold)]"
+          }`}
+        >
           {status}
         </p>
       )}

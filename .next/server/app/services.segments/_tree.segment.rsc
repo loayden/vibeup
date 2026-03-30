@@ -1,13 +1,4 @@
-:HL["/_next/static/chunks/c1d85ccc698d8163.css","style"]
-:HL["widding.jpg","image"]
-:HL["dj.jpg","image"]
-:HL["pexels-ardit-mbrati-216809103-16966362.jpg","image"]
-:HL["stage.jpg","image"]
-:HL["pexels-leeloothefirst-7598011.jpg","image"]
-:HL["pexels-beige-media-2148596893-32538883.jpg","image"]
-:HL["blurred-light-bulbs.jpg","image"]
-:HL["pexels-artempodrez-5025636.jpg","image"]
-:HL["pexels-rdne-7648047.jpg","image"]
-:HL["pexels-sebastiaan9977-3379257.jpg","image"]
-:HL["pexels-pavel-danilyuk-6405773.jpg","image"]
-0:{"buildId":"hBuSmxkDkpWT-qsMJ8Lyu","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"services","paramType":null,"paramKey":"services","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+:HL["/_next/static/chunks/9f9c12cb9990ea9b.css","style"]
+:HL["/_next/static/media/01e4147cff8141ee-s.p.7787e134.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/81cef6a21128489e-s.p.6cf41120.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+0:{"buildId":"gmVbXEf6RJhEB6i714mmC","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"services","paramType":null,"paramKey":"services","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

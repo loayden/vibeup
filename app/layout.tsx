@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site/footer";
 import { LuxuryCursor } from "@/components/site/luxury-cursor";
 import { Orbs } from "@/components/site/orbs";
 import { Navbar } from "@/components/navbar";
+import { ErrorBoundary } from "@/app/components/error-boundary";
 import { SITE } from "@/lib/site-data";
 import "./globals.css";
 
@@ -36,11 +37,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${jost.variable} ${cormorant.variable} antialiased`}>
-        <LuxuryCursor />
-        <Orbs />
-        <Navbar />
+        <ErrorBoundary>
+          <LuxuryCursor />
+          <Orbs />
+          <Navbar />
+        </ErrorBoundary>
         <div className="relative z-10 min-h-screen">{children}</div>
-        <SiteFooter />
+        <ErrorBoundary>
+          <SiteFooter />
+        </ErrorBoundary>
       </body>
     </html>
   );

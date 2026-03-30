@@ -96,7 +96,7 @@ self.__SERVER_FILES_MANIFEST={
     "poweredByHeader": true,
     "cacheHandlers": {},
     "cacheMaxMemorySize": 52428800,
-    "compress": true,
+    "compress": false,
     "i18n": null,
     "httpAgentOptions": {
       "keepAlive": true
@@ -136,7 +136,7 @@ self.__SERVER_FILES_MANIFEST={
       "imgOptSkipMetadata": null,
       "imgOptTimeoutInSeconds": 7,
       "proxyClientMaxBodySize": 10485760,
-      "trustHostHeader": false,
+      "trustHostHeader": true,
       "isExperimentalCompile": false
     }
   },

@@ -66,17 +66,35 @@ export function ContactForm() {
         }),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { message?: string; error?: string }
-        | null;
+      let errorMessage = "Unable to submit your enquiry.";
 
       if (!response.ok) {
+        try {
+          // ✅ Proper error message extraction
+          const payload = (await response.json()) as { error?: string; message?: string };
+          errorMessage = payload?.error || payload?.message || errorMessage;
+        } catch (parseError) {
+          // ✅ Handle parse errors properly
+          console.error("Response parse error", {
+            status: response.status,
+            statusText: response.statusText,
+          });
+
+          if (response.status === 500) {
+            errorMessage = "Server error. Please try again later.";
+          } else if (response.status === 429) {
+            errorMessage = "Too many requests. Please wait before trying again.";
+          }
+        }
+
         setBanner({
           type: "error",
-          message: payload?.error || "Unable to submit your enquiry.",
+          message: errorMessage,
         });
         return;
       }
+
+      const payload = (await response.json()) as { message?: string };
 
       setBanner({
         type: "success",
@@ -93,10 +111,14 @@ export function ContactForm() {
         budget: budgetRanges[1],
         message: "",
       });
-    } catch {
+    } catch (error) {
+      console.error("Contact form error", error);
       setBanner({
         type: "error",
-        message: "Unable to submit your enquiry.",
+        message:
+          error instanceof Error && error.name === "AbortError"
+            ? "Request cancelled."
+            : "Unable to submit your enquiry.",
       });
     } finally {
       setLoading(false);

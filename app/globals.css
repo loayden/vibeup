@@ -204,33 +204,114 @@ h5 {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
 }
 
+/* ─── Dark Luxury Input / Textarea / Select ─────────────────────────────── */
+
+/*
+ * Base reset: strip every browser default that can produce a white/grey
+ * background, including the iOS Safari "system" appearance.
+ */
+input,
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  color: inherit;
+}
+
+/*
+ * iOS Safari autofill override.
+ * The browser injects its own background via an internal pseudo-element;
+ * the only reliable cross-browser fix is a very long box-shadow inset that
+ * "paints over" the autofill colour, combined with a matching text colour.
+ */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  /* Paint over the autofill yellow/white with our dark background */
+  -webkit-box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.97) inset !important;
+  box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.97) inset !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.8) !important;
+  caret-color: rgba(255, 255, 255, 0.8);
+  /* Keep the border/transition intact */
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Date input calendar icon colour on WebKit */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.6) sepia(0.4) saturate(2) hue-rotate(5deg);
+  opacity: 0.55;
+  cursor: pointer;
+}
+
+/* Select arrow */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(198,169,98,0.55)' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px !important;
+}
+
+/* Select option dropdown (non-WebKit browsers) */
+select option {
+  background-color: #0d0c0b;
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .glass-input {
   width: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 14px;
   padding: 14px 18px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.82);
   font-family: var(--font-jost), sans-serif;
   font-size: 0.85rem;
   letter-spacing: 0.05em;
   font-weight: 300;
   outline: none;
+  /* Prevent iOS from overriding our background */
+  -webkit-appearance: none;
+  appearance: none;
   transition:
-    border-color 0.35s,
-    box-shadow 0.35s,
-    background 0.35s;
+    border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .glass-input::placeholder {
-  color: rgba(255, 255, 255, 0.24);
+  color: rgba(255, 255, 255, 0.22);
+  font-weight: 300;
 }
 
 .glass-input:focus {
-  border-color: rgba(198, 169, 98, 0.5);
-  box-shadow: 0 0 0 3px rgba(198, 169, 98, 0.09);
+  border-color: rgba(198, 169, 98, 0.45);
+  box-shadow:
+    0 0 0 3px rgba(198, 169, 98, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+}
+
+/* Autofill override scoped to .glass-input */
+.glass-input:-webkit-autofill,
+.glass-input:-webkit-autofill:hover,
+.glass-input:-webkit-autofill:focus,
+.glass-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.97) inset !important;
+  box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.97) inset !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.82) !important;
+  caret-color: rgba(255, 255, 255, 0.82);
+  border-color: rgba(255, 255, 255, 0.09) !important;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 .liquid-button-gold,
