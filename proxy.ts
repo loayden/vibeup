@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import {
+  getDefaultOrigin,
+  isAllowedOrigin,
+  normalizeOrigin,
+  resolveCorsOrigin,
+} from "@/lib/origins";
+
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
-function getAllowedOrigin() {
-  try {
-    return new URL(
-      process.env.NEXT_PUBLIC_APP_URL ||
-        process.env.NEXT_PUBLIC_BASE_URL ||
-        "http://localhost:3000",
-    ).origin;
-  } catch {
-    return "http://localhost:3000";
-  }
-}
-
-function buildCorsHeaders(origin?: string | null) {
-  const allowedOrigin = getAllowedOrigin();
-  const resolvedOrigin = origin && origin === allowedOrigin ? origin : allowedOrigin;
+function buildCorsHeaders(origin?: string | null, requestOrigin?: string) {
+  const normalizedOrigin = normalizeOrigin(origin);
+  const resolvedOrigin =
+    normalizedOrigin && normalizedOrigin === requestOrigin
+      ? normalizedOrigin
+      : resolveCorsOrigin(origin) || getDefaultOrigin();
 
   return {
     "Access-Control-Allow-Origin": resolvedOrigin,
@@ -36,9 +34,11 @@ export function proxy(request: NextRequest) {
   }
 
   const origin = request.headers.get("origin");
-  const corsHeaders = buildCorsHeaders(origin);
-  const allowedOrigin = getAllowedOrigin();
+  const requestOrigin = request.nextUrl.origin;
+  const corsHeaders = buildCorsHeaders(origin, requestOrigin);
   const isWebhook = pathname.startsWith("/api/webhooks/stripe");
+  const normalizedOrigin = normalizeOrigin(origin);
+  const isSameOrigin = Boolean(normalizedOrigin && normalizedOrigin === requestOrigin);
 
   if (request.method === "OPTIONS") {
     return new NextResponse(null, {
@@ -47,7 +47,7 @@ export function proxy(request: NextRequest) {
     });
   }
 
-  if (origin && origin !== allowedOrigin && !isWebhook) {
+  if (origin && !isSameOrigin && !isAllowedOrigin(origin) && !isWebhook) {
     return NextResponse.json(
       { error: "Origin not allowed" },
       {

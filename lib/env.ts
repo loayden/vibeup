@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getDefaultOrigin } from "@/lib/origins";
+
 export function getServerEnv(name: string) {
   const value = process.env[name];
 
@@ -19,11 +21,7 @@ export function getAppUrl() {
 }
 
 export function getAllowedOrigin() {
-  try {
-    return new URL(getAppUrl()).origin;
-  } catch {
-    return "http://localhost:3000";
-  }
+  return getDefaultOrigin();
 }
 
 export function getJwtExpiresIn() {

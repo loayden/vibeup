@@ -6,7 +6,6 @@ import { useState } from "react";
 
 import { CountdownTimer } from "@/components/site/countdown";
 import { GlassCard, LiquidButton, LiquidLinkButton } from "@/components/site/liquid";
-import { supabase } from "@/lib/supabase";
 import { SITE, TICKET_TYPES, TRUST_SIGNALS } from "@/lib/site-data";
 
 type QuantityMap = Record<string, number>;
@@ -100,22 +99,37 @@ export function CheckoutExperience() {
     setBanner(null);
 
     try {
-      const { error } = await supabase.from("reservations").insert(
-        selectedTickets.map((ticket) => ({
+      const response = await fetch("/api/reservations", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          full_name: form.name,
           email: form.email,
-          ticket_type: ticket.id,
+          phone: form.phone || undefined,
           promo: appliedPromo,
-          status: "pending",
-        })),
-      );
+          items: selectedTickets.map((ticket) => ({
+            id: ticket.id,
+            name: ticket.name,
+            quantity: ticket.quantity,
+          })),
+        }),
+      });
 
-      if (error) {
-        throw error;
+      const payload = (await response.json().catch(() => null)) as
+        | { error?: string; message?: string }
+        | null;
+
+      if (!response.ok) {
+        throw new Error(payload?.error || "Unable to save your reservation right now.");
       }
 
       setBanner({
         type: "success",
         message:
+          payload?.message ||
           "Your reservation has been saved. Continue to the official ticket page to complete final purchase.",
       });
       setForm({

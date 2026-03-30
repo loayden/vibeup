@@ -3,15 +3,14 @@ import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
-import { getAllowedOrigin } from "@/lib/env";
+import { resolveCorsOrigin } from "@/lib/origins";
 
 type JsonInit = ResponseInit & {
   origin?: string | null;
 };
 
 export function buildCorsHeaders(origin?: string | null) {
-  const allowedOrigin = getAllowedOrigin();
-  const resolvedOrigin = origin && origin === allowedOrigin ? origin : allowedOrigin;
+  const resolvedOrigin = resolveCorsOrigin(origin);
 
   return {
     "Access-Control-Allow-Origin": resolvedOrigin,
