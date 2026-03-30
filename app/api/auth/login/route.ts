@@ -8,8 +8,9 @@ import {
   signSessionToken,
 } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
+import { isMissingServerEnvError } from "@/lib/env";
 import { isMissingSupabaseTableError } from "@/lib/supabase-errors";
-import { createAdminClient } from "@/lib/supabase-server";
+import { tryCreateAdminClient } from "@/lib/supabase-server";
 import { normalizeEmail, sanitizeText } from "@/lib/utils";
 
 const loginSchema = z.object({
@@ -29,37 +30,36 @@ export async function POST(request: NextRequest) {
     }
 
     const authUser = signInResult.data.user;
-    const supabase = createAdminClient();
+    const fullName = sanitizeText(
+      authUser.user_metadata?.full_name || authUser.email || "VibeUp Guest",
+      100,
+    );
+    const supabase = tryCreateAdminClient();
+    let profile = buildFallbackProfile({
+      id: authUser.id,
+      email: payload.email,
+      fullName,
+    });
 
-    const profileResult = await supabase
-      .from("profiles")
-      .upsert(
-        {
-          id: authUser.id,
-          email: normalizeEmail(payload.email),
-          full_name: sanitizeText(
-            authUser.user_metadata?.full_name || authUser.email || "VibeUp Guest",
-            100,
-          ),
-        },
-        { onConflict: "id" },
-      )
-      .select("*")
-      .single();
+    if (supabase) {
+      const profileResult = await supabase
+        .from("profiles")
+        .upsert(
+          {
+            id: authUser.id,
+            email: normalizeEmail(payload.email),
+            full_name: fullName,
+          },
+          { onConflict: "id" },
+        )
+        .select("*")
+        .single();
 
-    let profile = profileResult.data;
-
-    if (!profile && isMissingSupabaseTableError(profileResult.error)) {
-      profile = buildFallbackProfile({
-        id: authUser.id,
-        email: payload.email,
-        fullName:
-          authUser.user_metadata?.full_name || authUser.email || "VibeUp Guest",
-      });
-    }
-
-    if (!profile && profileResult.error) {
-      throw profileResult.error;
+      if (profileResult.data) {
+        profile = profileResult.data;
+      } else if (profileResult.error && !isMissingSupabaseTableError(profileResult.error)) {
+        throw profileResult.error;
+      }
     }
 
     const sessionToken = await signSessionToken({
@@ -83,6 +83,16 @@ export async function POST(request: NextRequest) {
 
     return applySessionCookie(response, sessionToken);
   } catch (error) {
+    if (isMissingServerEnvError(error, "JWT_SECRET")) {
+      return errorResponse(
+        "Server configuration is incomplete. Set JWT_SECRET in Vercel before signing in.",
+        500,
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
+
     return handleRouteError(request, error, "Login failed");
   }
 }

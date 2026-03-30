@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { buildFallbackProfile, requireAdmin } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
 import { isMissingSupabaseTableError } from "@/lib/supabase-errors";
-import { createAdminClient } from "@/lib/supabase-server";
+import { tryCreateAdminClient } from "@/lib/supabase-server";
 import { clamp, parseInteger, sanitizeText } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
@@ -21,7 +21,20 @@ export async function GET(request: NextRequest) {
     const role = searchParams.get("role");
     const limit = clamp(parseInteger(searchParams.get("limit"), 20), 1, 100);
     const offset = Math.max(parseInteger(searchParams.get("offset"), 0), 0);
-    const supabase = createAdminClient();
+    const supabase = tryCreateAdminClient();
+
+    if (!supabase) {
+      return jsonResponse(
+        {
+          users: [authResult.profile],
+          total: 1,
+          has_more: false,
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
 
     let query = supabase
       .from("profiles")

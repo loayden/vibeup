@@ -3,9 +3,16 @@ import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 
-import { getAdminNotificationEmail, getJwtExpiresIn, getServerEnv } from "@/lib/env";
+import {
+  getAdminNotificationEmail,
+  getJwtExpiresIn,
+  getServerEnv,
+} from "@/lib/env";
 import { isMissingSupabaseTableError } from "@/lib/supabase-errors";
-import { createAdminClient, createPublicServerClient } from "@/lib/supabase-server";
+import {
+  createPublicServerClient,
+  tryCreateAdminClient,
+} from "@/lib/supabase-server";
 import { normalizeEmail } from "@/lib/utils";
 import type { TableRow } from "@/types/database";
 
@@ -109,7 +116,23 @@ export async function getAuthUser(request: NextRequest) {
 
   try {
     const payload = await verifySessionToken(token);
-    const supabase = createAdminClient();
+    const supabase = tryCreateAdminClient();
+
+    if (!supabase) {
+      const fallbackProfile = buildFallbackProfile({
+        id: payload.sub,
+        email: payload.email,
+      });
+
+      return {
+        ok: true,
+        user: {
+          id: fallbackProfile.id,
+          email: fallbackProfile.email,
+        },
+        profile: fallbackProfile,
+      } satisfies AuthSuccess;
+    }
 
     const { data: profile, error } = await supabase
       .from("profiles")

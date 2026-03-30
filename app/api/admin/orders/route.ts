@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { requireAdmin } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
-import { createAdminClient } from "@/lib/supabase-server";
+import { tryCreateAdminClient } from "@/lib/supabase-server";
 import { clamp, parseInteger, sanitizeText } from "@/lib/utils";
 
 const statusSchema = z.enum([
@@ -31,7 +31,20 @@ export async function GET(request: NextRequest) {
     const orderNumber = searchParams.get("order_number");
     const limit = clamp(parseInteger(searchParams.get("limit"), 20), 1, 100);
     const offset = Math.max(parseInteger(searchParams.get("offset"), 0), 0);
-    const supabase = createAdminClient();
+    const supabase = tryCreateAdminClient();
+
+    if (!supabase) {
+      return jsonResponse(
+        {
+          orders: [],
+          total: 0,
+          has_more: false,
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
 
     let query = supabase
       .from("orders")

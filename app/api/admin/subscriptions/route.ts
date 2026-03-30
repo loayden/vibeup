@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
 import { sendBulkEmail } from "@/lib/email";
-import { createAdminClient } from "@/lib/supabase-server";
+import { tryCreateAdminClient } from "@/lib/supabase-server";
 import { clamp, parseInteger } from "@/lib/utils";
 
 const blastSchema = z.object({
@@ -27,7 +27,16 @@ export async function GET(request: NextRequest) {
       1,
       500,
     );
-    const supabase = createAdminClient();
+    const supabase = tryCreateAdminClient();
+
+    if (!supabase) {
+      return jsonResponse(
+        { subscriptions: [] },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
     const { data: subscriptions, error } = await supabase
       .from("subscriptions")
       .select("*")
@@ -69,7 +78,20 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = blastSchema.parse(await request.json());
-    const supabase = createAdminClient();
+    const supabase = tryCreateAdminClient();
+
+    if (!supabase) {
+      return jsonResponse(
+        {
+          message: "No subscription list is configured for this project yet.",
+          sent: 0,
+          failed: 0,
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
     const { data: recipients, error } = await supabase
       .from("subscriptions")
       .select("email")

@@ -12,6 +12,22 @@ export function getServerEnv(name: string) {
   return value;
 }
 
+export function isMissingServerEnvError(error: unknown, name?: string) {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  if (!error.message.startsWith("Missing required environment variable: ")) {
+    return false;
+  }
+
+  if (!name) {
+    return true;
+  }
+
+  return error.message === `Missing required environment variable: ${name}`;
+}
+
 export function getAppUrl() {
   return (
     process.env.NEXT_PUBLIC_APP_URL ||

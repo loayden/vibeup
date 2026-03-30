@@ -35,3 +35,11 @@ export function createAdminClient(): SupabaseClient {
     },
   });
 }
+
+export function tryCreateAdminClient(): SupabaseClient | null {
+  try {
+    return createAdminClient();
+  } catch {
+    return null;
+  }
+}

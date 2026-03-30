@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 
 import { requireAdmin } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
-import { createAdminClient } from "@/lib/supabase-server";
+import { tryCreateAdminClient } from "@/lib/supabase-server";
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,7 +14,24 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const supabase = createAdminClient();
+    const supabase = tryCreateAdminClient();
+
+    if (!supabase) {
+      return jsonResponse(
+        {
+          monthly_revenue: [],
+          top_events: [],
+          totals: {
+            revenue: 0,
+            paid_orders: 0,
+            refunded_orders: 0,
+          },
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
     const [ordersResult, eventsResult] = await Promise.all([
       supabase
         .from("orders")

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 
 import { requireAdmin } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
-import { createAdminClient } from "@/lib/supabase-server";
+import { tryCreateAdminClient } from "@/lib/supabase-server";
 
 export async function GET(request: NextRequest) {
   try {
@@ -14,7 +14,25 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const supabase = createAdminClient();
+    const supabase = tryCreateAdminClient();
+
+    if (!supabase) {
+      return jsonResponse(
+        {
+          stats: {
+            orders_this_month: 0,
+            active_tickets: 0,
+            new_enquiries: 0,
+            total_subscribers: 0,
+            published_events: 0,
+            revenue_this_month: 0,
+          },
+        },
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
     const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
     const [
