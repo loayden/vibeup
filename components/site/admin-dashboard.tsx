@@ -161,19 +161,19 @@ export function AdminDashboardClient() {
         fetch("/api/admin/analytics", { credentials: "include", signal }).then((r) =>
           r.json()
         ),
-        fetch("/api/admin/orders?limit=8", { credentials: "include", signal }).then((r) =>
+        fetch("/api/admin/orders", { credentials: "include", signal }).then((r) =>
           r.json()
         ),
-        fetch("/api/admin/subscriptions?limit=8", { credentials: "include", signal }).then(
+        fetch("/api/admin/subscriptions", { credentials: "include", signal }).then(
           (r) => r.json()
         ),
-        fetch("/api/admin/enquiries?limit=8", { credentials: "include", signal }).then((r) =>
+        fetch("/api/admin/enquiries", { credentials: "include", signal }).then((r) =>
           r.json()
         ),
-        fetch("/api/admin/users?limit=8", { credentials: "include", signal }).then((r) =>
+        fetch("/api/admin/users", { credentials: "include", signal }).then((r) =>
           r.json()
         ),
-        fetch("/api/admin/reservations?limit=8", { credentials: "include", signal }).then(
+        fetch("/api/admin/reservations", { credentials: "include", signal }).then(
           (r) => r.json()
         ),
       ]);
