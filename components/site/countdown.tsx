@@ -46,8 +46,9 @@ export const CountdownTimer = memo(function CountdownTimer({
 
   useEffect(() => {
     // ✅ Detect low-end devices and adjust update frequency
-    const isLowEndDevice =
-      navigator.deviceMemory !== undefined && navigator.deviceMemory <= 2;
+    // deviceMemory is a non-standard API, so we type-cast it
+    const deviceMemory = (navigator as any).deviceMemory as number | undefined;
+    const isLowEndDevice = deviceMemory !== undefined && deviceMemory <= 2;
 
     // ✅ Use longer interval on low-end devices (5s instead of 1s) to reduce re-renders
     const updateInterval = isLowEndDevice ? 5000 : 1000;

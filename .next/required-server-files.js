@@ -18,6 +18,7 @@ self.__SERVER_FILES_MANIFEST={
         3840
       ],
       "imageSizes": [
+        16,
         32,
         48,
         64,
@@ -31,8 +32,9 @@ self.__SERVER_FILES_MANIFEST={
       "loaderFile": "",
       "domains": [],
       "disableStaticImages": false,
-      "minimumCacheTTL": 14400,
+      "minimumCacheTTL": 31536000,
       "formats": [
+        "image/avif",
         "image/webp"
       ],
       "maximumRedirects": 3,
@@ -96,7 +98,7 @@ self.__SERVER_FILES_MANIFEST={
     "poweredByHeader": true,
     "cacheHandlers": {},
     "cacheMaxMemorySize": 52428800,
-    "compress": false,
+    "compress": true,
     "i18n": null,
     "httpAgentOptions": {
       "keepAlive": true
@@ -136,7 +138,7 @@ self.__SERVER_FILES_MANIFEST={
       "imgOptSkipMetadata": null,
       "imgOptTimeoutInSeconds": 7,
       "proxyClientMaxBodySize": 10485760,
-      "trustHostHeader": true,
+      "trustHostHeader": false,
       "isExperimentalCompile": false
     }
   },

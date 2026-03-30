@@ -2,12 +2,6 @@
   "version": 4,
   "routes": {
     "/_global-error": {
-      "initialStatus": 500,
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/_global-error/layout,_N_T_/_global-error/page,_N_T_/_global-error"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -33,11 +27,6 @@
     },
     "/_not-found": {
       "initialStatus": 404,
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/_not-found/layout,_N_T_/_not-found/page,_N_T_/_not-found"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -62,11 +51,6 @@
       ]
     },
     "/about": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/about/layout,_N_T_/about/page,_N_T_/about"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -91,11 +75,6 @@
       ]
     },
     "/admin/dashboard": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/dashboard/layout,_N_T_/admin/dashboard/page,_N_T_/admin/dashboard"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -120,11 +99,6 @@
       ]
     },
     "/blog/abdel-karim-a-night-to-remember": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/[slug]/layout,_N_T_/blog/[slug]/page,_N_T_/blog/abdel-karim-a-night-to-remember"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -149,11 +123,6 @@
       ]
     },
     "/blog/behind-the-scenes-new-years-eve-gala-2025": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/[slug]/layout,_N_T_/blog/[slug]/page,_N_T_/blog/behind-the-scenes-new-years-eve-gala-2025"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -178,11 +147,6 @@
       ]
     },
     "/blog/building-community-through-celebration": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/[slug]/layout,_N_T_/blog/[slug]/page,_N_T_/blog/building-community-through-celebration"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -207,11 +171,6 @@
       ]
     },
     "/blog/five-reasons-to-hire-a-professional-event-company": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/[slug]/layout,_N_T_/blog/[slug]/page,_N_T_/blog/five-reasons-to-hire-a-professional-event-company"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -236,11 +195,6 @@
       ]
     },
     "/blog/plan-the-perfect-arab-cultural-event": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/[slug]/layout,_N_T_/blog/[slug]/page,_N_T_/blog/plan-the-perfect-arab-cultural-event"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -265,11 +219,6 @@
       ]
     },
     "/blog/vibeup-expands-to-new-york-and-chicago": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/[slug]/layout,_N_T_/blog/[slug]/page,_N_T_/blog/vibeup-expands-to-new-york-and-chicago"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -294,11 +243,6 @@
       ]
     },
     "/blog": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/blog/layout,_N_T_/blog/page,_N_T_/blog"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -323,11 +267,6 @@
       ]
     },
     "/careers": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/careers/layout,_N_T_/careers/page,_N_T_/careers"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -352,11 +291,6 @@
       ]
     },
     "/checkout": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/checkout/layout,_N_T_/checkout/page,_N_T_/checkout"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -381,11 +315,6 @@
       ]
     },
     "/contact-us": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/contact-us/layout,_N_T_/contact-us/page,_N_T_/contact-us"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -410,13 +339,6 @@
       ]
     },
     "/contact": {
-      "initialStatus": 307,
-      "initialHeaders": {
-        "location": "/contact-us",
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/contact/layout,_N_T_/contact/page,_N_T_/contact"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -441,11 +363,6 @@
       ]
     },
     "/email": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/email/layout,_N_T_/email/page,_N_T_/email"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -470,11 +387,6 @@
       ]
     },
     "/events/arab-nights": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/[slug]/layout,_N_T_/events/[slug]/page,_N_T_/events/arab-nights"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -499,11 +411,6 @@
       ]
     },
     "/events/eid-al-adha-celebration": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/[slug]/layout,_N_T_/events/[slug]/page,_N_T_/events/eid-al-adha-celebration"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -528,11 +435,6 @@
       ]
     },
     "/events/new-years-eve-gala-2027": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/[slug]/layout,_N_T_/events/[slug]/page,_N_T_/events/new-years-eve-gala-2027"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -557,11 +459,6 @@
       ]
     },
     "/events/ramadan-night-gala": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/[slug]/layout,_N_T_/events/[slug]/page,_N_T_/events/ramadan-night-gala"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -586,11 +483,6 @@
       ]
     },
     "/events/summer-rooftop-series": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/[slug]/layout,_N_T_/events/[slug]/page,_N_T_/events/summer-rooftop-series"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -615,11 +507,6 @@
       ]
     },
     "/events": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/events/layout,_N_T_/events/page,_N_T_/events"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -644,11 +531,6 @@
       ]
     },
     "/faq": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/faq/layout,_N_T_/faq/page,_N_T_/faq"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -702,11 +584,6 @@
       ]
     },
     "/gallery": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/gallery/layout,_N_T_/gallery/page,_N_T_/gallery"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -731,11 +608,6 @@
       ]
     },
     "/": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/page,_N_T_/,_N_T_/index"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -760,11 +632,6 @@
       ]
     },
     "/privacy": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/privacy/layout,_N_T_/privacy/page,_N_T_/privacy"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -789,11 +656,6 @@
       ]
     },
     "/services": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/services/layout,_N_T_/services/page,_N_T_/services"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -818,11 +680,6 @@
       ]
     },
     "/terms": {
-      "initialHeaders": {
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/terms/layout,_N_T_/terms/page,_N_T_/terms"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -847,13 +704,6 @@
       ]
     },
     "/tickets": {
-      "initialStatus": 307,
-      "initialHeaders": {
-        "location": "/checkout",
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/tickets/layout,_N_T_/tickets/page,_N_T_/tickets"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -878,13 +728,6 @@
       ]
     },
     "/upcoming-events": {
-      "initialStatus": 307,
-      "initialHeaders": {
-        "location": "/events",
-        "x-nextjs-stale-time": "300",
-        "x-nextjs-prerender": "1",
-        "x-next-cache-tags": "_N_T_/layout,_N_T_/upcoming-events/layout,_N_T_/upcoming-events/page,_N_T_/upcoming-events"
-      },
       "experimentalBypassFor": [
         {
           "type": "header",
