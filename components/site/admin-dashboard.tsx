@@ -1,16 +1,21 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { format } from "date-fns";
 import {
   ArrowRight,
   ChartNoAxesCombined,
   DollarSign,
   LogOut,
+  Mail,
   RefreshCw,
+  Search,
   Shield,
+  ShoppingBag,
   Ticket,
   UserRound,
   Users,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -55,6 +60,25 @@ type Enquiry = {
   status: string;
   event_type: string | null;
   created_at: string;
+};
+
+type ReservationSummary = {
+  id: string;
+  email: string;
+  full_name: string | null;
+  ticket_type: string;
+  ticket_id: string | null;
+  quantity: number;
+  promo: string | null;
+  status: string;
+  created_at: string;
+};
+
+type ReservationDetail = {
+  reservation: ReservationSummary;
+  linked_user: Profile | null;
+  related_orders: Order[];
+  related_reservations: ReservationSummary[];
 };
 
 type AnalyticsPayload = {
@@ -110,13 +134,17 @@ export function AdminDashboardClient() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [users, setUsers] = useState<Profile[]>([]);
+  const [reservations, setReservations] = useState<ReservationSummary[]>([]);
+  const [activeReservationId, setActiveReservationId] = useState<string | null>(null);
+  const [reservationDetail, setReservationDetail] = useState<ReservationDetail | null>(null);
+  const [reservationLoading, setReservationLoading] = useState(false);
 
   async function loadDashboardData() {
     setLoading(true);
     setBanner(null);
 
     try {
-      const [statsResponse, analyticsResponse, ordersResponse, subscriptionsResponse, enquiriesResponse, usersResponse] =
+      const [statsResponse, analyticsResponse, ordersResponse, subscriptionsResponse, enquiriesResponse, usersResponse, reservationsResponse] =
         await Promise.all([
           fetch("/api/admin/dashboard", { credentials: "include" }),
           fetch("/api/admin/analytics", { credentials: "include" }),
@@ -124,9 +152,10 @@ export function AdminDashboardClient() {
           fetch("/api/admin/subscriptions?limit=8", { credentials: "include" }),
           fetch("/api/admin/enquiries?limit=8", { credentials: "include" }),
           fetch("/api/admin/users?limit=8", { credentials: "include" }),
+          fetch("/api/admin/reservations?limit=8", { credentials: "include" }),
         ]);
 
-      if ([statsResponse, analyticsResponse, ordersResponse, subscriptionsResponse, enquiriesResponse, usersResponse].some((response) => !response.ok)) {
+      if ([statsResponse, analyticsResponse, ordersResponse, subscriptionsResponse, enquiriesResponse, usersResponse, reservationsResponse].some((response) => !response.ok)) {
         throw new Error("Unable to load dashboard data.");
       }
 
@@ -138,6 +167,9 @@ export function AdminDashboardClient() {
       };
       const enquiriesPayload = (await enquiriesResponse.json()) as { enquiries: Enquiry[] };
       const usersPayload = (await usersResponse.json()) as { users: Profile[] };
+      const reservationsPayload = (await reservationsResponse.json()) as {
+        reservations: ReservationSummary[];
+      };
 
       setStats(statsPayload.stats);
       setAnalytics(analyticsPayload);
@@ -145,6 +177,7 @@ export function AdminDashboardClient() {
       setSubscriptions(subscriptionsPayload.subscriptions || []);
       setEnquiries(enquiriesPayload.enquiries || []);
       setUsers(usersPayload.users || []);
+      setReservations(reservationsPayload.reservations || []);
     } catch (error) {
       setBanner({
         type: "error",
@@ -244,6 +277,9 @@ export function AdminDashboardClient() {
     setSubscriptions([]);
     setEnquiries([]);
     setUsers([]);
+    setReservations([]);
+    setActiveReservationId(null);
+    setReservationDetail(null);
     setAuthStatus("unauthenticated");
     setBanner({
       type: "info",
@@ -255,6 +291,49 @@ export function AdminDashboardClient() {
     ...(analytics?.monthly_revenue.map((item) => item.revenue) || [1]),
     1,
   );
+
+  async function openReservationDetails(reservationId: string) {
+    setActiveReservationId(reservationId);
+    setReservationLoading(true);
+    setBanner(null);
+
+    try {
+      const response = await fetch(`/api/admin/reservations/${reservationId}`, {
+        credentials: "include",
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | ReservationDetail
+        | { error?: string }
+        | null;
+
+      if (!response.ok || !payload || !("reservation" in payload)) {
+        throw new Error(
+          (payload && "error" in payload && payload.error) ||
+            "Unable to load reservation details.",
+        );
+      }
+
+      setReservationDetail(payload);
+    } catch (error) {
+      setReservationDetail(null);
+      setBanner({
+        type: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Unable to load reservation details.",
+      });
+    } finally {
+      setReservationLoading(false);
+    }
+  }
+
+  function closeReservationDetails() {
+    setActiveReservationId(null);
+    setReservationDetail(null);
+    setReservationLoading(false);
+  }
 
   if (authStatus === "checking") {
     return (
@@ -462,7 +541,7 @@ export function AdminDashboardClient() {
         </GlassCard>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-2 2xl:grid-cols-4">
         <GlassCard className="px-6 py-6">
           <div className="flex items-center gap-3">
             <Users className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
@@ -520,6 +599,52 @@ export function AdminDashboardClient() {
         </GlassCard>
 
         <GlassCard className="px-6 py-6">
+          <div className="flex items-center gap-3">
+            <Search className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+            <p className="eyebrow">Reserve Selections</p>
+          </div>
+          <div className="mt-5 space-y-4">
+            {reservations.length ? (
+              reservations.map((reservation) => (
+                <button
+                  key={reservation.id}
+                  type="button"
+                  onClick={() => void openReservationDetails(reservation.id)}
+                  className="w-full rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4 text-left transition-all duration-300 hover:border-[rgba(198,169,98,0.24)] hover:bg-white/[0.04]"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="font-serif text-[1.45rem] font-light tracking-[0.05em] text-white">
+                        {reservation.full_name || "Guest Reservation"}
+                      </p>
+                      <p className="body-copy mt-2 text-white/68">{reservation.email}</p>
+                    </div>
+                    <span className="liquid-button-ghost px-4 py-2 !text-[9px]">
+                      {reservation.status}
+                    </span>
+                  </div>
+                  <p className="body-copy mt-4 text-white/68">{reservation.ticket_type}</p>
+                  <div className="mt-4 flex flex-wrap gap-4">
+                    <p className="eyebrow text-white/28">
+                      Qty {reservation.quantity}
+                    </p>
+                    <p className="eyebrow text-white/28">
+                      {format(new Date(reservation.created_at), "MMM d, yyyy")}
+                    </p>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                <p className="body-copy text-white/62">
+                  No reservation selections have been captured yet.
+                </p>
+              </div>
+            )}
+          </div>
+        </GlassCard>
+
+        <GlassCard className="px-6 py-6">
           <p className="eyebrow">Subscribers & Enquiries</p>
           <div className="mt-5 space-y-5">
             <div>
@@ -562,6 +687,240 @@ export function AdminDashboardClient() {
           </div>
         </GlassCard>
       </div>
+
+      <AnimatePresence>
+        {activeReservationId ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[120] flex justify-end bg-black/55 px-4 py-4 backdrop-blur-md"
+            onClick={closeReservationDetails}
+          >
+            <motion.div
+              initial={{ opacity: 0, x: 48 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 48 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="h-full w-full max-w-2xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <GlassCard dark className="flex h-full flex-col overflow-hidden px-6 py-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="eyebrow mb-3">Reservation Detail</p>
+                    <h3 className="section-title text-[2rem]">
+                      Reserve selection <em>context</em>
+                    </h3>
+                    <p className="body-copy mt-4 max-w-xl">
+                      Review the captured reservation, the matched VibeUp user profile, and every
+                      order we can link by customer email.
+                    </p>
+                  </div>
+                  <LiquidButton
+                    className="!px-4 !py-3"
+                    onClick={closeReservationDetails}
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <X className="h-3.5 w-3.5" strokeWidth={1.2} />
+                      Close
+                    </span>
+                  </LiquidButton>
+                </div>
+
+                <div className="mt-6 flex-1 space-y-6 overflow-y-auto pr-1">
+                  {reservationLoading ? (
+                    <GlassCard warm className="px-5 py-5">
+                      <p className="eyebrow mb-3">Loading</p>
+                      <p className="body-copy">Pulling the linked user and order history now.</p>
+                    </GlassCard>
+                  ) : reservationDetail ? (
+                    <>
+                      <GlassCard warm className="px-5 py-5">
+                        <div className="flex flex-wrap items-start justify-between gap-4">
+                          <div>
+                            <p className="font-serif text-[1.95rem] font-light tracking-[0.05em] text-white">
+                              {reservationDetail.reservation.full_name || "Guest Reservation"}
+                            </p>
+                            <p className="body-copy mt-3 text-white/68">
+                              {reservationDetail.reservation.email}
+                            </p>
+                          </div>
+                          <span className="liquid-button-gold px-4 py-2 !text-[9px]">
+                            {reservationDetail.reservation.status}
+                          </span>
+                        </div>
+                        <div className="mt-5 grid gap-3 md:grid-cols-2">
+                          <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                            <p className="eyebrow mb-2">Selection</p>
+                            <p className="body-copy text-white/68">
+                              {reservationDetail.reservation.ticket_type}
+                            </p>
+                          </div>
+                          <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                            <p className="eyebrow mb-2">Quantity</p>
+                            <p className="body-copy text-white/68">
+                              {reservationDetail.reservation.quantity}
+                            </p>
+                          </div>
+                          <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                            <p className="eyebrow mb-2">Promo</p>
+                            <p className="body-copy text-white/68">
+                              {reservationDetail.reservation.promo || "No promo"}
+                            </p>
+                          </div>
+                          <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                            <p className="eyebrow mb-2">Captured</p>
+                            <p className="body-copy text-white/68">
+                              {format(
+                                new Date(reservationDetail.reservation.created_at),
+                                "MMMM d, yyyy 'at' p",
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      </GlassCard>
+
+                      <GlassCard className="px-5 py-5">
+                        <div className="flex items-center gap-3">
+                          <Users className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                          <p className="eyebrow">Linked User</p>
+                        </div>
+                        {reservationDetail.linked_user ? (
+                          <div className="mt-5 space-y-4">
+                            <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                              <p className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-white">
+                                {reservationDetail.linked_user.full_name || "VibeUp User"}
+                              </p>
+                              <div className="mt-4 flex flex-wrap gap-4">
+                                <p className="eyebrow text-white/28">
+                                  {reservationDetail.linked_user.role}
+                                </p>
+                                <p className="eyebrow text-white/28">
+                                  {reservationDetail.linked_user.email_verified
+                                    ? "Email verified"
+                                    : "Email unverified"}
+                                </p>
+                              </div>
+                              <div className="mt-4 flex items-center gap-3">
+                                <Mail className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                                <p className="body-copy text-white/68">
+                                  {reservationDetail.linked_user.email}
+                                </p>
+                              </div>
+                              <p className="eyebrow mt-4 text-white/28">
+                                Joined {format(new Date(reservationDetail.linked_user.created_at), "MMM d, yyyy")}
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="mt-5 rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                            <p className="body-copy text-white/62">
+                              No matching profile or authenticated user was found for this reservation email.
+                            </p>
+                          </div>
+                        )}
+                      </GlassCard>
+
+                      <GlassCard className="px-5 py-5">
+                        <div className="flex items-center gap-3">
+                          <ShoppingBag className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                          <p className="eyebrow">Linked Orders</p>
+                        </div>
+                        <div className="mt-5 space-y-4">
+                          {reservationDetail.related_orders.length ? (
+                            reservationDetail.related_orders.map((order) => (
+                              <div
+                                key={order.id}
+                                className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
+                              >
+                                <div className="flex flex-wrap items-start justify-between gap-4">
+                                  <div>
+                                    <p className="font-serif text-[1.45rem] font-light tracking-[0.05em] text-white">
+                                      {order.order_number}
+                                    </p>
+                                    <p className="body-copy mt-2 text-white/68">
+                                      {order.customer_name}
+                                    </p>
+                                  </div>
+                                  <span className="liquid-button-ghost px-4 py-2 !text-[9px]">
+                                    {order.status}
+                                  </span>
+                                </div>
+                                <p className="body-copy mt-4 text-white/68">
+                                  {order.events?.title || order.customer_email}
+                                </p>
+                                <div className="mt-4 flex flex-wrap gap-4">
+                                  <p className="eyebrow text-white/28">
+                                    ${order.total.toLocaleString()}
+                                  </p>
+                                  <p className="eyebrow text-white/28">
+                                    {format(new Date(order.created_at), "MMM d, yyyy")}
+                                  </p>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                              <p className="body-copy text-white/62">
+                                No orders are linked to this email yet. Reservations can exist before payment is completed.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </GlassCard>
+
+                      <GlassCard className="px-5 py-5">
+                        <div className="flex items-center gap-3">
+                          <Ticket className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                          <p className="eyebrow">Other Reservations</p>
+                        </div>
+                        <div className="mt-5 space-y-3">
+                          {reservationDetail.related_reservations.length ? (
+                            reservationDetail.related_reservations.map((reservation) => (
+                              <div
+                                key={reservation.id}
+                                className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
+                              >
+                                <div className="flex flex-wrap items-start justify-between gap-4">
+                                  <div>
+                                    <p className="body-copy text-white/68">
+                                      {reservation.ticket_type}
+                                    </p>
+                                    <p className="eyebrow mt-3 text-white/28">
+                                      Qty {reservation.quantity}
+                                    </p>
+                                  </div>
+                                  <span className="liquid-button-ghost px-4 py-2 !text-[9px]">
+                                    {reservation.status}
+                                  </span>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                              <p className="body-copy text-white/62">
+                                No additional reservation selections were found for this email.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </GlassCard>
+                    </>
+                  ) : (
+                    <GlassCard warm className="px-5 py-5">
+                      <p className="eyebrow mb-3">Unavailable</p>
+                      <p className="body-copy">
+                        Reservation details could not be loaded for the selected row.
+                      </p>
+                    </GlassCard>
+                  )}
+                </div>
+              </GlassCard>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
