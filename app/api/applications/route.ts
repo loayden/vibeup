@@ -6,6 +6,7 @@ import {
   sendAdminNotification,
   sendApplicationConfirmation,
 } from "@/lib/email";
+import { isBackupEligibleSupabaseError } from "@/lib/supabase-errors";
 import { createAdminClient } from "@/lib/supabase-server";
 import {
   normalizeEmail,
@@ -35,31 +36,6 @@ type ApplicationInput = {
   resumeUrl: string | null;
   message: string | null;
 };
-
-function isSupabaseConnectionError(error: unknown) {
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "object" &&
-          error &&
-          "message" in error &&
-          typeof error.message === "string"
-        ? error.message
-        : null;
-
-  if (!message) {
-    return false;
-  }
-
-  const normalized = message.toLowerCase();
-  return (
-    normalized.includes("fetch failed") ||
-    normalized.includes("enotfound") ||
-    normalized.includes("getaddrinfo") ||
-    normalized.includes("network") ||
-    normalized.includes("supabase")
-  );
-}
 
 function normalizeApplicationInput(
   payload: z.infer<typeof applicationSchema>,
@@ -138,7 +114,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error || !application) {
-      if (isSupabaseConnectionError(error)) {
+      if (isBackupEligibleSupabaseError(error)) {
         const backupSent = await sendApplicationBackup(input);
 
         if (backupSent) {
@@ -198,7 +174,7 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
-    if (isSupabaseConnectionError(error)) {
+    if (isBackupEligibleSupabaseError(error)) {
       return errorResponse(
         "Application delivery failed because Supabase is unavailable and email backup is not configured.",
         500,

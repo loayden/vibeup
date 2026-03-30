@@ -3,6 +3,12 @@ import { z } from "zod";
 
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
 import { sendAdminNotification } from "@/lib/email";
+import {
+  isBackupEligibleSupabaseError,
+  isMissingSupabaseTableError,
+  isSupabaseConnectionError,
+  isSupabaseMissingColumnError,
+} from "@/lib/supabase-errors";
 import { createAdminClient } from "@/lib/supabase-server";
 import { normalizeEmail, sanitizeOptionalText, sanitizeText } from "@/lib/utils";
 
@@ -34,31 +40,6 @@ type ReservationInput = {
     quantity: number;
   }>;
 };
-
-function isSupabaseConnectionError(error: unknown) {
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "object" &&
-          error &&
-          "message" in error &&
-          typeof error.message === "string"
-        ? error.message
-        : null;
-
-  if (!message) {
-    return false;
-  }
-
-  const normalized = message.toLowerCase();
-  return (
-    normalized.includes("fetch failed") ||
-    normalized.includes("enotfound") ||
-    normalized.includes("getaddrinfo") ||
-    normalized.includes("network") ||
-    normalized.includes("supabase")
-  );
-}
 
 function normalizeReservationInput(payload: z.infer<typeof reservationSchema>): ReservationInput {
   return {
@@ -121,26 +102,60 @@ async function sendReservationBackup(input: ReservationInput) {
   return true;
 }
 
+async function insertReservationRows(
+  input: ReservationInput,
+  origin: string | null,
+) {
+  const supabase = createAdminClient();
+
+  const standardRows = input.items.map((item) => ({
+    email: input.email,
+    full_name: input.fullName,
+    ticket_type: item.id,
+    quantity: item.quantity,
+    promo: input.promo,
+    status: "pending",
+  }));
+
+  const standardResult = await supabase.from("reservations").insert(standardRows);
+
+  if (!standardResult.error) {
+    return standardResult;
+  }
+
+  if (!isSupabaseMissingColumnError(standardResult.error)) {
+    return standardResult;
+  }
+
+  const minimalRows = input.items.map((item) => ({
+    email: input.email,
+    ticket_type: item.id,
+    promo: input.promo,
+    status: "pending",
+  }));
+
+  const fallbackResult = await supabase.from("reservations").insert(minimalRows);
+
+  if (fallbackResult.error) {
+    console.error("Reservation compatibility insert failed", {
+      origin,
+      standardError: standardResult.error,
+      fallbackError: fallbackResult.error,
+    });
+  }
+
+  return fallbackResult;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const payload = reservationSchema.parse(await request.json());
     const reservationInput = normalizeReservationInput(payload);
-    const supabase = createAdminClient();
-
-    const rows = reservationInput.items.map((item) => ({
-      email: reservationInput.email,
-      full_name: reservationInput.fullName,
-      ticket_type: item.name,
-      ticket_id: item.id,
-      quantity: item.quantity,
-      promo: reservationInput.promo,
-      status: "pending",
-    }));
-
-    const { error } = await supabase.from("reservations").insert(rows);
+    const origin = request.headers.get("origin");
+    const { error } = await insertReservationRows(reservationInput, origin);
 
     if (error) {
-      if (isSupabaseConnectionError(error)) {
+      if (isBackupEligibleSupabaseError(error)) {
         const backupSent = await sendReservationBackup(reservationInput);
 
         if (backupSent) {
@@ -151,7 +166,17 @@ export async function POST(request: NextRequest) {
             },
             {
               status: 201,
-              origin: request.headers.get("origin"),
+              origin,
+            },
+          );
+        }
+
+        if (isMissingSupabaseTableError(error)) {
+          return errorResponse(
+            "Reservations table is missing. Run the latest Supabase schema before saving reservations.",
+            500,
+            {
+              origin,
             },
           );
         }
@@ -160,20 +185,17 @@ export async function POST(request: NextRequest) {
           "Supabase connection failed. Check NEXT_PUBLIC_SUPABASE_URL and confirm the project is active.",
           500,
           {
-            origin: request.headers.get("origin"),
+            origin,
           },
         );
       }
 
-      if (
-        error.code === "42P01" ||
-        error.message.toLowerCase().includes("reservations")
-      ) {
+      if (isMissingSupabaseTableError(error)) {
         return errorResponse(
           "Reservations table is missing. Run the latest Supabase schema before saving reservations.",
           500,
           {
-            origin: request.headers.get("origin"),
+            origin,
           },
         );
       }
@@ -187,7 +209,7 @@ export async function POST(request: NextRequest) {
       },
       {
         status: 201,
-        origin: request.headers.get("origin"),
+        origin,
       },
     );
   } catch (error) {

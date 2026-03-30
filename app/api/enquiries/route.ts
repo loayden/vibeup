@@ -6,6 +6,7 @@ import {
   sendAdminNotification,
   sendEnquiryConfirmation,
 } from "@/lib/email";
+import { isBackupEligibleSupabaseError } from "@/lib/supabase-errors";
 import { createAdminClient } from "@/lib/supabase-server";
 import {
   normalizeEmail,
@@ -42,31 +43,6 @@ type EnquiryInput = {
   message: string;
   source: string;
 };
-
-function isSupabaseConnectionError(error: unknown) {
-  const message =
-    error instanceof Error
-      ? error.message
-      : typeof error === "object" &&
-          error &&
-          "message" in error &&
-          typeof error.message === "string"
-        ? error.message
-        : null;
-
-  if (!message) {
-    return false;
-  }
-
-  const normalized = message.toLowerCase();
-  return (
-    normalized.includes("fetch failed") ||
-    normalized.includes("enotfound") ||
-    normalized.includes("getaddrinfo") ||
-    normalized.includes("network") ||
-    normalized.includes("supabase")
-  );
-}
 
 function normalizeEnquiryInput(payload: z.infer<typeof enquirySchema>): EnquiryInput {
   return {
@@ -148,7 +124,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error || !enquiry) {
-      if (isSupabaseConnectionError(error)) {
+      if (isBackupEligibleSupabaseError(error)) {
         const backupSent = await sendEnquiryBackup(input);
 
         if (backupSent) {
@@ -204,7 +180,7 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
-    if (isSupabaseConnectionError(error)) {
+    if (isBackupEligibleSupabaseError(error)) {
       return errorResponse(
         "Enquiry delivery failed because Supabase is unavailable and email backup is not configured.",
         500,
