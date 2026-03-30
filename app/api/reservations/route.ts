@@ -22,6 +22,21 @@ const reservationSchema = z.object({
     .max(10),
 });
 
+function isSupabaseConnectionError(error: unknown) {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const message = error.message.toLowerCase();
+  return (
+    message.includes("fetch failed") ||
+    message.includes("enotfound") ||
+    message.includes("getaddrinfo") ||
+    message.includes("network") ||
+    message.includes("supabase")
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const payload = reservationSchema.parse(await request.json());
@@ -66,6 +81,16 @@ export async function POST(request: NextRequest) {
       },
     );
   } catch (error) {
+    if (isSupabaseConnectionError(error)) {
+      return errorResponse(
+        "Supabase connection failed. Check NEXT_PUBLIC_SUPABASE_URL and confirm the project is active.",
+        500,
+        {
+          origin: request.headers.get("origin"),
+        },
+      );
+    }
+
     return handleRouteError(request, error, "Unable to save your reservation right now.");
   }
 }
