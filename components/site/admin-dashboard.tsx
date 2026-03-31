@@ -25,24 +25,65 @@ type Profile = {
   id: string;
   full_name: string | null;
   email: string;
+  phone: string | null;
+  avatar_url: string | null;
   role: string;
   created_at: string;
+  updated_at: string;
   email_verified: boolean | null;
   marketing_opt_in: boolean | null;
+  auth_user?: {
+    phone: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+    last_sign_in_at: string | null;
+    email_confirmed_at: string | null;
+    user_metadata: Record<string, unknown>;
+    app_metadata: Record<string, unknown>;
+    providers: string[];
+  } | null;
 };
 
 type Order = {
   id: string;
   order_number: string;
+  user_id?: string | null;
+  event_id?: string | null;
   customer_name: string;
   customer_email: string;
+  customer_phone?: string | null;
   status: string;
   total: number;
+  subtotal?: number;
+  discount_amount?: number;
+  fee_amount?: number;
+  currency?: string;
+  promo_code?: string | null;
+  payment_method?: string | null;
+  notes?: string | null;
+  metadata?: Record<string, unknown> | null;
   created_at: string;
   events?: {
+    id?: string;
     title: string;
     event_date: string;
   } | null;
+  order_items?: Array<{
+    id: string;
+    ticket_type_name: string;
+    quantity: number;
+    unit_price: number;
+    total_price: number;
+  }>;
+  tickets?: Array<{
+    id: string;
+    ticket_number: string;
+    status: string;
+    ticket_type_name?: string;
+    holder_name?: string | null;
+    holder_email?: string | null;
+    created_at?: string;
+  }>;
 };
 
 type Subscription = {
@@ -118,6 +159,34 @@ type BannerState = {
   type: "error" | "success" | "info";
   message: string;
 };
+
+function formatDateValue(value?: string | null, fallback = "Unavailable") {
+  if (!value) {
+    return fallback;
+  }
+
+  try {
+    return format(new Date(value), "MMMM d, yyyy 'at' p");
+  } catch {
+    return fallback;
+  }
+}
+
+function formatCurrencyValue(value?: number, currency = "USD") {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return "Unavailable";
+  }
+
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function hasObjectEntries(value: Record<string, unknown> | null | undefined) {
+  return Boolean(value && Object.keys(value).length);
+}
 
 export function AdminDashboardClient() {
   const [authStatus, setAuthStatus] = useState<
@@ -318,7 +387,7 @@ export function AdminDashboardClient() {
           // ✅ Proper error message extraction
           const payload = (await response.json()) as { error?: string; message?: string };
           errorMessage = payload?.error || payload?.message || errorMessage;
-        } catch (parseError) {
+        } catch {
           // ✅ Handle parse errors properly
           console.error("Response parse error", {
             status: response.status,
@@ -492,6 +561,9 @@ export function AdminDashboardClient() {
                 className="glass-input"
                 placeholder="Admin Email"
                 type="email"
+                inputMode="email"
+                autoComplete="email"
+                style={{ fontSize: "16px" }}
                 value={loginForm.email}
                 onChange={(event) =>
                   setLoginForm((current) => ({ ...current, email: event.target.value }))
@@ -502,6 +574,8 @@ export function AdminDashboardClient() {
                 className="glass-input"
                 placeholder="Password"
                 type="password"
+                autoComplete="current-password"
+                style={{ fontSize: "16px" }}
                 value={loginForm.password}
                 onChange={(event) =>
                   setLoginForm((current) => ({ ...current, password: event.target.value }))
@@ -509,7 +583,7 @@ export function AdminDashboardClient() {
                 required
               />
               <div className="flex justify-end">
-                <LiquidButton gold type="submit" disabled={loggingIn}>
+                <LiquidButton gold type="submit" className="w-full justify-center sm:w-auto" disabled={loggingIn}>
                   <span className="inline-flex items-center gap-2">
                     {loggingIn ? "Signing In" : "Open Dashboard"}
                     <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
@@ -895,16 +969,120 @@ export function AdminDashboardClient() {
                                     ? "Email verified"
                                     : "Email unverified"}
                                 </p>
-                              </div>
-                              <div className="mt-4 flex items-center gap-3">
-                                <Mail className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                                <p className="body-copy text-white/68">
-                                  {reservationDetail.linked_user.email}
+                                <p className="eyebrow text-white/28">
+                                  {reservationDetail.linked_user.marketing_opt_in
+                                    ? "Marketing opt-in"
+                                    : "Marketing opt-out"}
                                 </p>
                               </div>
-                              <p className="eyebrow mt-4 text-white/28">
-                                Joined {format(new Date(reservationDetail.linked_user.created_at), "MMM d, yyyy")}
-                              </p>
+                              <div className="mt-5 grid gap-3 md:grid-cols-2">
+                                <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                  <p className="eyebrow mb-2">Email</p>
+                                  <div className="flex items-center gap-3">
+                                    <Mail className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                                    <p className="body-copy text-white/68">
+                                      {reservationDetail.linked_user.email}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                  <p className="eyebrow mb-2">Phone</p>
+                                  <p className="body-copy text-white/68">
+                                    {reservationDetail.linked_user.phone ||
+                                      reservationDetail.linked_user.auth_user?.phone ||
+                                      "Unavailable"}
+                                  </p>
+                                </div>
+                                <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                  <p className="eyebrow mb-2">Profile Created</p>
+                                  <p className="body-copy text-white/68">
+                                    {formatDateValue(reservationDetail.linked_user.created_at)}
+                                  </p>
+                                </div>
+                                <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                  <p className="eyebrow mb-2">Profile Updated</p>
+                                  <p className="body-copy text-white/68">
+                                    {formatDateValue(reservationDetail.linked_user.updated_at)}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="mt-5 rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                <p className="eyebrow mb-3">Profile Id</p>
+                                <p className="body-copy break-all text-white/68">
+                                  {reservationDetail.linked_user.id}
+                                </p>
+                              </div>
+                              {reservationDetail.linked_user.auth_user ? (
+                                <div className="mt-5 space-y-3">
+                                  <p className="eyebrow text-white/28">Auth Account Snapshot</p>
+                                  <div className="grid gap-3 md:grid-cols-2">
+                                    <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                      <p className="eyebrow mb-2">Email Confirmed</p>
+                                      <p className="body-copy text-white/68">
+                                        {formatDateValue(
+                                          reservationDetail.linked_user.auth_user.email_confirmed_at,
+                                          "Not confirmed",
+                                        )}
+                                      </p>
+                                    </div>
+                                    <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                      <p className="eyebrow mb-2">Last Sign In</p>
+                                      <p className="body-copy text-white/68">
+                                        {formatDateValue(
+                                          reservationDetail.linked_user.auth_user.last_sign_in_at,
+                                          "No sign-in recorded",
+                                        )}
+                                      </p>
+                                    </div>
+                                    <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                      <p className="eyebrow mb-2">Auth Created</p>
+                                      <p className="body-copy text-white/68">
+                                        {formatDateValue(
+                                          reservationDetail.linked_user.auth_user.created_at,
+                                        )}
+                                      </p>
+                                    </div>
+                                    <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                      <p className="eyebrow mb-2">Providers</p>
+                                      <p className="body-copy text-white/68">
+                                        {reservationDetail.linked_user.auth_user.providers.length
+                                          ? reservationDetail.linked_user.auth_user.providers.join(", ")
+                                          : "Email"}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {hasObjectEntries(
+                                    reservationDetail.linked_user.auth_user.user_metadata,
+                                  ) ? (
+                                    <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                      <p className="eyebrow mb-3">User Metadata</p>
+                                      <pre className="body-copy overflow-x-auto whitespace-pre-wrap break-all text-white/62">
+                                        {JSON.stringify(
+                                          reservationDetail.linked_user.auth_user.user_metadata,
+                                          null,
+                                          2,
+                                        )}
+                                      </pre>
+                                    </div>
+                                  ) : null}
+
+                                  {hasObjectEntries(
+                                    reservationDetail.linked_user.auth_user.app_metadata,
+                                  ) ? (
+                                    <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                      <p className="eyebrow mb-3">App Metadata</p>
+                                      <pre className="body-copy overflow-x-auto whitespace-pre-wrap break-all text-white/62">
+                                        {JSON.stringify(
+                                          reservationDetail.linked_user.auth_user.app_metadata,
+                                          null,
+                                          2,
+                                        )}
+                                      </pre>
+                                    </div>
+                                  ) : null}
+                                </div>
+                              ) : null}
                             </div>
                           </div>
                         ) : (
@@ -944,14 +1122,141 @@ export function AdminDashboardClient() {
                                 <p className="body-copy mt-4 text-white/68">
                                   {order.events?.title || order.customer_email}
                                 </p>
+                                <div className="mt-4 grid gap-3 md:grid-cols-2">
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Customer Email</p>
+                                    <p className="body-copy text-white/68">{order.customer_email}</p>
+                                  </div>
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Customer Phone</p>
+                                    <p className="body-copy text-white/68">
+                                      {order.customer_phone || "Unavailable"}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Created</p>
+                                    <p className="body-copy text-white/68">
+                                      {formatDateValue(order.created_at)}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Payment Method</p>
+                                    <p className="body-copy text-white/68">
+                                      {order.payment_method || "Awaiting confirmation"}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Subtotal</p>
+                                    <p className="body-copy text-white/68">
+                                      {formatCurrencyValue(order.subtotal, order.currency)}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Discount</p>
+                                    <p className="body-copy text-white/68">
+                                      {formatCurrencyValue(order.discount_amount, order.currency)}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Fees</p>
+                                    <p className="body-copy text-white/68">
+                                      {formatCurrencyValue(order.fee_amount, order.currency)}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Total</p>
+                                    <p className="body-copy text-white/68">
+                                      {formatCurrencyValue(order.total, order.currency)}
+                                    </p>
+                                  </div>
+                                </div>
                                 <div className="mt-4 flex flex-wrap gap-4">
                                   <p className="eyebrow text-white/28">
-                                    ${order.total.toLocaleString()}
+                                    Promo {order.promo_code || "None"}
                                   </p>
                                   <p className="eyebrow text-white/28">
-                                    {format(new Date(order.created_at), "MMM d, yyyy")}
+                                    User {order.user_id || "Guest checkout"}
+                                  </p>
+                                  <p className="eyebrow text-white/28">
+                                    Event {order.event_id || order.events?.id || "Unavailable"}
                                   </p>
                                 </div>
+                                {order.notes ? (
+                                  <div className="mt-4 rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-2">Order Notes</p>
+                                    <p className="body-copy text-white/68">{order.notes}</p>
+                                  </div>
+                                ) : null}
+                                {order.order_items?.length ? (
+                                  <div className="mt-4 rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-3">Order Items</p>
+                                    <div className="space-y-3">
+                                      {order.order_items.map((item) => (
+                                        <div
+                                          key={item.id}
+                                          className="rounded-[14px] border border-white/8 bg-black/10 px-4 py-3"
+                                        >
+                                          <div className="flex flex-wrap items-start justify-between gap-4">
+                                            <div>
+                                              <p className="body-copy text-white/70">
+                                                {item.ticket_type_name}
+                                              </p>
+                                              <p className="eyebrow mt-2 text-white/28">
+                                                Qty {item.quantity}
+                                              </p>
+                                            </div>
+                                            <div className="text-right">
+                                              <p className="body-copy text-white/70">
+                                                {formatCurrencyValue(item.total_price, order.currency)}
+                                              </p>
+                                              <p className="eyebrow mt-2 text-white/28">
+                                                Each {formatCurrencyValue(item.unit_price, order.currency)}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : null}
+                                {order.tickets?.length ? (
+                                  <div className="mt-4 rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-3">Issued Tickets</p>
+                                    <div className="space-y-3">
+                                      {order.tickets.map((ticket) => (
+                                        <div
+                                          key={ticket.id}
+                                          className="rounded-[14px] border border-white/8 bg-black/10 px-4 py-3"
+                                        >
+                                          <div className="flex flex-wrap items-start justify-between gap-4">
+                                            <div>
+                                              <p className="body-copy break-all text-white/70">
+                                                {ticket.ticket_number}
+                                              </p>
+                                              <p className="eyebrow mt-2 text-white/28">
+                                                {ticket.ticket_type_name || "Ticket"}
+                                              </p>
+                                            </div>
+                                            <div className="text-right">
+                                              <p className="eyebrow text-white/28">{ticket.status}</p>
+                                              <p className="body-copy mt-2 text-white/62">
+                                                {ticket.holder_name || ticket.holder_email || "Guest holder"}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : null}
+                                {hasObjectEntries(order.metadata) ? (
+                                  <div className="mt-4 rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                                    <p className="eyebrow mb-3">Order Metadata</p>
+                                    <pre className="body-copy overflow-x-auto whitespace-pre-wrap break-all text-white/62">
+                                      {JSON.stringify(order.metadata, null, 2)}
+                                    </pre>
+                                  </div>
+                                ) : null}
                               </div>
                             ))
                           ) : (

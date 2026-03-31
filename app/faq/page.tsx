@@ -13,8 +13,8 @@ export default function FaqPage() {
         align="center"
       />
 
-      <section className="px-6 py-8 md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {[
             "Ticketing, refunds, and guest-entry questions are answered here before checkout friction starts.",
             "Service and production questions help private clients understand how we scope projects and timelines.",
@@ -27,7 +27,7 @@ export default function FaqPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <SectionHeader
             eyebrow="Support"
@@ -39,7 +39,7 @@ export default function FaqPage() {
         </div>
       </section>
 
-      <section className="px-6 pt-8 md:px-10 lg:px-16">
+      <section className="px-5 pt-8 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard warm className="px-6 py-8 text-center md:px-10 md:py-10">
             <p className="eyebrow mb-4">Still Need Help</p>

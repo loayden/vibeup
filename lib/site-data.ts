@@ -113,7 +113,7 @@ export const UPCOMING_EVENTS = [
     city: "Los Angeles, CA",
     priceFrom: 120,
     status: "limited" as const,
-    image: "/arabnights.jpeg",
+    image: "/arabnights-1200.webp",
     summary:
       "A black-tie cultural celebration with live performance, premium dining, ceremonial arrival moments, and a deeply atmospheric midnight sequence.",
   },
@@ -139,7 +139,7 @@ export const UPCOMING_EVENTS = [
     city: "Los Angeles, CA",
     priceFrom: 80,
     status: "upcoming" as const,
-    image: "/fireworks.jpg",
+    image: "/fireworks-1600.webp",
     summary:
       "A sunset-to-midnight rooftop concept featuring elevated hospitality, skyline ambience, curated DJ direction, and premium guest flow.",
   },
@@ -152,7 +152,7 @@ export const UPCOMING_EVENTS = [
     city: "Los Angeles, CA",
     priceFrom: 100,
     status: "upcoming" as const,
-    image: "/stage.jpg",
+    image: "/stage-1600.webp",
     summary:
       "A large-format family and community celebration with formal production, entertainment programming, and a refined hospitality structure.",
   },
@@ -165,7 +165,7 @@ export const UPCOMING_EVENTS = [
     city: "Los Angeles, CA",
     priceFrom: 150,
     status: "upcoming" as const,
-    image: "/fireworks.jpg",
+    image: "/fireworks-1600.webp",
     summary:
       "The signature VibeUp countdown experience with cinematic staging, formal dinner service, live entertainment, and a dramatic midnight reveal.",
   },
@@ -177,7 +177,7 @@ export const PAST_EVENTS = [
     date: "December 31, 2025",
     venue: "Hilton LA",
     attendance: "800+ Guests",
-    image: "/VIBEUP21.jpeg",
+    image: "/VIBEUP21-1600.webp",
     summary:
       "A full-room premium celebration that blended gala service, live performance, and one of the most memorable countdowns in our calendar.",
   },
@@ -207,7 +207,7 @@ export const FEATURED_EVENT = {
   goldWord: "Returns",
   description:
     "An evening of ceremony, voice, dining, and atmosphere produced for guests who expect more than a party. Arab Nights is built as a complete journey, from arrival and reception to performance, social immersion, and a precisely timed finale.",
-  image: "/arabnights.jpeg",
+  image: "/arabnights-1200.webp",
   venue: SITE.venue,
   date: "March 28",
   details: [
@@ -248,7 +248,7 @@ export const SERVICES = [
       "Venue layout planning and guest journey mapping",
       "On-site production leadership from setup to close",
     ],
-    image: "/widding.jpg",
+    image: "/wedding-1600.webp",
   },
   {
     category: "Production",
@@ -261,7 +261,7 @@ export const SERVICES = [
       "Technical and hospitality coordination",
       "Performance cueing and stage management",
     ],
-    image: "/dj.jpg",
+    image: "/dj-1600.webp",
   },
   {
     category: "Marketing",
@@ -274,7 +274,7 @@ export const SERVICES = [
       "Influencer and community partner outreach",
       "Launch, countdown, and conversion reporting",
     ],
-    image: "/pexels-ardit-mbrati-216809103-16966362.jpg",
+    image: "/artist-1600.webp",
   },
   {
     category: "Production",
@@ -287,7 +287,7 @@ export const SERVICES = [
       "Check-in process design and support",
       "VIP access, codes, and hospitality allocation",
     ],
-    image: "/stage.jpg",
+    image: "/stage-1600.webp",
   },
   {
     category: "Creative",
@@ -326,7 +326,7 @@ export const SERVICES = [
       "Live show flow and cue management",
       "Technical supervision and vendor alignment",
     ],
-    image: "/fireworks.jpg",
+    image: "/fireworks-1600.webp",
   },
   {
     category: "Consulting",
@@ -339,7 +339,7 @@ export const SERVICES = [
       "Setup, strike, and loading schedules",
       "Guest circulation and service rhythm planning",
     ],
-    image: "/pexels-pavel-danilyuk-6405773.jpg",
+    image: "/production-1600.webp",
   },
   {
     category: "Marketing",
@@ -535,10 +535,10 @@ export const PARTNERS = [
 ] as const;
 
 export const GALLERY_ITEMS = [
-  { category: "events", image: "/VIBEUP21.jpeg", title: "New Year’s Eve Gala", date: "December 31, 2025" },
+  { category: "events", image: "/VIBEUP21-1600.webp", title: "New Year’s Eve Gala", date: "December 31, 2025" },
   { category: "events", image: "/VIBEUP22.jpeg", title: "Arab Nights Reception", date: "March 28, 2025" },
   { category: "artists", image: "/VIBEUP9.jpg", title: "Featured Artist Performance", date: "March 28, 2025" },
-  { category: "venues", image: "/stage.jpg", title: "Stage & Lighting Architecture", date: "January 2026" },
+  { category: "venues", image: "/stage-1600.webp", title: "Stage & Lighting Architecture", date: "January 2026" },
   { category: "behind-the-scenes", image: "/VIBEUP4.jpg", title: "Production Build", date: "October 2025" },
   { category: "events", image: "/VIBEUP10.jpg", title: "Guest Arrival Story", date: "October 12, 2025" },
   { category: "artists", image: "/VIBEUP11.jpg", title: "Voices Of Legends", date: "August 2025" },
@@ -577,7 +577,7 @@ export const BLOG_POSTS = [
     author: "VibeUp Editorial",
     readTime: "6 min read",
     date: "March 10, 2026",
-    image: "/arabnights.jpeg",
+    image: "/arabnights-1200.webp",
     featured: true,
   },
   {
@@ -589,7 +589,7 @@ export const BLOG_POSTS = [
     author: "Production Team",
     readTime: "5 min read",
     date: "February 22, 2026",
-    image: "/VIBEUP21.jpeg",
+    image: "/VIBEUP21-1600.webp",
     featured: false,
   },
   {
@@ -601,7 +601,7 @@ export const BLOG_POSTS = [
     author: "VibeUp Editorial",
     readTime: "4 min read",
     date: "January 28, 2026",
-    image: "/pexels-pavel-danilyuk-6405773.jpg",
+    image: "/production-1600.webp",
     featured: false,
   },
   {
@@ -637,7 +637,7 @@ export const BLOG_POSTS = [
     author: "Press Desk",
     readTime: "3 min read",
     date: "November 29, 2025",
-    image: "/fireworks.jpg",
+    image: "/fireworks-1600.webp",
     featured: false,
   },
 ] as const;

@@ -22,6 +22,31 @@ type ReservationRow = {
   created_at: string;
 };
 
+function buildAuthUserSnapshot(user: {
+  phone?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  last_sign_in_at?: string | null;
+  email_confirmed_at?: string | null;
+  user_metadata?: Record<string, unknown> | null;
+  app_metadata?: Record<string, unknown> | null;
+  identities?: Array<{ provider?: string | null }> | null;
+}) {
+  return {
+    phone: user.phone || null,
+    created_at: user.created_at || null,
+    updated_at: user.updated_at || null,
+    last_sign_in_at: user.last_sign_in_at || null,
+    email_confirmed_at: user.email_confirmed_at || null,
+    user_metadata: user.user_metadata || {},
+    app_metadata: user.app_metadata || {},
+    providers:
+      user.identities
+        ?.map((identity) => identity.provider || null)
+        .filter((provider): provider is string => Boolean(provider)) || [],
+  };
+}
+
 async function findLinkedUser(email: string) {
   const supabase = tryCreateAdminClient();
 
@@ -31,15 +56,9 @@ async function findLinkedUser(email: string) {
 
   const { data: profile, error } = await supabase
     .from("profiles")
-    .select(
-      "id, full_name, email, role, created_at, email_verified, marketing_opt_in",
-    )
+    .select("*")
     .eq("email", email)
     .maybeSingle();
-
-  if (!error && profile) {
-    return profile;
-  }
 
   if (error && !isMissingSupabaseTableError(error)) {
     throw error;
@@ -59,17 +78,27 @@ async function findLinkedUser(email: string) {
   );
 
   if (!authUser?.email) {
-    return null;
+    return profile || null;
   }
 
-  return buildFallbackProfile({
-    id: authUser.id,
-    email: authUser.email,
-    fullName:
-      typeof authUser.user_metadata?.full_name === "string"
-        ? authUser.user_metadata.full_name
-        : authUser.email,
-  });
+  if (profile) {
+    return {
+      ...profile,
+      auth_user: buildAuthUserSnapshot(authUser),
+    };
+  }
+
+  return {
+    ...buildFallbackProfile({
+      id: authUser.id,
+      email: authUser.email,
+      fullName:
+        typeof authUser.user_metadata?.full_name === "string"
+          ? authUser.user_metadata.full_name
+          : authUser.email,
+    }),
+    auth_user: buildAuthUserSnapshot(authUser),
+  };
 }
 
 async function findRelatedOrders(email: string) {

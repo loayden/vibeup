@@ -56,11 +56,11 @@ export default function ServicesPage() {
           <GlassCard className="overflow-hidden p-3">
             <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
-                src="/stage.jpg"
+                src="/stage-1600.webp"
                 alt="VibeUp services"
                 fill
                 priority
-                sizes="(min-width: 1024px) 42vw, 100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
                 className="object-cover"
               />
             </div>
@@ -76,8 +76,8 @@ export default function ServicesPage() {
         }
       />
 
-      <section className="px-6 py-8 md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 md:grid-cols-4">
           {[
             {
               icon: Sparkles,
@@ -109,7 +109,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Capabilities"
@@ -121,7 +121,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Process"
@@ -130,9 +130,9 @@ export default function ServicesPage() {
             subtitle="The experience feels smooth for guests because the work is structured carefully behind the scenes."
           />
 
-          <div className="grid gap-5 lg:grid-cols-5">
+          <div className="scrollbar-none -mx-5 flex gap-4 overflow-x-auto px-5 pb-2 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0">
             {SERVICE_PROCESS.map((step) => (
-              <GlassCard key={step.title} hover className="h-full px-5 py-6">
+              <GlassCard key={step.title} hover className="h-full min-w-[280px] px-5 py-6 lg:min-w-0">
                 <p className="eyebrow mb-3">{step.title}</p>
                 <h3 className="font-serif text-[1.8rem] font-light tracking-[0.05em] text-white">
                   {step.title}
@@ -145,7 +145,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Packages"
@@ -154,13 +154,15 @@ export default function ServicesPage() {
             subtitle="Pricing is shaped by guest count, technical complexity, creative ambition, and commercial scope. These tiers help frame the conversation."
           />
 
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3">
             {SERVICE_PACKAGES.map((pkg, index) => (
               <GlassCard
                 key={pkg.title}
                 gold={index === 1}
                 hover
-                className="h-full px-6 py-7"
+                className={`h-full px-6 py-7 ${
+                  index === 1 ? "order-first lg:order-none" : ""
+                }`}
               >
                 <p className="eyebrow mb-3">{pkg.title}</p>
                 <h3 className="font-serif text-[2.1rem] font-light tracking-[0.05em] text-white">
@@ -177,7 +179,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="px-6 py-10 md:px-10 lg:px-16">
+      <section className="px-5 py-10 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-6xl">
           <GlassCard gold className="px-6 py-7 md:px-8">
             <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr]">
@@ -207,7 +209,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <SectionHeader
             eyebrow="Questions"
@@ -219,7 +221,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section className="px-6 pt-8 md:px-10 lg:px-16">
+      <section className="px-5 pt-8 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard warm className="px-6 py-8 text-center md:px-10 md:py-10">
             <p className="eyebrow mb-4">Next Step</p>

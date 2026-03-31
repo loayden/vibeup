@@ -28,7 +28,7 @@ export default function AboutPage() {
                 alt="VibeUp gala room"
                 fill
                 priority
-                sizes="(min-width: 1024px) 42vw, 100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
                 className="object-cover"
               />
             </div>
@@ -46,7 +46,7 @@ export default function AboutPage() {
         }
       />
 
-      <section className="px-6 py-6 md:px-10 lg:px-16">
+      <section className="px-5 py-6 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard gold className="px-6 py-8 text-center md:px-10 md:py-10">
             <Quote className="mx-auto h-5 w-5 text-[var(--gold)]" strokeWidth={1.2} />
@@ -58,15 +58,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <GlassCard className="overflow-hidden p-3">
             <div className="relative min-h-[540px] overflow-hidden rounded-[18px]">
               <Image
-                src="/VIBEUP22.jpeg"
+                src="/VIBEUP22-1600.webp"
                 alt="VibeUp story"
                 fill
-                sizes="(min-width: 1024px) 38vw, 100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 38vw"
                 className="object-cover"
               />
             </div>
@@ -117,7 +117,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Values"
@@ -146,7 +146,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Leadership"
@@ -170,7 +170,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Milestones"
@@ -203,7 +203,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.82fr_1.18fr]">
           <GlassCard className="px-6 py-6">
             <div className="flex items-center gap-3">
@@ -251,7 +251,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="px-6 pt-8 md:px-10 lg:px-16">
+      <section className="px-5 pt-8 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard warm className="px-6 py-8 text-center md:px-10 md:py-10">
             <p className="eyebrow mb-4">Work With VibeUp</p>

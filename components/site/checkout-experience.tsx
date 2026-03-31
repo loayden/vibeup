@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, Minus, Plus, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronUp, Minus, Plus, ShieldCheck } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 import { CountdownTimer } from "@/components/site/countdown";
@@ -30,6 +30,7 @@ export function CheckoutExperience() {
   const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
   const [banner, setBanner] = useState<BannerState | null>(null);
   const [loading, setLoading] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
 
   // ✅ Track in-flight requests
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -53,6 +54,13 @@ export function CheckoutExperience() {
   );
   const fee = subtotal > 0 ? Number((subtotal * 0.03).toFixed(2)) : 0;
   const total = subtotal + fee;
+
+  function toggleTicketSelection(ticketId: string) {
+    setQuantities((current) => ({
+      ...current,
+      [ticketId]: current[ticketId] > 0 ? 0 : 1,
+    }));
+  }
 
   function updateQuantity(ticketId: string, direction: "up" | "down") {
     setQuantities((current) => {
@@ -143,7 +151,7 @@ export function CheckoutExperience() {
           // ✅ Proper error message extraction
           const payload = (await response.json()) as { error?: string; message?: string };
           errorMessage = payload?.error || payload?.message || errorMessage;
-        } catch (parseError) {
+        } catch {
           // ✅ Handle parse errors properly
           console.error("Response parse error", {
             status: response.status,
@@ -195,6 +203,57 @@ export function CheckoutExperience() {
     }
   }
 
+  const orderSummaryContent = (
+    <GlassCard dark className="px-5 py-5">
+      <p className="eyebrow mb-4">Order Summary</p>
+      <div className="space-y-4">
+        {selectedTickets.length ? (
+          selectedTickets.map((ticket) => (
+            <div key={ticket.id} className="flex items-start justify-between gap-4">
+              <div>
+                <p className="body-copy text-white/70">{ticket.name}</p>
+                <p className="eyebrow mt-2 text-white/28">Quantity {ticket.quantity}</p>
+              </div>
+              <p className="body-copy text-white/70">
+                ${(ticket.price * ticket.quantity).toFixed(2)}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p className="body-copy">Select a ticket tier to begin building your order.</p>
+        )}
+      </div>
+
+      <div className="subtle-divider mt-5 h-px" />
+
+      <div className="mt-5 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="body-copy">Subtotal</p>
+          <p className="body-copy text-white/70">${subtotal.toFixed(2)}</p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="body-copy">Estimated Fees</p>
+          <p className="body-copy text-white/70">${fee.toFixed(2)}</p>
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="body-copy">Promo Status</p>
+          <p className="body-copy text-white/70">
+            {appliedPromo ? `Saved: ${appliedPromo}` : "Optional"}
+          </p>
+        </div>
+      </div>
+
+      <div className="gold-divider-left mt-5 h-px w-24" />
+
+      <div className="mt-5 flex items-center justify-between">
+        <p className="eyebrow">Estimated Total</p>
+        <p className="font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)]">
+          ${total.toFixed(2)}
+        </p>
+      </div>
+    </GlassCard>
+  );
+
   return (
     <div className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
       <div className="space-y-8">
@@ -203,7 +262,7 @@ export function CheckoutExperience() {
           <CountdownTimer targetDate={new Date(SITE.countdownIso)} label="Until the next marquee night" />
         </GlassCard>
 
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
           {TICKET_TYPES.map((ticket) => {
             const quantity = quantities[ticket.id] || 0;
             const selected = quantity > 0;
@@ -214,34 +273,43 @@ export function CheckoutExperience() {
                 hover
                 className={`px-5 py-5 ${selected ? "border-[rgba(198,169,98,0.32)] shadow-[0_24px_64px_rgba(0,0,0,0.55),0_0_28px_rgba(198,169,98,0.10),inset_0_1px_0_rgba(255,255,255,0.14)]" : ""}`}
               >
-                <div
-                  className="mb-5 h-1.5 rounded-full"
-                  style={{ background: `linear-gradient(90deg, ${ticket.color}, transparent)` }}
-                />
+                <button
+                  type="button"
+                  className="block w-full text-left"
+                  onClick={() => toggleTicketSelection(ticket.id)}
+                >
+                  <div
+                    className="mb-5 h-1.5 rounded-full"
+                    style={{ background: `linear-gradient(90deg, ${ticket.color}, transparent)` }}
+                  />
 
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="eyebrow mb-3">Ticket Tier</p>
-                    <h3 className="font-serif text-[1.85rem] font-light tracking-[0.05em] text-white">
-                      {ticket.name}
-                    </h3>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="eyebrow mb-3">Ticket Tier</p>
+                      <h3 className="font-serif text-[1.75rem] font-light tracking-[0.05em] text-white sm:text-[1.85rem]">
+                        {ticket.name}
+                      </h3>
+                    </div>
+                    {ticket.badge ? (
+                      <span className="liquid-button-gold px-4 py-2 !text-[9px]">{ticket.badge}</span>
+                    ) : null}
                   </div>
-                  {ticket.badge ? (
-                    <span className="liquid-button-gold px-4 py-2 !text-[9px]">{ticket.badge}</span>
-                  ) : null}
-                </div>
 
-                <p className="mt-4 font-serif text-[2.1rem] font-light tracking-[0.05em] text-[var(--gold)]">
-                  ${ticket.price}
-                </p>
-                <p className="body-copy mt-4">{ticket.description}</p>
+                  <p className="mt-4 font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[2.1rem]">
+                    ${ticket.price}
+                  </p>
+                  <p className="body-copy mt-4">{ticket.description}</p>
+                </button>
 
                 <div className="mt-6 flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <button
-                      className="nav-mobile-button"
+                      className="nav-mobile-button !h-12 !w-12"
                       type="button"
-                      onClick={() => updateQuantity(ticket.id, "down")}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        updateQuantity(ticket.id, "down");
+                      }}
                       data-cursor="hover"
                     >
                       <Minus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
@@ -250,9 +318,12 @@ export function CheckoutExperience() {
                       {quantity}
                     </span>
                     <button
-                      className="nav-mobile-button"
+                      className="nav-mobile-button !h-12 !w-12"
                       type="button"
-                      onClick={() => updateQuantity(ticket.id, "up")}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        updateQuantity(ticket.id, "up");
+                      }}
                       data-cursor="hover"
                     >
                       <Plus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
@@ -283,10 +354,12 @@ export function CheckoutExperience() {
             for payment completion.
           </p>
 
-          <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
+          <form id="checkout-reservation-form" className="mt-7 space-y-4" onSubmit={handleSubmit}>
             <input
               className="glass-input"
               placeholder="Full Name"
+              autoComplete="name"
+              style={{ fontSize: "16px" }}
               value={form.name}
               onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
             />
@@ -294,12 +367,18 @@ export function CheckoutExperience() {
               className="glass-input"
               placeholder="Email Address"
               type="email"
+              inputMode="email"
+              autoComplete="email"
+              style={{ fontSize: "16px" }}
               value={form.email}
               onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
             />
             <input
               className="glass-input"
               placeholder="Phone Number"
+              inputMode="tel"
+              autoComplete="tel"
+              style={{ fontSize: "16px" }}
               value={form.phone}
               onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
             />
@@ -308,10 +387,12 @@ export function CheckoutExperience() {
               <input
                 className="glass-input"
                 placeholder="Promo or concierge code"
+                autoComplete="off"
+                style={{ fontSize: "16px" }}
                 value={form.promo}
                 onChange={(event) => setForm((current) => ({ ...current, promo: event.target.value }))}
               />
-              <LiquidButton type="button" onClick={applyPromo}>
+              <LiquidButton type="button" className="w-full sm:w-auto" onClick={applyPromo}>
                 Apply
               </LiquidButton>
             </div>
@@ -343,54 +424,7 @@ export function CheckoutExperience() {
               ) : null}
             </AnimatePresence>
 
-            <GlassCard dark className="px-5 py-5">
-              <p className="eyebrow mb-4">Order Summary</p>
-              <div className="space-y-4">
-                {selectedTickets.length ? (
-                  selectedTickets.map((ticket) => (
-                    <div key={ticket.id} className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="body-copy text-white/70">{ticket.name}</p>
-                        <p className="eyebrow mt-2 text-white/28">Quantity {ticket.quantity}</p>
-                      </div>
-                      <p className="body-copy text-white/70">
-                        ${(ticket.price * ticket.quantity).toFixed(2)}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="body-copy">Select a ticket tier to begin building your order.</p>
-                )}
-              </div>
-
-              <div className="subtle-divider mt-5 h-px" />
-
-              <div className="mt-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <p className="body-copy">Subtotal</p>
-                  <p className="body-copy text-white/70">${subtotal.toFixed(2)}</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="body-copy">Estimated Fees</p>
-                  <p className="body-copy text-white/70">${fee.toFixed(2)}</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="body-copy">Promo Status</p>
-                  <p className="body-copy text-white/70">
-                    {appliedPromo ? `Saved: ${appliedPromo}` : "Optional"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="gold-divider-left mt-5 h-px w-24" />
-
-              <div className="mt-5 flex items-center justify-between">
-                <p className="eyebrow">Estimated Total</p>
-                <p className="font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)]">
-                  ${total.toFixed(2)}
-                </p>
-              </div>
-            </GlassCard>
+            <div className="hidden md:block">{orderSummaryContent}</div>
 
             <LiquidButton gold type="submit" className="w-full justify-center" disabled={loading}>
               <span className="inline-flex items-center gap-2">
@@ -420,6 +454,49 @@ export function CheckoutExperience() {
             </LiquidLinkButton>
           </div>
         </GlassCard>
+      </div>
+
+      <div className="safe-bottom fixed inset-x-0 bottom-0 z-40 px-4 md:hidden">
+        <AnimatePresence initial={false}>
+          {summaryOpen ? (
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 24 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="mb-3"
+            >
+              {orderSummaryContent}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
+        <div className="glass-card glass-card-warm flex items-center gap-3 rounded-[20px] p-3">
+          <button
+            type="button"
+            onClick={() => setSummaryOpen((current) => !current)}
+            className="liquid-button-ghost min-w-[128px] justify-center !px-4"
+          >
+            <span className="inline-flex items-center gap-2">
+              Summary
+              {summaryOpen ? (
+                <ChevronDown className="h-4 w-4" strokeWidth={1.3} />
+              ) : (
+                <ChevronUp className="h-4 w-4" strokeWidth={1.3} />
+              )}
+            </span>
+          </button>
+
+          <button
+            type="submit"
+            form="checkout-reservation-form"
+            disabled={loading}
+            className="liquid-button-gold flex min-h-[56px] flex-1 items-center justify-between !px-5"
+          >
+            <span>{loading ? "Saving" : "Proceed To Payment"}</span>
+            <span className="font-serif text-[1.1rem] tracking-[0.03em]">${total.toFixed(2)}</span>
+          </button>
+        </div>
       </div>
     </div>
   );

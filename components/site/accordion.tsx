@@ -26,7 +26,7 @@ export function LiquidAccordion({ items }: LiquidAccordionProps) {
         return (
           <GlassCard key={item.question} dark hover className="px-5 py-4">
             <button
-              className="flex w-full items-center justify-between gap-5 text-left"
+              className="flex min-h-[56px] w-full items-center justify-between gap-5 text-left"
               onClick={() => setOpenIndex((current) => (current === index ? null : index))}
               data-cursor="hover"
             >

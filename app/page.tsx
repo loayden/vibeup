@@ -20,6 +20,9 @@ import {
   SectionHeader,
 } from "@/components/site/liquid";
 import { NewsletterForm } from "@/components/site/newsletter-form";
+import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
+import { SwipeCarousel } from "@/components/site/swipe-carousel";
+import { useDeviceProfile } from "@/components/site/use-device-profile";
 import {
   FEATURED_EVENT,
   GALLERY_ITEMS,
@@ -43,39 +46,51 @@ const serviceHighlights = SERVICES.slice(0, 4);
 const galleryHighlights = GALLERY_ITEMS.slice(0, 6);
 
 export default function HomePage() {
+  const { shouldUseLiteMedia } = useDeviceProfile();
+  const testimonialCards = TESTIMONIALS.map((testimonial) => (
+    <GlassCard key={testimonial.name} hover className="h-full px-6 py-6">
+      <p className="font-serif text-[2rem] font-light leading-snug text-white">
+        “{testimonial.quote}”
+      </p>
+      <div className="gold-divider-left mt-6 h-px w-20" />
+      <p className="eyebrow mt-5">{testimonial.event}</p>
+      <p className="body-copy mt-2 text-white/68">{testimonial.name}</p>
+      <p className="body-copy text-[0.78rem]">{testimonial.role}</p>
+    </GlassCard>
+  ));
+
   return (
     <main className="overflow-x-hidden">
-      <section className="relative min-h-screen overflow-hidden">
-        {/* ✅ Fallback image while video loads */}
+      <section className="relative min-h-[85vh] overflow-hidden sm:min-h-screen">
         <Image
-          src="/arabnights.jpeg"
+          src="/arabnights-1200.webp"
           alt="Hero background"
           fill
           className="absolute inset-0 object-cover"
           priority
           quality={75}
+          sizes="100vw"
         />
 
-        {/* ✅ Video with poster image for quick display */}
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="/arab.jpg"
-          preload="metadata"
-          style={{ filter: "brightness(0.34) saturate(0.88)" }}
-        >
-          {/* ✅ Multiple formats for better browser support and compression */}
-          <source src={SITE.heroVideo.replace(".mp4", ".webm")} type="video/webm" />
-          <source src={SITE.heroVideo} type="video/mp4" />
-        </video>
+        {!shouldUseLiteMedia ? (
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="/arabnights-1200.webp"
+            preload="none"
+            style={{ filter: "brightness(0.34) saturate(0.88)" }}
+          >
+            <source src={SITE.heroVideo} type="video/mp4" />
+          </video>
+        ) : null}
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.62)_82%)]" />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(180deg,transparent,#080808)]" />
 
-        <div className="relative z-10 flex min-h-screen items-center px-6 pt-32 md:px-10 lg:px-16">
+        <div className="relative z-10 flex min-h-[85vh] items-center px-5 pt-28 sm:min-h-screen sm:px-10 sm:pt-32 lg:px-16">
           <div className="mx-auto w-full max-w-7xl">
             <PageHero
               eyebrow="VibeUp Events & Services"
@@ -86,12 +101,13 @@ export default function HomePage() {
                 <GlassCard className="p-4 md:p-5">
                   <div className="overflow-hidden rounded-[18px]">
                     <Image
-                      src="/arabnights.jpeg"
+                      src="/arabnights-1200.webp"
                       alt="Arab Nights featured event"
                       width={1100}
                       height={1300}
-                      className="h-[460px] w-full object-cover"
+                      className="h-[300px] w-full object-cover sm:h-[420px] md:h-[460px]"
                       priority
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 38vw"
                     />
                   </div>
                   <div className="grid gap-3 px-1 pb-2 pt-5 sm:grid-cols-3">
@@ -125,8 +141,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <motion.section {...revealProps} className="px-6 py-8 md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
+      <motion.section {...revealProps} className="px-5 py-8 sm:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 lg:grid-cols-4">
           {HERO_STATS.map((item, index) => (
             <motion.div
               key={item.label}
@@ -146,7 +162,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Count Down"
@@ -171,7 +187,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow={FEATURED_EVENT.eyebrow}
@@ -186,7 +202,7 @@ export default function HomePage() {
                 alt={FEATURED_EVENT.title}
                 fill
                 className="object-cover"
-                sizes="(min-width: 1024px) 44vw, 100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 44vw"
               />
             </div>
             <div className="px-6 py-7 md:px-8 md:py-8">
@@ -212,11 +228,11 @@ export default function HomePage() {
                   </GlassCard>
                 ))}
               </div>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <LiquidLinkButton href="/checkout" gold>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                <LiquidLinkButton href="/checkout" gold className="w-full justify-center sm:w-auto">
                   Reserve Seats
                 </LiquidLinkButton>
-                <LiquidLinkButton href={SITE.buyUrl} external>
+                <LiquidLinkButton href={SITE.buyUrl} external className="w-full justify-center sm:w-auto">
                   Official Ticket Link
                 </LiquidLinkButton>
               </div>
@@ -225,7 +241,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Why VibeUp"
@@ -255,7 +271,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Access Options"
@@ -263,7 +279,7 @@ export default function HomePage() {
             goldWord="arrival"
             subtitle="Each tier is structured around sightlines, service flow, and the feeling you want your night to carry. The categories are designed to make the room feel premium at every level."
           />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {TICKET_TYPES.map((ticket, index) => (
               <motion.div
                 key={ticket.id}
@@ -302,7 +318,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Services"
@@ -353,7 +369,7 @@ export default function HomePage() {
                       src={item.image}
                       alt={item.title}
                       fill
-                      sizes="(min-width: 1280px) 28vw, (min-width: 768px) 45vw, 100vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition duration-500 hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.85))]" />
@@ -374,7 +390,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Client Voices"
@@ -382,23 +398,14 @@ export default function HomePage() {
             goldWord="lands"
             subtitle="Our best feedback tends to say the same thing in different ways: the room feels calm, elevated, and fully considered, even when the event energy is high."
           />
-          <div className="grid gap-5 lg:grid-cols-3">
-            {TESTIMONIALS.map((testimonial) => (
-              <GlassCard key={testimonial.name} hover className="h-full px-6 py-6">
-                <p className="font-serif text-[2rem] font-light leading-snug text-white">
-                  “{testimonial.quote}”
-                </p>
-                <div className="gold-divider-left mt-6 h-px w-20" />
-                <p className="eyebrow mt-5">{testimonial.event}</p>
-                <p className="body-copy mt-2 text-white/68">{testimonial.name}</p>
-                <p className="body-copy text-[0.78rem]">{testimonial.role}</p>
-              </GlassCard>
-            ))}
+          <div className="hidden gap-5 lg:grid lg:grid-cols-3">{testimonialCards}</div>
+          <div className="lg:hidden">
+            <SwipeCarousel items={testimonialCards} />
           </div>
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Partners"
@@ -406,7 +413,7 @@ export default function HomePage() {
             goldWord="collaborators"
             subtitle="We work best in rooms where quality matters, timing matters, and the brand around the event matters as much as the event itself."
           />
-          <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
             {PARTNERS.map((partner) => (
               <GlassCard key={partner} className="flex items-center justify-center px-4 py-6 text-center">
                 <p className="eyebrow text-white/28">{partner}</p>
@@ -416,7 +423,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <motion.section {...revealProps} className="px-6 pb-20 pt-12 md:px-10 lg:px-16">
+      <motion.section {...revealProps} className="px-5 pb-20 pt-12 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard gold className="px-6 py-8 text-center md:px-10 md:py-10">
             <p className="eyebrow mb-4">Private Access</p>
@@ -433,6 +440,8 @@ export default function HomePage() {
           </GlassCard>
         </div>
       </motion.section>
+
+      <StickyBuyCTA href="/checkout" price={120} />
     </main>
   );
 }

@@ -1,6 +1,7 @@
-import { Instagram, PlayCircle } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 import { GalleryShowcase } from "@/components/site/gallery-showcase";
+import { GalleryVideoGrid } from "@/components/site/gallery-video-grid";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
 import { GALLERY_ITEMS, GALLERY_VIDEOS, SITE } from "@/lib/site-data";
 
@@ -15,7 +16,7 @@ export default function GalleryPage() {
         align="center"
       />
 
-      <section className="px-6 py-8 md:px-10 lg:px-16">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
           {[
             "Arrival moments, stage pacing, and guest-energy transitions are documented with the same care as the event itself.",
@@ -29,7 +30,7 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Gallery Filters"
@@ -41,7 +42,7 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Video Highlights"
@@ -50,36 +51,11 @@ export default function GalleryPage() {
             subtitle="Motion matters. These sequences show how the room breathes, how the performance lands, and how energy changes across the night."
           />
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            {GALLERY_VIDEOS.map((video) => (
-              <GlassCard key={video.title} hover className="overflow-hidden p-3">
-                <div className="overflow-hidden rounded-[18px]">
-                  <video
-                    src={video.src}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="aspect-[4/5] w-full object-cover"
-                  />
-                </div>
-                <div className="px-3 pb-3 pt-5">
-                  <div className="flex items-center gap-3">
-                    <PlayCircle className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                    <p className="eyebrow">Video Highlight</p>
-                  </div>
-                  <h3 className="mt-4 font-serif text-[1.8rem] font-light tracking-[0.05em] text-white">
-                    {video.title}
-                  </h3>
-                  <p className="body-copy mt-5">{video.description}</p>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
+          <GalleryVideoGrid videos={GALLERY_VIDEOS} />
         </div>
       </section>
 
-      <section className="px-6 pt-8 md:px-10 lg:px-16">
+      <section className="px-5 pt-8 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard gold className="px-6 py-8 text-center md:px-10 md:py-10">
             <Instagram className="mx-auto h-5 w-5 text-[var(--gold)]" strokeWidth={1.2} />

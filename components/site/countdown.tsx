@@ -8,6 +8,10 @@ type CountdownTimerProps = {
   label?: string;
 };
 
+type DeviceNavigator = Navigator & {
+  deviceMemory?: number;
+};
+
 // ✅ Memoize the block to prevent unnecessary re-renders
 const CountdownBlock = memo(function CountdownBlock({
   value,
@@ -17,8 +21,14 @@ const CountdownBlock = memo(function CountdownBlock({
   label: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="glass-card glass-card-gold relative flex h-20 w-20 items-center justify-center rounded-[18px] md:h-24 md:w-24">
+    <div className="flex flex-col items-center gap-2 sm:gap-3">
+      <div
+        className="glass-card glass-card-gold relative flex items-center justify-center rounded-[18px]"
+        style={{
+          width: "clamp(56px, 18vw, 96px)",
+          height: "clamp(56px, 18vw, 96px)",
+        }}
+      >
         <div className="spec-line" />
         <AnimatePresence mode="popLayout">
           <motion.span
@@ -27,13 +37,13 @@ const CountdownBlock = memo(function CountdownBlock({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 18 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-[2rem] font-light tracking-[0.04em] text-[var(--gold)] md:text-[2.5rem]"
+            className="font-serif text-[clamp(1.45rem,6vw,2.5rem)] font-light tracking-[0.04em] text-[var(--gold)]"
           >
             {String(value).padStart(2, "0")}
           </motion.span>
         </AnimatePresence>
       </div>
-      <p className="eyebrow text-white/28">{label}</p>
+      <p className="eyebrow text-[clamp(7px,2vw,9px)] text-white/28">{label}</p>
     </div>
   );
 });
@@ -46,8 +56,7 @@ export const CountdownTimer = memo(function CountdownTimer({
 
   useEffect(() => {
     // ✅ Detect low-end devices and adjust update frequency
-    // deviceMemory is a non-standard API, so we type-cast it
-    const deviceMemory = (navigator as any).deviceMemory as number | undefined;
+    const deviceMemory = (navigator as DeviceNavigator).deviceMemory;
     const isLowEndDevice = deviceMemory !== undefined && deviceMemory <= 2;
 
     // ✅ Use longer interval on low-end devices (5s instead of 1s) to reduce re-renders
@@ -69,9 +78,9 @@ export const CountdownTimer = memo(function CountdownTimer({
   }, [now, targetDate]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {label ? <p className="eyebrow text-center">{label}</p> : null}
-      <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-6">
         <CountdownBlock value={days} label="Days" />
         <CountdownBlock value={hours} label="Hours" />
         <CountdownBlock value={minutes} label="Minutes" />

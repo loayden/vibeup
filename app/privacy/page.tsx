@@ -39,7 +39,7 @@ export default function PrivacyPage() {
         align="center"
       />
 
-      <section className="px-6 py-12 md:px-10 lg:px-16">
+      <section className="px-5 py-12 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl space-y-5">
           {privacySections.map((section) => (
             <GlassCard key={section.title} className="px-6 py-6 md:px-8">

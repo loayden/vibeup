@@ -53,20 +53,25 @@ export function NewsletterForm({
   };
 
   return (
-    <div className={`space-y-4 ${compact ? "" : "max-w-2xl"}`}>
+    <form
+      className={`space-y-4 ${compact ? "" : "max-w-2xl"}`}
+      onSubmit={(event) => {
+        event.preventDefault();
+        void handleSubmit();
+      }}
+    >
       <div className={`flex flex-col gap-3 sm:flex-row ${compact ? "" : "sm:items-center"}`}>
         <input
           className="glass-input flex-1"
           placeholder="Your email address"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              void handleSubmit();
-            }
-          }}
+          aria-label="Email address"
         />
-        <LiquidButton gold onClick={() => void handleSubmit()} disabled={loading}>
+        <LiquidButton gold type="submit" className="w-full sm:w-auto" disabled={loading}>
           <span className="inline-flex items-center gap-2">
             {loading ? "Sending" : "Subscribe"}
             <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
@@ -82,6 +87,6 @@ export function NewsletterForm({
           {status}
         </motion.p>
       ) : null}
-    </div>
+    </form>
   );
 }

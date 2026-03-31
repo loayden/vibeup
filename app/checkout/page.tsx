@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { CheckoutExperience } from "@/components/site/checkout-experience";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
+import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
 import { SITE } from "@/lib/site-data";
 
 export default function CheckoutPage() {
@@ -17,11 +18,11 @@ export default function CheckoutPage() {
           <GlassCard className="overflow-hidden p-3">
             <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
-                src="/arabnights.jpeg"
+                src="/arabnights-1200.webp"
                 alt="Arab Nights checkout"
                 fill
                 priority
-                sizes="(min-width: 1024px) 42vw, 100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
                 className="object-cover"
               />
             </div>
@@ -37,8 +38,8 @@ export default function CheckoutPage() {
         }
       />
 
-      <section className="px-6 py-8 md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {[
             {
               icon: ShieldCheck,
@@ -65,7 +66,7 @@ export default function CheckoutPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Ticket Selection"
@@ -77,7 +78,7 @@ export default function CheckoutPage() {
         </div>
       </section>
 
-      <section className="px-6 py-10 md:px-10 lg:px-16">
+      <section className="px-5 py-10 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-3">
           {[
             {
@@ -104,6 +105,8 @@ export default function CheckoutPage() {
           ))}
         </div>
       </section>
+
+      <StickyBuyCTA href="/checkout" price={120} label="Reserve Now" />
     </main>
   );
 }

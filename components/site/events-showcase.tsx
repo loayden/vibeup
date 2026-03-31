@@ -85,7 +85,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
   return (
     <div className="space-y-10">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-wrap gap-3">
+        <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
           {[
             { key: "all", label: "All Events" },
             { key: "upcoming", label: "Upcoming" },
@@ -93,7 +93,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
           ].map((tab) => (
             <button
               key={tab.key}
-              className={activeTab === tab.key ? "liquid-button-gold" : "liquid-button-ghost"}
+              className={`${activeTab === tab.key ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
               onClick={() => setActiveTab(tab.key as "all" | "upcoming" | "past")}
               data-cursor="hover"
             >
@@ -102,16 +102,16 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
           <button
-            className={view === "grid" ? "liquid-button-gold" : "liquid-button-ghost"}
+            className={`${view === "grid" ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
             onClick={() => setView("grid")}
             data-cursor="hover"
           >
             Grid View
           </button>
           <button
-            className={view === "calendar" ? "liquid-button-gold" : "liquid-button-ghost"}
+            className={`${view === "calendar" ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
             onClick={() => setView("calendar")}
             data-cursor="hover"
           >
@@ -123,7 +123,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
       {view === "grid" ? (
         <div className="space-y-12">
           {visibleUpcoming.length ? (
-            <div className="grid gap-6 xl:grid-cols-2">
+            <div className="grid gap-4 xl:grid-cols-2">
               {visibleUpcoming.map((event, index) => (
                 <motion.div
                   key={event.slug}
@@ -133,12 +133,13 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                   transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <GlassCard hover className="h-full overflow-hidden p-3">
-                    <div className="relative aspect-[16/10] overflow-hidden rounded-[18px]">
+                    <div className="grid gap-0 sm:block">
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-[18px] sm:aspect-[16/10] sm:overflow-hidden">
                       <Image
                         src={event.image}
                         alt={event.title}
                         fill
-                        sizes="(min-width: 1280px) 42vw, 100vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw"
                         className="object-cover transition duration-500 hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
@@ -150,22 +151,22 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                       </div>
                     </div>
 
-                    <div className="px-3 pb-3 pt-6">
-                      <div className="flex items-start justify-between gap-5">
+                    <div className="px-3 pb-3 pt-5 sm:pt-6">
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                           <p className="eyebrow mb-3">Ticketed Experience</p>
-                          <h3 className="font-serif text-[2rem] font-light tracking-[0.05em] text-white">
+                          <h3 className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white sm:text-[2rem]">
                             {event.title}
                           </h3>
                         </div>
-                        <p className="font-serif text-[1.8rem] font-light tracking-[0.05em] text-[var(--gold)]">
+                        <p className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[1.8rem]">
                           From ${event.priceFrom}
                         </p>
                       </div>
 
                       <div className="gold-divider-left mt-4 h-px w-24" />
 
-                      <div className="mt-5 grid gap-3 md:grid-cols-2">
+                      <div className="mt-5 grid gap-3 sm:grid-cols-2">
                         <GlassCard dark className="px-4 py-4">
                           <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                           <p className="eyebrow mb-2">Date</p>
@@ -184,14 +185,15 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
 
                       <p className="body-copy mt-5">{event.summary}</p>
 
-                      <div className="mt-7 flex flex-wrap gap-4">
-                        <LiquidLinkButton href={`/events/${event.slug}`} gold>
+                      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                        <LiquidLinkButton href={`/events/${event.slug}`} gold className="w-full justify-center sm:w-auto">
                           View Event <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                         </LiquidLinkButton>
-                        <LiquidLinkButton href="/checkout">
+                        <LiquidLinkButton href="/checkout" className="w-full justify-center sm:w-auto">
                           Get Tickets <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                         </LiquidLinkButton>
                       </div>
+                    </div>
                     </div>
                   </GlassCard>
                 </motion.div>
@@ -211,7 +213,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                 <LiquidLinkButton href="/gallery">Open Gallery</LiquidLinkButton>
               </div>
 
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {visiblePast.map((event, index) => (
                   <motion.div
                     key={event.title}
@@ -226,7 +228,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                           src={event.image}
                           alt={event.title}
                           fill
-                          sizes="(min-width: 1280px) 28vw, (min-width: 768px) 45vw, 100vw"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           className="object-cover transition duration-500 hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
@@ -247,7 +249,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                           {event.venue}
                         </p>
                         <p className="body-copy mt-5">{event.summary}</p>
-                        <Link href="/gallery" className="eyebrow mt-6 inline-flex text-[var(--gold)]">
+                        <Link href="/gallery" className="liquid-button-ghost mt-6 inline-flex w-full justify-center sm:w-auto">
                           View Gallery
                         </Link>
                       </div>

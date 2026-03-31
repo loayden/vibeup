@@ -1,6 +1,7 @@
 import { Clock3, Mail, MapPin, Phone } from "lucide-react";
 
 import { ContactForm } from "@/components/site/contact-form";
+import { LazyMap } from "@/components/site/lazy-map";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
 import { SITE } from "@/lib/site-data";
 
@@ -15,23 +16,40 @@ export default function ContactPage() {
         align="center"
       />
 
-      <section className="px-6 py-8 md:px-10 lg:px-16">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
           {[
-            { icon: Mail, label: "Email", value: SITE.email },
-            { icon: Phone, label: "Phone", value: `${SITE.phonePrimary} / ${SITE.phoneSecondary}` },
-            { icon: MapPin, label: "Base", value: SITE.city },
+            {
+              icon: Mail,
+              label: "Email",
+              value: SITE.email,
+              href: `mailto:${SITE.email}`,
+            },
+            {
+              icon: Phone,
+              label: "Phone",
+              value: `${SITE.phonePrimary} / ${SITE.phoneSecondary}`,
+              href: "tel:+19492479309",
+            },
+            {
+              icon: MapPin,
+              label: "Base",
+              value: SITE.city,
+              href: "https://maps.apple.com/?q=Los+Angeles,+CA",
+            },
           ].map((item) => (
             <GlassCard key={item.label} gold className="px-5 py-5">
-              <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-              <p className="eyebrow mb-2">{item.label}</p>
-              <p className="body-copy text-white/68">{item.value}</p>
+              <a href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="block min-h-[52px]">
+                <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                <p className="eyebrow mb-2">{item.label}</p>
+                <p className="body-copy text-white/68">{item.value}</p>
+              </a>
             </GlassCard>
           ))}
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.08fr_0.92fr]">
           <GlassCard className="px-6 py-7 md:px-8">
             <SectionHeader
@@ -99,7 +117,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="px-6 py-10 md:px-10 lg:px-16">
+      <section className="px-5 py-10 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Find Us"
@@ -108,17 +126,10 @@ export default function ContactPage() {
             subtitle="Most VibeUp productions are anchored in Los Angeles, with project support available for expansion markets and destination opportunities."
           />
 
-          <GlassCard className="overflow-hidden p-3">
-            <div className="overflow-hidden rounded-[18px]">
-              <iframe
-                title="VibeUp Location"
-                src="https://www.google.com/maps?q=Los%20Angeles%2C%20CA&z=11&output=embed"
-                className="h-[420px] w-full border-0"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </GlassCard>
+          <LazyMap
+            embedUrl="https://www.google.com/maps?q=Los%20Angeles%2C%20CA&z=11&output=embed"
+            openUrl="https://maps.apple.com/?q=Los+Angeles,+CA"
+          />
         </div>
       </section>
     </main>

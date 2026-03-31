@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { EventsShowcase } from "@/components/site/events-showcase";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
+import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
 import {
   FEATURED_EVENT,
   PAST_EVENTS,
@@ -22,11 +23,11 @@ export default function EventsPage() {
           <GlassCard className="overflow-hidden p-3">
             <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
-                src="/arabnights.jpeg"
+                src="/arabnights-1200.webp"
                 alt="VibeUp events"
                 fill
                 priority
-                sizes="(min-width: 1024px) 42vw, 100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
                 className="object-cover"
               />
             </div>
@@ -42,8 +43,8 @@ export default function EventsPage() {
         }
       />
 
-      <section className="px-6 py-8 md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {[
             {
               icon: CalendarRange,
@@ -70,7 +71,7 @@ export default function EventsPage() {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Browse The Calendar"
@@ -82,7 +83,7 @@ export default function EventsPage() {
         </div>
       </section>
 
-      <section className="px-6 py-10 md:px-10 lg:px-16">
+      <section className="px-5 py-10 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-6xl">
           <GlassCard hover className="grid overflow-hidden rounded-[26px] lg:grid-cols-[1.08fr_0.92fr]">
             <div className="relative min-h-[360px]">
@@ -124,6 +125,8 @@ export default function EventsPage() {
           </GlassCard>
         </div>
       </section>
+
+      <StickyBuyCTA href="/checkout" price={120} />
     </main>
   );
 }

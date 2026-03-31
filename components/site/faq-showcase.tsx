@@ -17,11 +17,11 @@ export function FaqShowcase({ groups }: FaqShowcaseProps) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap gap-3">
+      <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-3 sm:mx-0 sm:flex-wrap sm:px-0">
         {groups.map((group) => (
           <button
             key={group.category}
-            className={activeCategory === group.category ? "liquid-button-gold" : "liquid-button-ghost"}
+            className={`${activeCategory === group.category ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
             onClick={() => setActiveCategory(group.category)}
             data-cursor="hover"
           >

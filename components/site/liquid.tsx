@@ -139,9 +139,9 @@ export function PageHero({
   media,
 }: PageHeroProps) {
   return (
-    <section className="relative px-6 pb-18 pt-32 md:px-10 lg:px-16 lg:pt-36">
+    <section className="relative px-5 pb-16 pt-28 sm:px-10 sm:pb-20 sm:pt-32 lg:px-16 lg:pt-36">
       <div
-        className={`mx-auto grid max-w-7xl gap-10 ${media ? "items-center lg:grid-cols-[1.05fr_0.95fr]" : ""}`}
+        className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${media ? "items-center lg:grid-cols-[1.05fr_0.95fr]" : ""}`}
       >
         <div className={align === "center" ? "text-center lg:col-span-2" : ""}>
           <p className={`eyebrow ${align === "center" ? "mx-auto" : ""} mb-5`}>{eyebrow}</p>
@@ -150,7 +150,7 @@ export function PageHero({
           </h1>
           <div className={`mt-6 h-px w-24 ${align === "center" ? "mx-auto gold-divider-centered" : "gold-divider-left"}`} />
           <p
-            className={`body-copy mt-7 max-w-2xl text-[0.92rem] leading-8 ${
+            className={`body-copy mt-6 max-w-2xl text-[0.88rem] leading-7 sm:mt-7 sm:text-[0.92rem] sm:leading-8 ${
               align === "center" ? "mx-auto text-center" : ""
             }`}
           >
@@ -158,7 +158,7 @@ export function PageHero({
           </p>
           {actions ? (
             <div
-              className={`mt-10 flex flex-wrap gap-4 ${
+              className={`mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4 [&>*]:w-full [&>*]:justify-center sm:[&>*]:w-auto ${
                 align === "center" ? "justify-center" : "justify-start"
               }`}
             >

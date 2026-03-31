@@ -12,7 +12,7 @@ export default function AdminDashboardPage() {
         align="center"
       />
 
-      <section className="px-6 py-6 md:px-10 lg:px-16">
+      <section className="px-5 py-6 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <AdminDashboardClient />
         </div>

@@ -5,6 +5,7 @@ import { AlertCircle, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 
 import { LiquidButton } from "@/components/site/liquid";
+import { LiquidSelect } from "@/components/site/liquid-select";
 
 type BannerState = {
   type: "success" | "error";
@@ -22,6 +23,18 @@ const eventTypes = [
 
 const guestCounts = ["Under 50", "50-200", "200-500", "500+"] as const;
 const budgetRanges = ["Under $5K", "$5K-$15K", "$15K-$50K", "$50K+"] as const;
+const eventTypeOptions = eventTypes.map((option) => ({
+  label: option.label,
+  value: option.value,
+}));
+const guestCountOptions = guestCounts.map((option) => ({
+  label: option,
+  value: option,
+}));
+const budgetOptions = budgetRanges.map((option) => ({
+  label: option,
+  value: option,
+}));
 
 export function ContactForm() {
   const [form, setForm] = useState<{
@@ -73,7 +86,7 @@ export function ContactForm() {
           // ✅ Proper error message extraction
           const payload = (await response.json()) as { error?: string; message?: string };
           errorMessage = payload?.error || payload?.message || errorMessage;
-        } catch (parseError) {
+        } catch {
           // ✅ Handle parse errors properly
           console.error("Response parse error", {
             status: response.status,
@@ -155,10 +168,12 @@ export function ContactForm() {
         ) : null}
       </AnimatePresence>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <input
           className="glass-input"
           placeholder="Full Name"
+          autoComplete="name"
+          style={{ fontSize: "16px" }}
           value={form.name}
           onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
           required
@@ -167,80 +182,77 @@ export function ContactForm() {
           className="glass-input"
           placeholder="Email Address"
           type="email"
+          inputMode="email"
+          autoComplete="email"
+          style={{ fontSize: "16px" }}
           value={form.email}
           onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
           required
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <input
           className="glass-input"
           placeholder="Phone Number"
+          inputMode="tel"
+          autoComplete="tel"
+          style={{ fontSize: "16px" }}
           value={form.phone}
           onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
         />
         <input
           className="glass-input"
           placeholder="Company / Brand"
+          autoComplete="organization"
+          style={{ fontSize: "16px" }}
           value={form.company}
           onChange={(event) => setForm((current) => ({ ...current, company: event.target.value }))}
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <select
-          className="glass-input"
+      <div className="grid gap-4 sm:grid-cols-2">
+        <LiquidSelect
+          options={eventTypeOptions}
           value={form.event_type}
-          onChange={(event) =>
+          onChange={(value) =>
             setForm((current) => ({
               ...current,
-              event_type: event.target.value as typeof form.event_type,
+              event_type: value,
             }))
           }
-        >
-          {eventTypes.map((option) => (
-            <option key={option.value} value={option.value} className="bg-[#121214] text-white">
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <select
-          className="glass-input"
+          placeholder="Select event type"
+        />
+        <LiquidSelect
+          options={guestCountOptions}
           value={form.guest_count}
-          onChange={(event) => setForm((current) => ({ ...current, guest_count: event.target.value }))}
-        >
-          {guestCounts.map((option) => (
-            <option key={option} value={option} className="bg-[#121214] text-white">
-              {option}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => setForm((current) => ({ ...current, guest_count: value }))}
+          placeholder="Expected guest count"
+        />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <input
           className="glass-input"
           type="date"
+          style={{ fontSize: "16px" }}
           value={form.event_date}
           onChange={(event) => setForm((current) => ({ ...current, event_date: event.target.value }))}
         />
-        <select
-          className="glass-input"
+        <LiquidSelect
+          options={budgetOptions}
           value={form.budget}
-          onChange={(event) => setForm((current) => ({ ...current, budget: event.target.value }))}
-        >
-          {budgetRanges.map((option) => (
-            <option key={option} value={option} className="bg-[#121214] text-white">
-              {option}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => setForm((current) => ({ ...current, budget: value }))}
+          placeholder="Budget range"
+        />
       </div>
 
       <textarea
         className="glass-input min-h-[160px] resize-none"
         placeholder="Tell us about the experience you want to create."
+        autoComplete="off"
+        rows={5}
+        style={{ fontSize: "16px" }}
         value={form.message}
         onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
         required
@@ -251,7 +263,7 @@ export function ContactForm() {
           We review every enquiry personally and usually respond within 24 hours with a
           clear next step.
         </p>
-        <LiquidButton gold type="submit" disabled={loading}>
+        <LiquidButton gold type="submit" className="w-full md:w-auto" disabled={loading}>
           <span className="inline-flex items-center gap-2">
             {loading ? "Sending" : "Send Enquiry"}
             <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />

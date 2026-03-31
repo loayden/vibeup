@@ -5,6 +5,7 @@ import { ArrowRight, MapPin, BriefcaseBusiness } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { GlassCard, LiquidButton } from "@/components/site/liquid";
+import { LiquidSelect } from "@/components/site/liquid-select";
 import type { OPEN_POSITIONS } from "@/lib/site-data";
 
 type BannerState = {
@@ -20,6 +21,7 @@ type CareersBoardProps = {
 
 export function CareersBoard({ positions }: CareersBoardProps) {
   const [selectedRole, setSelectedRole] = useState<string>(positions[0]?.role || "");
+  const [expandedRole, setExpandedRole] = useState<string>(positions[0]?.role || "");
   const [banner, setBanner] = useState<BannerState | null>(null);
   const [loading, setLoading] = useState(false);
   const formRef = useRef<HTMLDivElement | null>(null);
@@ -116,30 +118,45 @@ export function CareersBoard({ positions }: CareersBoardProps) {
             transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           >
             <GlassCard hover className="h-full px-6 py-6">
-              <div className="flex flex-wrap gap-3">
-                <span className="liquid-button-gold px-4 py-2 !text-[9px]">{position.type}</span>
-                <span className="liquid-button-ghost px-4 py-2 !text-[9px]">{position.location}</span>
-              </div>
-              <h3 className="mt-5 font-serif text-[2rem] font-light tracking-[0.05em] text-white">
-                {position.role}
-              </h3>
-              <div className="gold-divider-left mt-4 h-px w-20" />
-              <div className="mt-5 flex items-center gap-3">
-                <MapPin className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                <p className="body-copy text-white/65">{position.location}</p>
-              </div>
-              <div className="mt-3 flex items-center gap-3">
-                <BriefcaseBusiness className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                <p className="body-copy text-white/65">{position.type}</p>
-              </div>
-              <p className="body-copy mt-5">{position.summary}</p>
               <button
-                className="liquid-button-gold mt-7"
-                onClick={() => focusForm(position.role)}
-                data-cursor="hover"
+                type="button"
+                className="block w-full text-left"
+                onClick={() =>
+                  setExpandedRole((current) =>
+                    current === position.role ? "" : position.role,
+                  )
+                }
               >
-                Apply Now
+                <div className="flex flex-wrap gap-3">
+                  <span className="liquid-button-gold px-4 py-2 !text-[9px]">{position.type}</span>
+                  <span className="liquid-button-ghost px-4 py-2 !text-[9px]">{position.location}</span>
+                </div>
+                <h3 className="mt-5 font-serif text-[2rem] font-light tracking-[0.05em] text-white">
+                  {position.role}
+                </h3>
+                <div className="gold-divider-left mt-4 h-px w-20" />
+                <div className="mt-5 flex items-center gap-3">
+                  <MapPin className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="body-copy text-white/65">{position.location}</p>
+                </div>
+                <div className="mt-3 flex items-center gap-3">
+                  <BriefcaseBusiness className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="body-copy text-white/65">{position.type}</p>
+                </div>
+                <p className="eyebrow mt-5 text-[var(--gold)] md:hidden">
+                  {expandedRole === position.role ? "Hide details" : "View details"}
+                </p>
               </button>
+              <div className={`${expandedRole === position.role ? "block" : "hidden"} md:block`}>
+                <p className="body-copy mt-5">{position.summary}</p>
+                <button
+                  className="liquid-button-gold mt-7 w-full justify-center"
+                  onClick={() => focusForm(position.role)}
+                  data-cursor="hover"
+                >
+                  Apply Now
+                </button>
+              </div>
             </GlassCard>
           </motion.div>
         ))}
@@ -181,10 +198,12 @@ export function CareersBoard({ positions }: CareersBoardProps) {
               ) : null}
             </AnimatePresence>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <input
                 className="glass-input"
                 placeholder="Full Name"
+                autoComplete="name"
+                style={{ fontSize: "16px" }}
                 value={form.name}
                 onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
                 required
@@ -193,40 +212,47 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 className="glass-input"
                 placeholder="Email Address"
                 type="email"
+                inputMode="email"
+                autoComplete="email"
+                style={{ fontSize: "16px" }}
                 value={form.email}
                 onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
                 required
               />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <input
                 className="glass-input"
                 placeholder="Phone Number"
+                inputMode="tel"
+                autoComplete="tel"
+                style={{ fontSize: "16px" }}
                 value={form.phone}
                 onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
               />
-              <select
-                className="glass-input"
+              <LiquidSelect
+                options={positions.map((position) => ({
+                  label: position.role,
+                  value: position.role,
+                }))}
                 value={form.role}
-                onChange={(event) => {
-                  setSelectedRole(event.target.value);
-                  setForm((current) => ({ ...current, role: event.target.value }));
+                onChange={(value) => {
+                  setSelectedRole(value);
+                  setForm((current) => ({ ...current, role: value }));
                 }}
-              >
-                {positions.map((position) => (
-                  <option key={position.role} value={position.role} className="bg-[#121214] text-white">
-                    {position.role}
-                  </option>
-                ))}
-              </select>
+                placeholder="Select a role"
+              />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2">
               <input
                 className="glass-input"
                 placeholder="Portfolio URL"
                 type="url"
+                inputMode="url"
+                autoComplete="url"
+                style={{ fontSize: "16px" }}
                 value={form.portfolio_url}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, portfolio_url: event.target.value }))
@@ -236,6 +262,9 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 className="glass-input"
                 placeholder="LinkedIn URL"
                 type="url"
+                inputMode="url"
+                autoComplete="url"
+                style={{ fontSize: "16px" }}
                 value={form.linkedin_url}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, linkedin_url: event.target.value }))
@@ -247,6 +276,9 @@ export function CareersBoard({ positions }: CareersBoardProps) {
               className="glass-input"
               placeholder="Resume Link (Drive, Dropbox, or portfolio page)"
               type="url"
+              inputMode="url"
+              autoComplete="url"
+              style={{ fontSize: "16px" }}
               value={form.resume_url}
               onChange={(event) => setForm((current) => ({ ...current, resume_url: event.target.value }))}
             />
@@ -254,6 +286,8 @@ export function CareersBoard({ positions }: CareersBoardProps) {
             <textarea
               className="glass-input min-h-[160px] resize-none"
               placeholder="Tell us why you want to work with VibeUp."
+              rows={5}
+              style={{ fontSize: "16px" }}
               value={form.message}
               onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
             />
@@ -263,7 +297,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 Share links instead of attachments when possible. It keeps review faster and
                 helps us evaluate your work in context.
               </p>
-              <LiquidButton gold type="submit" disabled={loading}>
+              <LiquidButton gold type="submit" className="w-full md:w-auto" disabled={loading}>
                 <span className="inline-flex items-center gap-2">
                   {loading ? "Submitting" : "Submit Application"}
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />

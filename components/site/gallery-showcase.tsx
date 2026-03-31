@@ -33,11 +33,11 @@ export function GalleryShowcase({ items }: GalleryShowcaseProps) {
   return (
     <>
       <div className="space-y-8">
-        <div className="flex flex-wrap gap-3">
+        <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
           {categories.map((category) => (
             <button
               key={category.key}
-              className={activeCategory === category.key ? "liquid-button-gold" : "liquid-button-ghost"}
+              className={`${activeCategory === category.key ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
               onClick={() => setActiveCategory(category.key)}
               data-cursor="hover"
             >
@@ -46,22 +46,22 @@ export function GalleryShowcase({ items }: GalleryShowcaseProps) {
           ))}
         </div>
 
-        <div className="columns-1 gap-5 md:columns-2 xl:columns-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4 md:grid-cols-3">
           {filteredItems.map((item, index) => (
-            <div key={`${item.title}-${item.image}`} className="mb-5 break-inside-avoid">
+            <div key={`${item.title}-${item.image}`}>
               <button
                 className="block w-full text-left"
                 onClick={() => setLightboxIndex(index)}
                 data-cursor="hover"
               >
                 <GlassCard hover className="overflow-hidden p-3">
-                  <div className="relative min-h-[280px] overflow-hidden rounded-[18px]">
+                  <div className="relative aspect-square overflow-hidden rounded-[18px] md:aspect-[4/5]">
                     <Image
                       src={item.image}
                       alt={item.title}
-                      width={960}
-                      height={1200}
-                      className="h-auto w-full object-cover transition duration-500 hover:scale-105"
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover transition duration-500 hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
                     <div className="absolute inset-x-0 bottom-0 p-5">

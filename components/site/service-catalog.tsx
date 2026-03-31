@@ -16,6 +16,7 @@ type ServiceCatalogProps = {
 export function ServiceCatalog({ services }: ServiceCatalogProps) {
   const categories = ["All", ...new Set(services.map((service) => service.category))];
   const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [expandedService, setExpandedService] = useState<string>(services[0]?.title || "");
 
   const filteredServices =
     activeCategory === "All"
@@ -24,12 +25,19 @@ export function ServiceCatalog({ services }: ServiceCatalogProps) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap gap-3">
+      <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
         {categories.map((category) => (
           <button
             key={category}
-            className={activeCategory === category ? "liquid-button-gold" : "liquid-button-ghost"}
-            onClick={() => setActiveCategory(category)}
+            className={`${activeCategory === category ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
+            onClick={() => {
+              setActiveCategory(category);
+              const nextServices =
+                category === "All"
+                  ? services
+                  : services.filter((service) => service.category === category);
+              setExpandedService(nextServices[0]?.title || "");
+            }}
             data-cursor="hover"
           >
             {category}
@@ -37,7 +45,7 @@ export function ServiceCatalog({ services }: ServiceCatalogProps) {
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         {filteredServices.map((service, index) => (
           <motion.div
             key={service.title}
@@ -48,25 +56,40 @@ export function ServiceCatalog({ services }: ServiceCatalogProps) {
           >
             <GlassCard hover className="h-full overflow-hidden p-3">
               <div className="grid gap-0 xl:grid-cols-[0.42fr_0.58fr]">
-                <div className="relative min-h-[280px] overflow-hidden rounded-[18px]">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[18px] xl:min-h-[280px]">
                   <Image
                     src={service.image}
                     alt={service.title}
                     fill
-                    sizes="(min-width: 1280px) 18vw, 100vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition duration-500 hover:scale-105"
                   />
                 </div>
 
                 <div className="px-5 pb-4 pt-5 md:px-6">
-                  <p className="eyebrow mb-3">{service.category}</p>
-                  <h3 className="font-serif text-[2rem] font-light tracking-[0.05em] text-white">
-                    {service.title}
-                  </h3>
-                  <div className="gold-divider-left mt-4 h-px w-24" />
-                  <p className="body-copy mt-5">{service.summary}</p>
+                  <button
+                    type="button"
+                    className="block w-full text-left"
+                    onClick={() =>
+                      setExpandedService((current) =>
+                        current === service.title ? "" : service.title,
+                      )
+                    }
+                  >
+                    <p className="eyebrow mb-3">{service.category}</p>
+                    <h3 className="font-serif text-[1.8rem] font-light tracking-[0.05em] text-white sm:text-[2rem]">
+                      {service.title}
+                    </h3>
+                    <div className="gold-divider-left mt-4 h-px w-24" />
+                    <p className="body-copy mt-5">{service.summary}</p>
+                    <p className="eyebrow mt-5 text-[var(--gold)] md:hidden">
+                      {expandedService === service.title ? "Hide details" : "View details"}
+                    </p>
+                  </button>
 
-                  <div className="mt-6 space-y-3">
+                  <div
+                    className={`mt-6 space-y-3 ${expandedService === service.title ? "block" : "hidden"} md:block`}
+                  >
                     {service.details.map((detail) => (
                       <div
                         key={detail}

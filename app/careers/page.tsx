@@ -23,7 +23,7 @@ export default function CareersPage() {
         }
       />
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Why Work Here"
@@ -52,7 +52,7 @@ export default function CareersPage() {
         </div>
       </section>
 
-      <section id="open-roles" className="px-6 py-20 md:px-10 lg:px-16">
+      <section id="open-roles" className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Open Positions"

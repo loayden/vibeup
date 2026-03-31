@@ -3,6 +3,7 @@ import { CalendarDays, Clock3, MapPin, Sparkles } from "lucide-react";
 import Image from "next/image";
 
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
+import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
 import { SITE, TICKET_TYPES, UPCOMING_EVENTS } from "@/lib/site-data";
 
 type EventPageProps = {
@@ -86,7 +87,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                 alt={event.title}
                 fill
                 priority
-                sizes="(min-width: 1024px) 42vw, 100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
                 className="object-cover"
               />
             </div>
@@ -102,8 +103,8 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         }
       />
 
-      <section className="px-6 py-8 md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {[
             { icon: CalendarDays, label: "Date", value: event.date },
             { icon: MapPin, label: "Venue", value: `${event.venue}, ${event.city}` },
@@ -118,7 +119,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Event Journey"
@@ -142,7 +143,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.84fr_1.16fr]">
           <GlassCard className="px-6 py-6">
             <div className="flex items-center gap-3">
@@ -178,7 +179,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         </div>
       </section>
 
-      <section className="px-6 py-10 md:px-10 lg:px-16">
+      <section className="px-5 py-10 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-6xl">
           <GlassCard warm className="px-6 py-7 md:px-8">
             <p className="eyebrow mb-4">Venue Notes</p>
@@ -202,6 +203,8 @@ export default async function EventDetailPage({ params }: EventPageProps) {
           </GlassCard>
         </div>
       </section>
+
+      <StickyBuyCTA href="/checkout" price={event.priceFrom} label="Book Seats" />
     </main>
   );
 }
