@@ -188,6 +188,7 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
         className="absolute inset-x-3 top-3 overflow-hidden"
         style={{
           borderRadius:24,
+          paddingTop:"max(env(safe-area-inset-top), 12px)",
           background:"linear-gradient(160deg, rgba(14,10,6,0.97) 0%, rgba(9,6,3,0.99) 100%)",
           backdropFilter:"blur(40px) saturate(180%)",
           border:"1px solid rgba(198,169,98,0.22)",
@@ -290,9 +291,9 @@ export function SiteNavbar() {
 
       <motion.header
         initial={{ opacity:0, y:-16 }}
-        animate={{ opacity:1, y:0 }}
-        transition={{ duration:0.8, ease:E }}
-        className="fixed inset-x-0 top-0 z-50 transition-all duration-500"
+        animate={{ opacity: open ? 0 : 1, y: open ? -16 : 0 }}
+        transition={{ duration:0.35, ease:E }}
+        className="fixed inset-x-0 top-0 z-50 transition-all duration-500 md:opacity-100 md:translate-y-0"
         style={scrolled ? {
           background:"linear-gradient(180deg, rgba(8,6,4,0.82) 0%, rgba(6,4,2,0.88) 100%)",
           backdropFilter:"blur(32px) saturate(180%)",
