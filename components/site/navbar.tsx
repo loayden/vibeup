@@ -2,612 +2,416 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowRight,
-  Briefcase,
-  Calendar,
-  ChevronDown,
-  FileText,
-  HelpCircle,
-  Image as ImageIcon,
-  Menu,
-  Phone,
-  Rss,
-  Ticket,
-  Users,
-  X,
+  Calendar, Briefcase, Image as ImageIcon, Users,
+  Ticket, Menu, X, ChevronDown, ArrowRight,
+  Rss, HelpCircle, Phone,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-const BRAND = {
-  name: "VIBEUP",
-  tagline: "Events & Services",
-  logo: "/vibeup-logo-512.webp",
-  href: "/",
-};
+/* ─────────────────────────────────────────
+   CONFIG
+───────────────────────────────────────── */
+const BRAND = { name: "VIBEUP", sub: "Events & Services" };
 
-type NavChild = {
-  label: string;
-  href: string;
-  description: string;
-  icon: React.ReactNode;
-};
-
-type NavItem = {
-  label: string;
-  href: string;
-  icon?: React.ReactNode;
-  children?: NavChild[];
-};
-
-const NAV: NavItem[] = [
-  {
-    label: "Events",
-    href: "/events",
-    icon: <Calendar strokeWidth={1.3} className="h-4 w-4" />,
-  },
-  {
-    label: "Services",
-    href: "/services",
-    icon: <Briefcase strokeWidth={1.3} className="h-4 w-4" />,
-  },
-  {
-    label: "Gallery",
-    href: "/gallery",
-    icon: <ImageIcon strokeWidth={1.3} className="h-4 w-4" />,
-  },
-  {
-    label: "About",
-    href: "/about",
-    icon: <Users strokeWidth={1.3} className="h-4 w-4" />,
-  },
-  {
-    label: "More",
-    href: "#",
-    children: [
-      {
-        label: "Blog",
-        href: "/blog",
-        description: "Event tips, artist spotlights, and news",
-        icon: <Rss strokeWidth={1.3} className="h-4 w-4" />,
-      },
-      {
-        label: "FAQ",
-        href: "/faq",
-        description: "Guest questions and booking answers",
-        icon: <HelpCircle strokeWidth={1.3} className="h-4 w-4" />,
-      },
-      {
-        label: "Careers",
-        href: "/careers",
-        description: "Join the VibeUp team",
-        icon: <Briefcase strokeWidth={1.3} className="h-4 w-4" />,
-      },
-      {
-        label: "Contact",
-        href: "/contact-us",
-        description: "Talk to the production team",
-        icon: <Phone strokeWidth={1.3} className="h-4 w-4" />,
-      },
-      {
-        label: "Privacy",
-        href: "/privacy",
-        description: "Policies and guest terms",
-        icon: <FileText strokeWidth={1.3} className="h-4 w-4" />,
-      },
-    ],
-  },
+const LEFT_LINKS  = [
+  { label: "Events",   href: "/events"   },
+  { label: "Services", href: "/services" },
+];
+const RIGHT_LINKS = [
+  { label: "Gallery",  href: "/gallery"  },
+  { label: "About",    href: "/about"    },
+];
+const MORE_LINKS = [
+  { label:"Blog",    href:"/blog",       desc:"Tips & spotlights",        icon:<Rss         strokeWidth={1.2} className="w-3.5 h-3.5"/> },
+  { label:"FAQ",     href:"/faq",        desc:"Common questions",         icon:<HelpCircle  strokeWidth={1.2} className="w-3.5 h-3.5"/> },
+  { label:"Contact", href:"/contact-us", desc:"Reach our team",           icon:<Phone       strokeWidth={1.2} className="w-3.5 h-3.5"/> },
+  { label:"Careers", href:"/careers",    desc:"Join VibeUp",              icon:<Briefcase   strokeWidth={1.2} className="w-3.5 h-3.5"/> },
 ];
 
-const CTA = { label: "Buy Tickets", href: "/checkout" };
-const ease = [0.22, 1, 0.36, 1] as const;
+const ALL_MOBILE = [
+  { label:"Events",   href:"/events",   icon:<Calendar   strokeWidth={1.2} className="w-4 h-4"/> },
+  { label:"Services", href:"/services", icon:<Briefcase  strokeWidth={1.2} className="w-4 h-4"/> },
+  { label:"Gallery",  href:"/gallery",  icon:<ImageIcon  strokeWidth={1.2} className="w-4 h-4"/> },
+  { label:"About",    href:"/about",    icon:<Users      strokeWidth={1.2} className="w-4 h-4"/> },
+  { label:"Blog",     href:"/blog",     icon:<Rss        strokeWidth={1.2} className="w-4 h-4"/> },
+  { label:"FAQ",      href:"/faq",      icon:<HelpCircle strokeWidth={1.2} className="w-4 h-4"/> },
+  { label:"Contact",  href:"/contact-us",icon:<Phone     strokeWidth={1.2} className="w-4 h-4"/> },
+];
 
-function isActivePath(pathname: string, href: string) {
-  if (href === "/" || href === "#") {
-    return pathname === "/";
-  }
+const E = [0.22, 1, 0.36, 1] as const;
 
-  return pathname.startsWith(href);
-}
-
-function DesktopDropdown({
-  item,
-  pathname,
-}: {
-  item: NavItem;
-  pathname: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const timer = useRef<NodeJS.Timeout | null>(null);
-  const active = Boolean(item.children?.some((child) => isActivePath(pathname, child.href)));
-
-  const handleEnter = () => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-    }
-
-    setOpen(true);
-  };
-
-  const handleLeave = () => {
-    timer.current = setTimeout(() => setOpen(false), 160);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-    };
-  }, []);
+/* ─────────────────────────────────────────
+   NAV LINK
+───────────────────────────────────────── */
+function NavLink({ label, href }: { label: string; href: string }) {
+  const pathname = usePathname();
+  const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <li className="relative" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+    <Link href={href} className="group relative flex items-center gap-1.5 px-3 py-1.5 transition-all duration-400"
+      style={{
+        fontFamily: "'Jost',sans-serif",
+        fontSize: "9px",
+        letterSpacing: "0.30em",
+        fontWeight: 300,
+        textTransform: "uppercase",
+        color: active ? "rgba(198,169,98,0.85)" : "rgba(255,255,255,0.40)",
+      }}
+      onMouseEnter={e => { if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+      onMouseLeave={e => { if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.40)"; }}
+    >
+      {label}
+      {/* Underline */}
+      <span className="absolute bottom-0 left-3 h-px transition-all duration-500"
+            style={{
+              width: active ? "calc(100% - 24px)" : "0%",
+              background: "linear-gradient(90deg, rgba(198,169,98,0.7), transparent)",
+            }} />
+      {/* Hover underline */}
+      <span className="absolute bottom-0 left-3 h-px w-0 group-hover:w-[calc(100%-24px)] transition-all duration-400"
+            style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.25), transparent)" }} />
+    </Link>
+  );
+}
+
+/* ─────────────────────────────────────────
+   MORE DROPDOWN
+───────────────────────────────────────── */
+function MoreMenu() {
+  const [open, setOpen] = useState(false);
+  const t = useRef<NodeJS.Timeout | null>(null);
+  const enter = () => { if (t.current) clearTimeout(t.current); setOpen(true); };
+  const leave = () => { t.current = setTimeout(() => setOpen(false), 150); };
+  useEffect(() => () => { if (t.current) clearTimeout(t.current); }, []);
+
+  return (
+    <div className="relative flex items-center" onMouseEnter={enter} onMouseLeave={leave}>
       <button
-        type="button"
-        className="group relative flex min-h-[44px] items-center gap-1.5 rounded-full px-3.5 py-2 transition-all duration-300"
+        className="flex items-center gap-1 px-3 py-1.5 transition-all duration-400"
         style={{
-          fontFamily: "'Jost',sans-serif",
-          fontSize: "9.5px",
-          letterSpacing: "0.22em",
-          fontWeight: 300,
-          textTransform: "uppercase",
-          color: active ? "#C6A962" : "rgba(255,255,255,0.52)",
-          background: open ? "rgba(198,169,98,0.08)" : "transparent",
+          fontFamily:"'Jost',sans-serif", fontSize:"9px",
+          letterSpacing:"0.30em", fontWeight:300, textTransform:"uppercase",
+          color: open ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.40)",
         }}
       >
-        {item.label}
-        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.3 }}>
-          <ChevronDown strokeWidth={1.3} className="h-3 w-3" />
+        More
+        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration:0.3 }}>
+          <ChevronDown strokeWidth={1.2} className="w-3 h-3" />
         </motion.span>
       </button>
 
       <AnimatePresence>
-        {open ? (
+        {open && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.97 }}
-            transition={{ duration: 0.25, ease }}
-            className="absolute left-1/2 top-full z-50 mt-3 w-72 -translate-x-1/2 overflow-hidden"
+            initial={{ opacity:0, y:8, scale:0.98 }}
+            animate={{ opacity:1, y:0, scale:1 }}
+            exit={{ opacity:0, y:8, scale:0.98 }}
+            transition={{ duration:0.22, ease:E }}
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 overflow-hidden z-50"
             style={{
-              borderRadius: 20,
-              background:
-                "linear-gradient(160deg, rgba(14,11,9,0.97) 0%, rgba(10,8,6,0.99) 100%)",
-              backdropFilter: "blur(36px) saturate(180%)",
-              WebkitBackdropFilter: "blur(36px) saturate(180%)",
-              border: "1px solid rgba(198,169,98,0.28)",
+              borderRadius: 16,
+              background: "linear-gradient(160deg, rgba(10,8,5,0.96) 0%, rgba(7,5,3,0.98) 100%)",
+              backdropFilter: "blur(40px) saturate(180%)",
+              border: "1px solid rgba(198,169,98,0.20)",
               boxShadow: [
-                "0 0 0 1px rgba(198,169,98,0.07)",
-                "0 0 28px rgba(198,169,98,0.12)",
-                "0 28px 64px rgba(0,0,0,0.75)",
+                "0 0 0 1px rgba(198,169,98,0.06)",
+                "0 20px 60px rgba(0,0,0,0.80)",
                 "inset 0 1px 0 rgba(198,169,98,0.18)",
               ].join(","),
             }}
           >
-            <div
-              className="pointer-events-none absolute inset-x-4 top-0 h-px"
-              style={{
-                background: "linear-gradient(90deg, transparent, rgba(198,169,98,0.5), transparent)",
-              }}
-            />
-
+            <div className="absolute inset-x-4 top-0 h-px"
+                 style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.35), transparent)" }} />
             <div className="p-2">
-              {item.children?.map((child) => (
-                <Link
-                  key={child.href}
-                  href={child.href}
-                  className="group flex min-h-[52px] items-start gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/[0.04]"
+              {MORE_LINKS.map(l => (
+                <Link key={l.href} href={l.href}
+                  className="group flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all duration-200"
+                  style={{ background:"transparent" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                   onClick={() => setOpen(false)}
                 >
-                  <span
-                    className="mt-0.5 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(198,169,98,0.12), rgba(198,169,98,0.03))",
-                      border: "1px solid rgba(198,169,98,0.14)",
-                      color: "rgba(198,169,98,0.6)",
-                    }}
-                  >
-                    {child.icon}
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg flex-shrink-0"
+                        style={{
+                          background:"rgba(198,169,98,0.08)",
+                          border:"1px solid rgba(198,169,98,0.15)",
+                          color:"rgba(198,169,98,0.60)",
+                        }}>
+                    {l.icon}
                   </span>
-                  <span className="min-w-0 flex-1">
-                    <span
-                      className="block text-white/75 transition-colors duration-200 group-hover:text-[#C6A962]"
-                      style={{
-                        fontFamily: "'Jost',sans-serif",
-                        fontSize: "11px",
-                        letterSpacing: "0.1em",
-                      }}
-                    >
-                      {child.label}
+                  <span className="flex-1">
+                    <span className="block" style={{ fontFamily:"'Jost',sans-serif", fontSize:"10px", letterSpacing:"0.12em", color:"rgba(255,255,255,0.65)" }}>
+                      {l.label}
                     </span>
-                    <span
-                      className="mt-0.5 block text-white/25"
-                      style={{
-                        fontFamily: "'Jost',sans-serif",
-                        fontSize: "10px",
-                        letterSpacing: "0.04em",
-                      }}
-                    >
-                      {child.description}
+                    <span className="block mt-0.5" style={{ fontFamily:"'Jost',sans-serif", fontSize:"8.5px", color:"rgba(255,255,255,0.22)" }}>
+                      {l.desc}
                     </span>
                   </span>
-                  <ArrowRight
-                    strokeWidth={1.2}
-                    className="mt-1 h-3 w-3 flex-shrink-0 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
-                    style={{ color: "rgba(198,169,98,0.6)" }}
-                  />
+                  <ArrowRight strokeWidth={1.2} className="w-3 h-3 opacity-0 group-hover:opacity-60 -translate-x-1 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0"
+                              style={{ color:"rgba(198,169,98,0.7)" }} />
                 </Link>
               ))}
             </div>
           </motion.div>
-        ) : null}
+        )}
       </AnimatePresence>
-    </li>
+    </div>
   );
 }
 
-function DesktopLink({ item, pathname }: { item: NavItem; pathname: string }) {
-  const active = isActivePath(pathname, item.href);
-
-  return (
-    <li>
-      <Link
-        href={item.href}
-        className="group relative flex min-h-[44px] items-center gap-1.5 rounded-full px-3.5 py-2 transition-all duration-300"
-        style={{
-          fontFamily: "'Jost',sans-serif",
-          fontSize: "9.5px",
-          letterSpacing: "0.22em",
-          fontWeight: 300,
-          textTransform: "uppercase",
-          color: active ? "#C6A962" : "rgba(255,255,255,0.52)",
-          background: active ? "rgba(198,169,98,0.09)" : "transparent",
-        }}
-      >
-        {item.label}
-        {active ? (
-          <motion.span
-            layoutId="nav-dot"
-            className="absolute bottom-1.5 left-1/2 h-0.5 w-3 -translate-x-1/2 rounded-full"
-            style={{ background: "rgba(198,169,98,0.7)" }}
-            transition={{ ease }}
-          />
-        ) : null}
-      </Link>
-    </li>
-  );
-}
-
-function MobileOverlay({
-  pathname,
-  onClose,
-}: {
-  pathname: string;
-  onClose: () => void;
-}) {
-  const links = NAV.flatMap((item) =>
-    item.children
-      ? item.children.map((child) => ({
-          label: child.label,
-          href: child.href,
-          icon: child.icon,
-        }))
-      : [
-          {
-            label: item.label,
-            href: item.href,
-            icon: item.icon,
-          },
-        ],
-  );
+/* ─────────────────────────────────────────
+   MOBILE OVERLAY
+───────────────────────────────────────── */
+function MobileOverlay({ onClose }: { onClose: () => void }) {
+  const pathname = usePathname();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.28, ease }}
-      className="fixed inset-0 z-[100] flex flex-col"
-      style={{
-        background: "linear-gradient(160deg, rgba(14,10,6,0.97), rgba(9,6,3,0.99))",
-        backdropFilter: "blur(40px)",
-        paddingTop: "max(env(safe-area-inset-top), 16px)",
-        paddingBottom: "max(env(safe-area-inset-bottom), 24px)",
-        paddingLeft: "max(env(safe-area-inset-left), 20px)",
-        paddingRight: "max(env(safe-area-inset-right), 20px)",
-        pointerEvents: "auto",
-        touchAction: "manipulation",
-        WebkitTapHighlightColor: "transparent",
-      }}
-      onClick={(e) => {
-        if (e.currentTarget === e.target) {
-          onClose();
-        }
-      }}
-      onTouchMove={(e) => e.stopPropagation()}
+      initial={{ opacity:0 }}
+      animate={{ opacity:1 }}
+      exit={{ opacity:0 }}
+      transition={{ duration:0.35 }}
+      className="fixed inset-0 z-40"
+      style={{ background:"rgba(0,0,0,0.75)", backdropFilter:"blur(8px)" }}
     >
-      <div className="flex items-center justify-between">
-        <Link href={BRAND.href} className="flex items-center gap-3" onClick={onClose}>
-          <Image
-            src={BRAND.logo}
-            alt={BRAND.name}
-            width={104}
-            height={40}
-            className="h-9 w-auto"
-            sizes="104px"
-            priority
-          />
-        </Link>
+      {/* Backdrop tap to close */}
+      <div className="absolute inset-0" onClick={onClose} />
 
-        <button
-          type="button"
-          onClick={onClose}
-          onTouchStart={(e) => e.currentTarget.style.opacity = "0.7"}
-          onTouchEnd={(e) => e.currentTarget.style.opacity = "1"}
-          className="nav-mobile-button flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 active:opacity-70"
-          style={{
-            background: "rgba(198,169,98,0.12)",
-            border: "1px solid rgba(198,169,98,0.28)",
-            pointerEvents: "auto",
-            touchAction: "manipulation",
-            WebkitTapHighlightColor: "transparent",
-            cursor: "pointer",
-          }}
-          aria-label="Close navigation"
-        >
-          <X strokeWidth={1.4} className="h-4 w-4 text-[var(--gold)]" />
-        </button>
-      </div>
+      {/* Panel */}
+      <motion.div
+        initial={{ opacity:0, y:-20 }}
+        animate={{ opacity:1, y:0 }}
+        exit={{ opacity:0, y:-20 }}
+        transition={{ duration:0.4, ease:E }}
+        className="absolute inset-x-3 top-3 overflow-hidden"
+        style={{
+          borderRadius:24,
+          background:"linear-gradient(160deg, rgba(14,10,6,0.97) 0%, rgba(9,6,3,0.99) 100%)",
+          backdropFilter:"blur(40px) saturate(180%)",
+          border:"1px solid rgba(198,169,98,0.22)",
+          boxShadow:[
+            "0 0 0 1px rgba(198,169,98,0.06)",
+            "0 32px 80px rgba(0,0,0,0.85)",
+            "inset 0 1px 0 rgba(198,169,98,0.20)",
+          ].join(","),
+        }}
+      >
+        {/* Top specular */}
+        <div className="absolute inset-x-6 top-0 h-px"
+             style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.35), transparent)" }} />
 
-      <div className="subtle-divider mt-6 h-px" />
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 pt-6 pb-5"
+             style={{ borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+          <div>
+            <p style={{ fontFamily:"'Cormorant Garamond',serif", fontWeight:300, fontSize:"1.1rem", letterSpacing:"0.35em", color:"rgba(198,169,98,0.70)", textTransform:"uppercase" }}>
+              {BRAND.name}
+            </p>
+            <p style={{ fontFamily:"'Jost',sans-serif", fontSize:"7px", letterSpacing:"0.35em", color:"rgba(255,255,255,0.20)", textTransform:"uppercase", marginTop:2 }}>
+              {BRAND.sub}
+            </p>
+          </div>
+          <motion.button onClick={onClose} whileTap={{ scale:0.85 }}
+            className="flex h-9 w-9 items-center justify-center rounded-full"
+            style={{ border:"1px solid rgba(255,255,255,0.10)", background:"rgba(255,255,255,0.04)", color:"rgba(255,255,255,0.45)" }}>
+            <X strokeWidth={1.3} className="w-4 h-4" />
+          </motion.button>
+        </div>
 
-      <div className="mt-6 grid flex-1 auto-rows-fr grid-cols-2 gap-3 overflow-y-auto">
-        {links.map((link) => {
-          const active = isActivePath(pathname, link.href);
-
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={onClose}
-              className="glass-card glass-card-dark flex min-h-[92px] flex-col justify-between rounded-[18px] px-4 py-4"
-              style={{
-                borderColor: active ? "rgba(198,169,98,0.28)" : "rgba(255,255,255,0.08)",
-                background: active
-                  ? "linear-gradient(135deg, rgba(198,169,98,0.12), rgba(198,169,98,0.04))"
-                  : undefined,
-              }}
-            >
-              <div className="spec-line" />
-              <span
-                className="flex h-10 w-10 items-center justify-center rounded-[14px]"
+        {/* Links grid */}
+        <div className="p-4 grid grid-cols-2 gap-2">
+          {ALL_MOBILE.map((item) => {
+            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            return (
+              <Link key={item.href} href={item.href} onClick={onClose}
+                className="flex items-center gap-3 px-4 py-3.5 rounded-2xl min-h-[52px] transition-all duration-300"
                 style={{
-                  background: active
-                    ? "rgba(198,169,98,0.14)"
-                    : "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))",
-                  border: active
-                    ? "1px solid rgba(198,169,98,0.24)"
-                    : "1px solid rgba(255,255,255,0.08)",
-                  color: active ? "#C6A962" : "rgba(255,255,255,0.58)",
-                }}
-              >
-                {link.icon}
-              </span>
-              <span
-                style={{
-                  fontFamily: "'Jost',sans-serif",
-                  fontSize: "11px",
-                  letterSpacing: "0.16em",
-                  textTransform: "uppercase",
-                  color: active ? "#C6A962" : "rgba(255,255,255,0.78)",
-                }}
-              >
-                {link.label}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
+                  background: active ? "rgba(198,169,98,0.09)" : "rgba(255,255,255,0.03)",
+                  border: active ? "1px solid rgba(198,169,98,0.22)" : "1px solid rgba(255,255,255,0.06)",
+                }}>
+                <span style={{ color: active ? "rgba(198,169,98,0.75)" : "rgba(255,255,255,0.30)" }}>
+                  {item.icon}
+                </span>
+                <span style={{
+                  fontFamily:"'Jost',sans-serif", fontSize:"10.5px",
+                  letterSpacing:"0.10em", fontWeight:300,
+                  color: active ? "rgba(198,169,98,0.80)" : "rgba(255,255,255,0.55)",
+                }}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
 
-      <div className="mt-6">
-        <Link href={CTA.href} onClick={onClose} className="liquid-button-gold flex w-full">
-          <span className="inline-flex items-center gap-2">
-            <Ticket strokeWidth={1.3} className="h-4 w-4" />
-            {CTA.label}
-          </span>
-        </Link>
-      </div>
+        {/* CTA */}
+        <div className="px-4 pb-5">
+          <Link href="/checkout" onClick={onClose}
+            className="relative overflow-hidden flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl transition-all duration-400"
+            style={{
+              background:"linear-gradient(135deg, rgba(198,169,98,0.18), rgba(198,169,98,0.06))",
+              border:"1px solid rgba(198,169,98,0.32)",
+              color:"rgba(198,169,98,0.80)",
+              fontFamily:"'Jost',sans-serif", fontSize:"10px",
+              letterSpacing:"0.30em", fontWeight:300, textTransform:"uppercase",
+            }}>
+            <div className="absolute inset-0 pointer-events-none"
+                 style={{ background:"linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%)" }} />
+            <Ticket strokeWidth={1.3} className="w-3.5 h-3.5 relative z-10" />
+            <span className="relative z-10">Buy Tickets</span>
+          </Link>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
 
+/* ─────────────────────────────────────────
+   MAIN NAVBAR
+───────────────────────────────────────── */
 export function SiteNavbar() {
-  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open,     setOpen]     = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 18);
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    const fn = () => setScrolled(window.scrollY > 12);
+    fn();
+    window.addEventListener("scroll", fn, { passive:true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
-
-  useEffect(() => {
-    function preventScroll(event: TouchEvent) {
-      event.preventDefault();
-    }
-
-    const previousOverflow = document.body.style.overflow;
-
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-      document.addEventListener("touchmove", preventScroll, { passive: false });
-    } else {
-      document.body.style.overflow = previousOverflow;
-    }
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("touchmove", preventScroll);
-    };
-  }, [menuOpen]);
-
-  useEffect(() => {
-    if (!menuOpen) {
-      return;
-    }
-
-    const frame = window.requestAnimationFrame(() => {
-      setMenuOpen(false);
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
-  }, [menuOpen, pathname]);
 
   return (
     <>
-      <div
-        className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center"
-        style={{
-          paddingTop: `max(env(safe-area-inset-top), ${scrolled ? 10 : 16}px)`,
-          transition: "padding 0.5s cubic-bezier(0.22,1,0.36,1)",
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400&display=swap');
+      `}</style>
+
+      <motion.header
+        initial={{ opacity:0, y:-16 }}
+        animate={{ opacity:1, y:0 }}
+        transition={{ duration:0.8, ease:E }}
+        className="fixed inset-x-0 top-0 z-50 transition-all duration-500"
+        style={scrolled ? {
+          background:"linear-gradient(180deg, rgba(8,6,4,0.82) 0%, rgba(6,4,2,0.88) 100%)",
+          backdropFilter:"blur(32px) saturate(180%)",
+          WebkitBackdropFilter:"blur(32px) saturate(180%)",
+          borderBottom:"1px solid rgba(198,169,98,0.12)",
+          boxShadow:"0 1px 0 rgba(198,169,98,0.06), 0 8px 32px rgba(0,0,0,0.40)",
+        } : {
+          background:"linear-gradient(180deg, rgba(0,0,0,0.28) 0%, transparent 100%)",
+          backdropFilter:"blur(12px)",
+          WebkitBackdropFilter:"blur(12px)",
+          borderBottom:"1px solid transparent",
         }}
       >
-        <motion.div
-          initial={{ y: -64, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.85, ease, delay: 0.05 }}
-          className="pointer-events-auto relative w-[min(calc(100vw-20px),1100px)]"
-        >
-          <div
-            className="relative flex items-center justify-between gap-3 px-3 sm:px-4"
-            style={{
-              height: scrolled ? 56 : 60,
-              borderRadius: 9999,
-              transition: "height 0.45s cubic-bezier(0.22,1,0.36,1)",
-              background:
-                "linear-gradient(175deg, rgba(32,25,14,0.80) 0%, rgba(18,13,7,0.92) 45%, rgba(28,21,11,0.80) 100%)",
-              backdropFilter: "blur(40px) saturate(200%)",
-              WebkitBackdropFilter: "blur(40px) saturate(200%)",
-              border: "1px solid rgba(198,169,98,0.58)",
-              boxShadow: [
-                "0 0 0 1px rgba(198,169,98,0.09)",
-                "0 0 22px rgba(198,169,98,0.20)",
-                "0 0 64px rgba(198,169,98,0.07)",
-                "0 14px 50px rgba(0,0,0,0.65)",
-                "inset 0 1px 0 rgba(198,169,98,0.42)",
-                "inset 0 -1px 0 rgba(0,0,0,0.50)",
-              ].join(","),
-            }}
-          >
-            <div
-              className="pointer-events-none absolute inset-x-8 top-0 h-px"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent 5%, rgba(198,169,98,0.50) 35%, rgba(255,240,180,0.30) 50%, rgba(198,169,98,0.50) 65%, transparent 95%)",
-              }}
-            />
-            <div
-              className="pointer-events-none absolute inset-x-8 bottom-0 h-px"
-              style={{
-                background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.55), transparent)",
-              }}
-            />
+        {/* Bottom specular line when scrolled */}
+        {scrolled && (
+          <div className="absolute inset-x-0 bottom-0 h-px pointer-events-none"
+               style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.18), transparent)" }} />
+        )}
 
-            <Link href={BRAND.href} className="flex flex-shrink-0 items-center gap-2.5">
-              <Image
-                src={BRAND.logo}
-                alt={BRAND.name}
-                width={112}
-                height={42}
-                className="h-8 w-auto sm:h-9"
-                sizes="112px"
-                priority
-              />
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between"
+             style={{ height: scrolled ? 52 : 62, transition:"height 0.45s cubic-bezier(0.22,1,0.36,1)" }}>
+
+          {/* ── LEFT LINKS (desktop) ── */}
+          <nav className="hidden md:flex items-center gap-1 flex-1">
+            {LEFT_LINKS.map(l => <NavLink key={l.href} {...l} />)}
+            <MoreMenu />
+          </nav>
+
+          {/* ── LOGO (centered) ── */}
+          <Link href="/" className="group flex flex-col items-center flex-shrink-0 mx-6"
+                onClick={() => setOpen(false)}>
+            <span
+              className="font-light tracking-[0.42em] uppercase transition-all duration-500 group-hover:opacity-80"
+              style={{
+                fontFamily:"'Cormorant Garamond',serif",
+                fontSize:"clamp(0.78rem,2.2vw,0.96rem)",
+                color:"rgba(255,255,255,0.85)",
+                letterSpacing:"0.42em",
+              }}
+            >
+              {BRAND.name}
+            </span>
+            {/* Gold underline — always visible, dims on scroll */}
+            <div className="mt-1 h-px w-8 transition-all duration-500 group-hover:w-full"
+                 style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.55), transparent)" }} />
+            <span className="mt-0.5 hidden sm:block"
+                  style={{ fontFamily:"'Jost',sans-serif", fontSize:"6px", letterSpacing:"0.45em", color:"rgba(255,255,255,0.22)", textTransform:"uppercase" }}>
+              {BRAND.sub}
+            </span>
+          </Link>
+
+          {/* ── RIGHT LINKS (desktop) ── */}
+          <nav className="hidden md:flex items-center gap-1 flex-1 justify-end">
+            {RIGHT_LINKS.map(l => <NavLink key={l.href} {...l} />)}
+
+            {/* Divider */}
+            <div className="w-px h-4 mx-2" style={{ background:"rgba(255,255,255,0.10)" }} />
+
+            {/* CTA */}
+            <motion.div whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }}>
+              <Link href="/checkout"
+                className="relative overflow-hidden flex items-center gap-2 rounded-full px-5 py-2.5 transition-all duration-400"
+                style={{
+                  background:"linear-gradient(135deg, rgba(198,169,98,0.16), rgba(198,169,98,0.06))",
+                  border:"1px solid rgba(198,169,98,0.32)",
+                  backdropFilter:"blur(16px)",
+                  boxShadow:"0 0 18px rgba(198,169,98,0.10), inset 0 1px 0 rgba(255,255,255,0.08)",
+                  color:"rgba(198,169,98,0.80)",
+                  fontFamily:"'Jost',sans-serif", fontSize:"9px",
+                  letterSpacing:"0.28em", fontWeight:300, textTransform:"uppercase",
+                }}>
+                {/* Shimmer */}
+                <div className="absolute inset-0 pointer-events-none"
+                     style={{ background:"linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%)" }} />
+                <Ticket strokeWidth={1.3} className="w-3.5 h-3.5 relative z-10" />
+                <span className="relative z-10">Buy Tickets</span>
+              </Link>
+            </motion.div>
+          </nav>
+
+          {/* ── MOBILE CONTROLS ── */}
+          <div className="flex md:hidden items-center gap-2 ml-auto">
+            <Link href="/checkout"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full"
+              style={{
+                background:"rgba(198,169,98,0.12)",
+                border:"1px solid rgba(198,169,98,0.25)",
+                color:"rgba(198,169,98,0.75)",
+                fontFamily:"'Jost',sans-serif", fontSize:"8.5px",
+                letterSpacing:"0.22em", textTransform:"uppercase",
+              }}>
+              <Ticket strokeWidth={1.3} className="w-3 h-3" />
+              Tickets
             </Link>
 
-            <ul className="hidden flex-1 items-center justify-center gap-0 md:flex">
-              {NAV.map((item) =>
-                item.children ? (
-                  <DesktopDropdown key={item.label} item={item} pathname={pathname} />
-                ) : (
-                  <DesktopLink key={item.href} item={item} pathname={pathname} />
-                ),
-              )}
-            </ul>
-
-            <div className="hidden items-center gap-2 md:flex">
-              <div className="mx-1 h-4 w-px" style={{ background: "rgba(198,169,98,0.20)" }} />
-              <Link href={CTA.href} className="liquid-button-gold">
-                <span className="inline-flex items-center gap-2">
-                  <Ticket strokeWidth={1.3} className="h-3.5 w-3.5" />
-                  {CTA.label}
-                </span>
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-2 md:hidden">
-              <Link href={CTA.href} className="liquid-button-gold !min-h-[44px] !px-4">
-                {CTA.label}
-              </Link>
-              <button
-                type="button"
-                onClick={() => setMenuOpen((value) => !value)}
-                onTouchStart={(e) => e.currentTarget.style.opacity = "0.8"}
-                onTouchEnd={(e) => e.currentTarget.style.opacity = "1"}
-                className="nav-mobile-button flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 active:opacity-80"
-                style={{
-                  background: menuOpen ? "rgba(198,169,98,0.12)" : "rgba(198,169,98,0.08)",
-                  border: menuOpen ? "1px solid rgba(198,169,98,0.28)" : "1px solid rgba(198,169,98,0.20)",
-                  pointerEvents: "auto",
-                  touchAction: "manipulation",
-                  WebkitTapHighlightColor: "transparent",
-                  cursor: "pointer",
-                }}
-                aria-label={menuOpen ? "Close menu" : "Open menu"}
-              >
-                <AnimatePresence mode="wait">
-                  {menuOpen ? (
-                    <motion.span
-                      key="close"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <X strokeWidth={1.4} className="h-4 w-4 text-[var(--gold)]" />
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="open"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Menu strokeWidth={1.4} className="h-4 w-4 text-[var(--gold)]" />
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </button>
-            </div>
+            <motion.button
+              onClick={() => setOpen(v => !v)}
+              whileTap={{ scale:0.88 }}
+              className="flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300"
+              style={{
+                background: open ? "rgba(198,169,98,0.12)" : "rgba(255,255,255,0.06)",
+                border: open ? "1px solid rgba(198,169,98,0.28)" : "1px solid rgba(255,255,255,0.10)",
+                color: open ? "rgba(198,169,98,0.80)" : "rgba(255,255,255,0.50)",
+              }}
+            >
+              <AnimatePresence mode="wait">
+                {open
+                  ? <motion.span key="x" initial={{rotate:-90,opacity:0}} animate={{rotate:0,opacity:1}} exit={{rotate:90,opacity:0}} transition={{duration:0.2}}><X strokeWidth={1.4} className="w-4 h-4"/></motion.span>
+                  : <motion.span key="m" initial={{rotate:90,opacity:0}} animate={{rotate:0,opacity:1}} exit={{rotate:-90,opacity:0}} transition={{duration:0.2}}><Menu strokeWidth={1.4} className="w-4 h-4"/></motion.span>
+                }
+              </AnimatePresence>
+            </motion.button>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.header>
 
+      {/* Mobile overlay */}
       <AnimatePresence>
-        {menuOpen ? <MobileOverlay pathname={pathname} onClose={() => setMenuOpen(false)} /> : null}
+        {open && <MobileOverlay onClose={() => setOpen(false)} />}
       </AnimatePresence>
     </>
   );
