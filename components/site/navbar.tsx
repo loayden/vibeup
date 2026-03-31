@@ -319,7 +319,16 @@ function MobileOverlay({
         paddingBottom: "max(env(safe-area-inset-bottom), 24px)",
         paddingLeft: "max(env(safe-area-inset-left), 20px)",
         paddingRight: "max(env(safe-area-inset-right), 20px)",
+        pointerEvents: "auto",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
       }}
+      onClick={(e) => {
+        if (e.currentTarget === e.target) {
+          onClose();
+        }
+      }}
+      onTouchMove={(e) => e.stopPropagation()}
     >
       <div className="flex items-center justify-between">
         <Link href={BRAND.href} className="flex items-center gap-3" onClick={onClose}>
@@ -337,7 +346,17 @@ function MobileOverlay({
         <button
           type="button"
           onClick={onClose}
-          className="nav-mobile-button"
+          onTouchStart={(e) => e.currentTarget.style.opacity = "0.7"}
+          onTouchEnd={(e) => e.currentTarget.style.opacity = "1"}
+          className="nav-mobile-button flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 active:opacity-70"
+          style={{
+            background: "rgba(198,169,98,0.12)",
+            border: "1px solid rgba(198,169,98,0.28)",
+            pointerEvents: "auto",
+            touchAction: "manipulation",
+            WebkitTapHighlightColor: "transparent",
+            cursor: "pointer",
+          }}
           aria-label="Close navigation"
         >
           <X strokeWidth={1.4} className="h-4 w-4 text-[var(--gold)]" />
@@ -545,7 +564,17 @@ export function SiteNavbar() {
               <button
                 type="button"
                 onClick={() => setMenuOpen((value) => !value)}
-                className="nav-mobile-button"
+                onTouchStart={(e) => e.currentTarget.style.opacity = "0.8"}
+                onTouchEnd={(e) => e.currentTarget.style.opacity = "1"}
+                className="nav-mobile-button flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 active:opacity-80"
+                style={{
+                  background: menuOpen ? "rgba(198,169,98,0.12)" : "rgba(198,169,98,0.08)",
+                  border: menuOpen ? "1px solid rgba(198,169,98,0.28)" : "1px solid rgba(198,169,98,0.20)",
+                  pointerEvents: "auto",
+                  touchAction: "manipulation",
+                  WebkitTapHighlightColor: "transparent",
+                  cursor: "pointer",
+                }}
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
               >
                 <AnimatePresence mode="wait">
