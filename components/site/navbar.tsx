@@ -283,6 +283,21 @@ export function SiteNavbar() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
+  // Scroll locking when mobile menu is open
+  useEffect(() => {
+    if (!open) return;
+
+    // Lock background scroll
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.documentElement.style.overflow = previousOverflow;
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <>
       <style>{`

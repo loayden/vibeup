@@ -76,10 +76,10 @@ export function LiquidSelect({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="glass-card glass-card-dark absolute left-0 right-0 top-[calc(100%+10px)] z-30 overflow-hidden p-2"
+            className="glass-card glass-card-dark absolute left-0 right-0 top-[calc(100%+10px)] z-45 overflow-visible p-2"
           >
             <div className="spec-line" />
-            <div className="max-h-64 overflow-y-auto">
+            <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-rgba">
               {options.map((option) => {
                 const selected = option.value === value;
 

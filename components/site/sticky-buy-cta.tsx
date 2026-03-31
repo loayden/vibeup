@@ -36,7 +36,7 @@ export function StickyBuyCTA({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="safe-bottom fixed inset-x-0 bottom-0 z-40 px-4 md:hidden"
+          className="safe-bottom fixed inset-x-0 bottom-0 z-45 px-4 md:hidden"
         >
           <div
             className="overflow-hidden rounded-[20px]"

@@ -14,7 +14,10 @@ export function SwipeCarousel({ items }: SwipeCarouselProps) {
     <div className="relative overflow-hidden">
       <div
         className="flex transition-transform duration-500 ease-out"
-        style={{ transform: `translateX(-${current * 100}%)` }}
+        style={{
+          transform: `translateX(-${current * 100}%)`,
+          willChange: "transform",
+        }}
         onTouchStart={(event) => {
           startX.current = event.touches[0].clientX;
         }}
@@ -31,7 +34,7 @@ export function SwipeCarousel({ items }: SwipeCarouselProps) {
         }}
       >
         {items.map((item, index) => (
-          <div key={index} className="w-full flex-shrink-0 px-1">
+          <div key={index} className="w-full flex-shrink-0 px-1 scroll-snap-center" style={{ scrollSnapAlign: "center" }}>
             {item}
           </div>
         ))}
