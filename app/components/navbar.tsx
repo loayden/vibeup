@@ -174,10 +174,22 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
       exit={{ opacity:0 }}
       transition={{ duration:0.35 }}
       className="fixed inset-0 z-40"
-      style={{ background:"rgba(0,0,0,0.75)", backdropFilter:"blur(8px)" }}
+      style={{ 
+        background:"rgba(0,0,0,0.75)", 
+        backdropFilter:"blur(8px)",
+        touchAction: "manipulation",
+        WebkitTapHighlightColor: "transparent",
+      }}
     >
       {/* Backdrop tap to close */}
-      <div className="absolute inset-0" onClick={onClose} />
+      <div 
+        className="absolute inset-0" 
+        onClick={onClose}
+        style={{
+          pointerEvents: "auto",
+          touchAction: "manipulation",
+        }}
+      />
 
       {/* Panel */}
       <motion.div
@@ -213,9 +225,22 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
               {BRAND.sub}
             </p>
           </div>
-          <motion.button onClick={onClose} whileTap={{ scale:0.85 }}
-            className="flex h-9 w-9 items-center justify-center rounded-full"
-            style={{ border:"1px solid rgba(255,255,255,0.10)", background:"rgba(255,255,255,0.04)", color:"rgba(255,255,255,0.45)" }}>
+          <motion.button 
+            type="button"
+            onClick={onClose} 
+            onTouchStart={(e) => e.currentTarget.style.opacity = "0.7"}
+            onTouchEnd={(e) => e.currentTarget.style.opacity = "1"}
+            whileTap={{ scale:0.85 }}
+            className="flex h-9 w-9 items-center justify-center rounded-full active:opacity-70"
+            style={{ 
+              border:"1px solid rgba(255,255,255,0.10)", 
+              background:"rgba(255,255,255,0.04)", 
+              color:"rgba(255,255,255,0.45)",
+              pointerEvents: "auto",
+              touchAction: "manipulation",
+              WebkitTapHighlightColor: "transparent",
+              cursor: "pointer",
+            }}>
             <X strokeWidth={1.3} className="w-4 h-4" />
           </motion.button>
         </div>
@@ -389,13 +414,20 @@ export function SiteNavbar() {
             </Link>
 
             <motion.button
+              type="button"
               onClick={() => setOpen(v => !v)}
+              onTouchStart={(e) => e.currentTarget.style.opacity = "0.8"}
+              onTouchEnd={(e) => e.currentTarget.style.opacity = "1"}
               whileTap={{ scale:0.88 }}
-              className="flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300"
+              className="flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 active:opacity-80"
               style={{
                 background: open ? "rgba(198,169,98,0.12)" : "rgba(255,255,255,0.06)",
                 border: open ? "1px solid rgba(198,169,98,0.28)" : "1px solid rgba(255,255,255,0.10)",
                 color: open ? "rgba(198,169,98,0.80)" : "rgba(255,255,255,0.50)",
+                pointerEvents: "auto",
+                touchAction: "manipulation",
+                WebkitTapHighlightColor: "transparent",
+                cursor: "pointer",
               }}
             >
               <AnimatePresence mode="wait">
