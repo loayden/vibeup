@@ -11,6 +11,7 @@ export const SITE = {
   venue: "Hilton Los Angeles / Universal City",
   city: "Los Angeles, California",
   credit: "Presented by FR ع · California Nights Entertainment",
+  frInstagram: "https://www.instagram.com/fr3_fdn/?__pwa=1",
   countdownIso: "2025-12-31T20:30:00",
   heroVideo: "/arab.mp4",
   ambientAudio: "/luxury-ambient.mp3",

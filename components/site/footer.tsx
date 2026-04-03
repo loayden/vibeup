@@ -61,7 +61,16 @@ export function SiteFooter() {
         </GlassCard>
 
         <div className="mt-6 flex flex-col gap-3 text-center md:flex-row md:items-center md:justify-between md:text-left">
-          <p className="body-copy text-[0.74rem]">{SITE.credit}</p>
+          <Link
+            href={SITE.frInstagram}
+            target="_blank"
+            rel="noreferrer"
+            className="body-copy inline-flex items-center justify-center gap-2 text-[0.74rem] transition hover:text-white/72 md:justify-start"
+          >
+            <span className="text-white/40">Powered by</span>
+            <span style={{ color: "rgba(147, 108, 224, 0.94)" }}>FR</span>
+            <span style={{ color: "var(--gold)" }}>ع</span>
+          </Link>
           <div className="flex flex-wrap items-center justify-center gap-4 md:justify-end">
             <Link href={SITE.socials.whatsapp} className="eyebrow text-white/30 transition hover:text-[var(--gold)]">
               WhatsApp
