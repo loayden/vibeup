@@ -150,8 +150,8 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                   transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <GlassCard hover className="h-full overflow-hidden p-3">
-                    <div className="grid gap-0 sm:block">
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-[18px] sm:aspect-[16/10]">
+                    <div className="flex gap-3 sm:block">
+                      <div className="relative aspect-square w-[124px] shrink-0 overflow-hidden rounded-[18px] sm:w-full sm:aspect-[16/10]">
                         <Image
                           src={event.coverImageUrl}
                           alt={event.title}
@@ -168,29 +168,29 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                         </div>
                       </div>
 
-                      <div className="px-3 pb-3 pt-5 sm:pt-6">
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex min-w-0 flex-1 flex-col px-1 pb-1 pt-1 sm:px-3 sm:pb-3 sm:pt-5">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div>
-                            <p className="eyebrow mb-3">Ticketed Experience</p>
-                            <h3 className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white sm:text-[2rem]">
+                            <p className="eyebrow mb-2">Ticketed Experience</p>
+                            <h3 className="font-serif text-[1.45rem] font-light tracking-[0.05em] text-white sm:text-[2rem]">
                               {event.title}
                             </h3>
                           </div>
-                          <p className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[1.8rem]">
+                          <p className="font-serif text-[1.25rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[1.8rem]">
                             {event.priceFrom > 0 ? `From $${event.priceFrom}` : "Invite Only"}
                           </p>
                         </div>
 
-                        <div className="gold-divider-left mt-4 h-px w-24" />
+                        <div className="gold-divider-left mt-3 h-px w-16 sm:mt-4 sm:w-24" />
 
-                        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                        <div className="mt-3 grid gap-3 sm:mt-5 sm:grid-cols-2">
                           <GlassCard dark className="px-4 py-4">
-                            <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                            <CalendarDays className="mb-2 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                             <p className="eyebrow mb-2">Date</p>
                             <p className="body-copy text-white/68">{event.formattedDate}</p>
                           </GlassCard>
                           <GlassCard dark className="px-4 py-4">
-                            <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                            <MapPin className="mb-2 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                             <p className="eyebrow mb-2">Venue</p>
                             <p className="body-copy text-white/68">
                               {event.shortVenue}
@@ -200,9 +200,9 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                           </GlassCard>
                         </div>
 
-                        <p className="body-copy mt-5">{event.shortDescription}</p>
+                        <p className="body-copy mt-4 sm:mt-5">{event.shortDescription}</p>
 
-                        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                        <div className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:gap-4">
                           <LiquidLinkButton
                             href={`/events/${event.slug}`}
                             gold

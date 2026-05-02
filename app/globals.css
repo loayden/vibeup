@@ -16,6 +16,7 @@ html {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   text-size-adjust: 100%;
+  scroll-padding-top: 96px;
 }
 
 html,
@@ -42,6 +43,11 @@ body {
 
 * {
   -webkit-tap-highlight-color: transparent;
+}
+
+a,
+button {
+  touch-action: manipulation;
 }
 
 body::before {

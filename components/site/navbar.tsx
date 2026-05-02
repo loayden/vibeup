@@ -2,244 +2,192 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Calendar, Briefcase, Image as ImageIcon, Users,
-  Ticket, Menu, X, ChevronDown, ArrowRight,
-  Rss, HelpCircle, Phone,
+  ArrowRight,
+  Briefcase,
+  CalendarDays,
+  HelpCircle,
+  Image as ImageIcon,
+  Mail,
+  Menu,
+  Ticket,
+  UserRound,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-/* ─────────────────────────────────────────
-   CONFIG
-───────────────────────────────────────── */
-const BRAND = { name: "VIBEUP", sub: "Events & Services" };
+import { SITE } from "@/lib/site-data";
 
-const LEFT_LINKS  = [
-  { label: "Events",   href: "/events"   },
+const EASING = [0.22, 1, 0.36, 1] as const;
+
+const DESKTOP_LEFT = [
+  { label: "Events", href: "/events" },
   { label: "Services", href: "/services" },
-];
-const RIGHT_LINKS = [
-  { label: "Gallery",  href: "/gallery"  },
-  { label: "About",    href: "/about"    },
-];
-const MORE_LINKS = [
-  { label:"Blog",    href:"/blog",       desc:"Tips & spotlights",        icon:<Rss         strokeWidth={1.2} className="w-3.5 h-3.5"/> },
-  { label:"FAQ",     href:"/faq",        desc:"Common questions",         icon:<HelpCircle  strokeWidth={1.2} className="w-3.5 h-3.5"/> },
-  { label:"Contact", href:"/contact-us", desc:"Reach our team",           icon:<Phone       strokeWidth={1.2} className="w-3.5 h-3.5"/> },
-  { label:"Careers", href:"/careers",    desc:"Join VibeUp",              icon:<Briefcase   strokeWidth={1.2} className="w-3.5 h-3.5"/> },
-];
+  { label: "About", href: "/about" },
+] as const;
 
-const ALL_MOBILE = [
-  { label:"Events",   href:"/events",   icon:<Calendar   strokeWidth={1.2} className="w-4 h-4"/> },
-  { label:"Services", href:"/services", icon:<Briefcase  strokeWidth={1.2} className="w-4 h-4"/> },
-  { label:"Gallery",  href:"/gallery",  icon:<ImageIcon  strokeWidth={1.2} className="w-4 h-4"/> },
-  { label:"About",    href:"/about",    icon:<Users      strokeWidth={1.2} className="w-4 h-4"/> },
-  { label:"Blog",     href:"/blog",     icon:<Rss        strokeWidth={1.2} className="w-4 h-4"/> },
-  { label:"FAQ",      href:"/faq",      icon:<HelpCircle strokeWidth={1.2} className="w-4 h-4"/> },
-  { label:"Contact",  href:"/contact-us",icon:<Phone     strokeWidth={1.2} className="w-4 h-4"/> },
-];
+const DESKTOP_RIGHT = [
+  { label: "Gallery", href: "/gallery" },
+  { label: "Contact", href: "/contact-us" },
+  { label: "FAQ", href: "/faq" },
+] as const;
 
-const E = [0.22, 1, 0.36, 1] as const;
+const MOBILE_PRIMARY = [
+  { label: "Events", href: "/events", icon: CalendarDays },
+  { label: "Buy Tickets", href: "/checkout", icon: Ticket },
+  { label: "Services", href: "/services", icon: Briefcase },
+  { label: "Contact", href: "/contact-us", icon: Mail },
+] as const;
 
-/* ─────────────────────────────────────────
-   NAV LINK
-───────────────────────────────────────── */
-function NavLink({ label, href }: { label: string; href: string }) {
+const MOBILE_SECONDARY = [
+  { label: "Gallery", href: "/gallery", icon: ImageIcon },
+  { label: "About", href: "/about", icon: UserRound },
+  { label: "Journal", href: "/blog", icon: ArrowRight },
+  { label: "Careers", href: "/careers", icon: Briefcase },
+  { label: "FAQ", href: "/faq", icon: HelpCircle },
+] as const;
+
+function isActivePath(pathname: string, href: string) {
+  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+}
+
+function DesktopNavLink({
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+}) {
   const pathname = usePathname();
-  const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const active = isActivePath(pathname, href);
 
   return (
-    <Link href={href} className="group relative flex items-center gap-1.5 px-3 py-1.5 transition-all duration-400"
+    <Link
+      href={href}
+      className="group relative flex min-h-[44px] items-center px-3 py-2"
       style={{
         fontFamily: "'Jost',sans-serif",
         fontSize: "9px",
         letterSpacing: "0.30em",
         fontWeight: 300,
         textTransform: "uppercase",
-        color: active ? "rgba(198,169,98,0.85)" : "rgba(255,255,255,0.40)",
+        color: active ? "rgba(198,169,98,0.84)" : "rgba(255,255,255,0.45)",
       }}
-      onMouseEnter={e => { if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
-      onMouseLeave={e => { if (!active) e.currentTarget.style.color = "rgba(255,255,255,0.40)"; }}
     >
       {label}
-      {/* Underline */}
-      <span className="absolute bottom-0 left-3 h-px transition-all duration-500"
-            style={{
-              width: active ? "calc(100% - 24px)" : "0%",
-              background: "linear-gradient(90deg, rgba(198,169,98,0.7), transparent)",
-            }} />
-      {/* Hover underline */}
-      <span className="absolute bottom-0 left-3 h-px w-0 group-hover:w-[calc(100%-24px)] transition-all duration-400"
-            style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.25), transparent)" }} />
+      <span
+        className="absolute bottom-1 left-3 h-px transition-all duration-300"
+        style={{
+          width: active ? "calc(100% - 24px)" : "0%",
+          background: "linear-gradient(90deg, rgba(198,169,98,0.68), transparent)",
+        }}
+      />
+      <span
+        className="absolute bottom-1 left-3 h-px w-0 transition-all duration-300 group-hover:w-[calc(100%-24px)]"
+        style={{
+          background: "linear-gradient(90deg, rgba(255,255,255,0.22), transparent)",
+        }}
+      />
     </Link>
   );
 }
 
-/* ─────────────────────────────────────────
-   MORE DROPDOWN
-───────────────────────────────────────── */
-function MoreMenu() {
-  const [open, setOpen] = useState(false);
-  const t = useRef<NodeJS.Timeout | null>(null);
-  const enter = () => { if (t.current) clearTimeout(t.current); setOpen(true); };
-  const leave = () => { t.current = setTimeout(() => setOpen(false), 150); };
-  useEffect(() => () => { if (t.current) clearTimeout(t.current); }, []);
-
-  return (
-    <div className="relative flex items-center" onMouseEnter={enter} onMouseLeave={leave}>
-      <button
-        className="flex items-center gap-1 px-3 py-1.5 transition-all duration-400"
-        style={{
-          fontFamily:"'Jost',sans-serif", fontSize:"9px",
-          letterSpacing:"0.30em", fontWeight:300, textTransform:"uppercase",
-          color: open ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.40)",
-        }}
-      >
-        More
-        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration:0.3 }}>
-          <ChevronDown strokeWidth={1.2} className="w-3 h-3" />
-        </motion.span>
-      </button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity:0, y:8, scale:0.98 }}
-            animate={{ opacity:1, y:0, scale:1 }}
-            exit={{ opacity:0, y:8, scale:0.98 }}
-            transition={{ duration:0.22, ease:E }}
-            className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 overflow-hidden z-50"
-            style={{
-              borderRadius: 16,
-              background: "linear-gradient(160deg, rgba(10,8,5,0.96) 0%, rgba(7,5,3,0.98) 100%)",
-              backdropFilter: "blur(40px) saturate(180%)",
-              border: "1px solid rgba(198,169,98,0.20)",
-              boxShadow: [
-                "0 0 0 1px rgba(198,169,98,0.06)",
-                "0 20px 60px rgba(0,0,0,0.80)",
-                "inset 0 1px 0 rgba(198,169,98,0.18)",
-              ].join(","),
-            }}
-          >
-            <div className="absolute inset-x-4 top-0 h-px"
-                 style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.35), transparent)" }} />
-            <div className="p-2">
-              {MORE_LINKS.map(l => (
-                <Link key={l.href} href={l.href}
-                  className="group flex items-center gap-3 px-3.5 py-3 rounded-xl transition-all duration-200"
-                  style={{ background:"transparent" }}
-                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.04)"}
-                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                  onClick={() => setOpen(false)}
-                >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg flex-shrink-0"
-                        style={{
-                          background:"rgba(198,169,98,0.08)",
-                          border:"1px solid rgba(198,169,98,0.15)",
-                          color:"rgba(198,169,98,0.60)",
-                        }}>
-                    {l.icon}
-                  </span>
-                  <span className="flex-1">
-                    <span className="block" style={{ fontFamily:"'Jost',sans-serif", fontSize:"10px", letterSpacing:"0.12em", color:"rgba(255,255,255,0.65)" }}>
-                      {l.label}
-                    </span>
-                    <span className="block mt-0.5" style={{ fontFamily:"'Jost',sans-serif", fontSize:"8.5px", color:"rgba(255,255,255,0.22)" }}>
-                      {l.desc}
-                    </span>
-                  </span>
-                  <ArrowRight strokeWidth={1.2} className="w-3 h-3 opacity-0 group-hover:opacity-60 -translate-x-1 group-hover:translate-x-0 transition-all duration-300 flex-shrink-0"
-                              style={{ color:"rgba(198,169,98,0.7)" }} />
-                </Link>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────
-   MOBILE OVERLAY
-───────────────────────────────────────── */
-function MobileOverlay({ onClose }: { onClose: () => void }) {
+function MobileOverlay({
+  onClose,
+}: {
+  onClose: () => void;
+}) {
   const pathname = usePathname();
+  const supportActions = useMemo(
+    () => [
+      {
+        label: "WhatsApp",
+        href: SITE.socials.whatsapp,
+        note: "Fastest support",
+        external: true,
+      },
+      {
+        label: "Email",
+        href: `mailto:${SITE.email}`,
+        note: SITE.email,
+        external: false,
+      },
+    ],
+    [],
+  );
 
   return (
     <motion.div
-      initial={{ opacity:0 }}
-      animate={{ opacity:1 }}
-      exit={{ opacity:0 }}
-      transition={{ duration:0.35 }}
-      className="fixed inset-0 z-40"
-      style={{ background:"rgba(0,0,0,0.75)", backdropFilter:"blur(8px)" }}
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+      transition={{ duration: 0.35, ease: EASING }}
+      className="safe-top safe-bottom fixed inset-0 z-[100] flex flex-col"
+      style={{
+        background:
+          "linear-gradient(160deg, rgba(14,10,6,0.97), rgba(9,6,3,0.99))",
+        backdropFilter: "blur(40px)",
+        paddingLeft: "max(env(safe-area-inset-left), 20px)",
+        paddingRight: "max(env(safe-area-inset-right), 20px)",
+      }}
     >
-      {/* Backdrop tap to close */}
-      <div className="absolute inset-0" onClick={onClose} />
+      <div className="absolute inset-x-6 top-0 h-px pointer-events-none bg-[linear-gradient(90deg,transparent,rgba(198,169,98,0.35),transparent)]" />
 
-      {/* Panel */}
-      <motion.div
-        initial={{ opacity:0, y:-20 }}
-        animate={{ opacity:1, y:0 }}
-        exit={{ opacity:0, y:-20 }}
-        transition={{ duration:0.4, ease:E }}
-        className="absolute inset-x-3 top-3 overflow-hidden"
-        style={{
-          borderRadius:24,
-          paddingTop:"max(env(safe-area-inset-top), 12px)",
-          background:"linear-gradient(160deg, rgba(14,10,6,0.97) 0%, rgba(9,6,3,0.99) 100%)",
-          backdropFilter:"blur(40px) saturate(180%)",
-          border:"1px solid rgba(198,169,98,0.22)",
-          boxShadow:[
-            "0 0 0 1px rgba(198,169,98,0.06)",
-            "0 32px 80px rgba(0,0,0,0.85)",
-            "inset 0 1px 0 rgba(198,169,98,0.20)",
-          ].join(","),
-        }}
-      >
-        {/* Top specular */}
-        <div className="absolute inset-x-6 top-0 h-px"
-             style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.35), transparent)" }} />
-
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 pt-6 pb-5"
-             style={{ borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
-          <div>
-            <p style={{ fontFamily:"'Cormorant Garamond',serif", fontWeight:300, fontSize:"1.1rem", letterSpacing:"0.35em", color:"rgba(198,169,98,0.70)", textTransform:"uppercase" }}>
-              {BRAND.name}
-            </p>
-            <p style={{ fontFamily:"'Jost',sans-serif", fontSize:"7px", letterSpacing:"0.35em", color:"rgba(255,255,255,0.20)", textTransform:"uppercase", marginTop:2 }}>
-              {BRAND.sub}
-            </p>
-          </div>
-          <motion.button onClick={onClose} whileTap={{ scale:0.85 }}
-            className="flex h-9 w-9 items-center justify-center rounded-full"
-            style={{ border:"1px solid rgba(255,255,255,0.10)", background:"rgba(255,255,255,0.04)", color:"rgba(255,255,255,0.45)" }}>
-            <X strokeWidth={1.3} className="w-4 h-4" />
-          </motion.button>
+      <div className="flex items-center justify-between pb-5 pt-2">
+        <div>
+          <p
+            style={{
+              fontFamily: "'Cormorant Garamond',serif",
+              fontWeight: 300,
+              fontSize: "1rem",
+              letterSpacing: "0.34em",
+              color: "rgba(198,169,98,0.74)",
+              textTransform: "uppercase",
+            }}
+          >
+            VIBEUP
+          </p>
+          <p className="mt-1 text-[7px] uppercase tracking-[0.36em] text-white/24">
+            Events & Services
+          </p>
         </div>
 
-        {/* Links grid */}
-        <div className="p-4 grid grid-cols-2 gap-2">
-          {ALL_MOBILE.map((item) => {
-            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+        <button
+          type="button"
+          onClick={onClose}
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/58"
+        >
+          <X className="h-4 w-4" strokeWidth={1.3} />
+        </button>
+      </div>
+
+      <div className="grid gap-3">
+        <div className="grid grid-cols-2 gap-3">
+          {MOBILE_PRIMARY.map((item) => {
+            const active = isActivePath(pathname, item.href);
+            const Icon = item.icon;
+
             return (
-              <Link key={item.href} href={item.href} onClick={onClose}
-                className="flex items-center gap-3 px-4 py-3.5 rounded-2xl min-h-[52px] transition-all duration-300"
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className="glass-card glass-card-warm flex min-h-[76px] items-center gap-3 rounded-[18px] px-4 py-4"
                 style={{
-                  background: active ? "rgba(198,169,98,0.09)" : "rgba(255,255,255,0.03)",
-                  border: active ? "1px solid rgba(198,169,98,0.22)" : "1px solid rgba(255,255,255,0.06)",
-                }}>
-                <span style={{ color: active ? "rgba(198,169,98,0.75)" : "rgba(255,255,255,0.30)" }}>
-                  {item.icon}
+                  borderColor: active
+                    ? "rgba(198,169,98,0.28)"
+                    : "rgba(255,255,255,0.08)",
+                  background: active
+                    ? "linear-gradient(135deg, rgba(198,169,98,0.12), rgba(198,169,98,0.04))"
+                    : undefined,
+                }}
+              >
+                <div className="spec-line" />
+                <span className="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[rgba(198,169,98,0.16)] bg-[rgba(198,169,98,0.08)]">
+                  <Icon className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                 </span>
-                <span style={{
-                  fontFamily:"'Jost',sans-serif", fontSize:"10.5px",
-                  letterSpacing:"0.10em", fontWeight:300,
-                  color: active ? "rgba(198,169,98,0.80)" : "rgba(255,255,255,0.55)",
-                }}>
+                <span className="text-[10px] uppercase tracking-[0.22em] text-white/74">
                   {item.label}
                 </span>
               </Link>
@@ -247,188 +195,222 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
           })}
         </div>
 
-        {/* CTA */}
-        <div className="px-4 pb-5">
-          <Link href="/checkout" onClick={onClose}
-            className="relative overflow-hidden flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl transition-all duration-400"
-            style={{
-              background:"linear-gradient(135deg, rgba(198,169,98,0.18), rgba(198,169,98,0.06))",
-              border:"1px solid rgba(198,169,98,0.32)",
-              color:"rgba(198,169,98,0.80)",
-              fontFamily:"'Jost',sans-serif", fontSize:"10px",
-              letterSpacing:"0.30em", fontWeight:300, textTransform:"uppercase",
-            }}>
-            <div className="absolute inset-0 pointer-events-none"
-                 style={{ background:"linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%)" }} />
-            <Ticket strokeWidth={1.3} className="w-3.5 h-3.5 relative z-10" />
-            <span className="relative z-10">Buy Tickets</span>
-          </Link>
+        <div className="glass-card glass-card-dark rounded-[22px] p-4">
+          <div className="spec-line" />
+          <p className="eyebrow mb-4">Explore More</p>
+          <div className="grid grid-cols-2 gap-2">
+            {MOBILE_SECONDARY.map((item) => {
+              const active = isActivePath(pathname, item.href);
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onClose}
+                  className="flex min-h-[52px] items-center gap-3 rounded-[16px] border px-4 py-3"
+                  style={{
+                    borderColor: active
+                      ? "rgba(198,169,98,0.22)"
+                      : "rgba(255,255,255,0.06)",
+                    background: active ? "rgba(198,169,98,0.08)" : "rgba(255,255,255,0.02)",
+                  }}
+                >
+                  <Icon className="h-3.5 w-3.5 text-[var(--gold)]" strokeWidth={1.2} />
+                  <span className="text-[9px] uppercase tracking-[0.22em] text-white/62">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
-      </motion.div>
+
+        <div className="glass-card rounded-[22px] p-4">
+          <div className="spec-line" />
+          <p className="eyebrow mb-3">Need A Fast Answer</p>
+          <p className="body-copy text-[0.82rem] text-white/58">
+            Mobile guests usually need one thing quickly: ticket help, timing, or access support.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {supportActions.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+                className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
+              >
+                <p className="eyebrow mb-2 text-[var(--gold)]">{item.label}</p>
+                <p className="body-copy text-white/68">{item.note}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-auto pt-5">
+        <Link
+          href="/checkout"
+          onClick={onClose}
+          className="liquid-button-gold flex w-full justify-center"
+        >
+          <span className="inline-flex items-center gap-2">
+            Buy Tickets
+            <Ticket className="h-3.5 w-3.5" strokeWidth={1.2} />
+          </span>
+        </Link>
+      </div>
     </motion.div>
   );
 }
 
-/* ─────────────────────────────────────────
-   MAIN NAVBAR
-───────────────────────────────────────── */
 export function SiteNavbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [open,     setOpen]     = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 12);
-    fn();
-    window.addEventListener("scroll", fn, { passive:true });
-    return () => window.removeEventListener("scroll", fn);
+    const handleScroll = () => setScrolled(window.scrollY > 12);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Scroll locking when mobile menu is open
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      return;
+    }
 
-    // Lock background scroll
-    const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
 
     return () => {
-      document.documentElement.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     };
   }, [open]);
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400&display=swap');
-      `}</style>
-
       <motion.header
-        initial={{ opacity:0, y:-16 }}
+        initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: open ? 0 : 1, y: open ? -16 : 0 }}
-        transition={{ duration:0.35, ease:E }}
-        className="fixed inset-x-0 top-0 z-50 transition-all duration-500 md:opacity-100 md:translate-y-0"
-        style={scrolled ? {
-          background:"linear-gradient(180deg, rgba(8,6,4,0.82) 0%, rgba(6,4,2,0.88) 100%)",
-          backdropFilter:"blur(32px) saturate(180%)",
-          WebkitBackdropFilter:"blur(32px) saturate(180%)",
-          borderBottom:"1px solid rgba(198,169,98,0.12)",
-          boxShadow:"0 1px 0 rgba(198,169,98,0.06), 0 8px 32px rgba(0,0,0,0.40)",
-        } : {
-          background:"linear-gradient(180deg, rgba(0,0,0,0.28) 0%, transparent 100%)",
-          backdropFilter:"blur(12px)",
-          WebkitBackdropFilter:"blur(12px)",
-          borderBottom:"1px solid transparent",
-        }}
+        transition={{ duration: 0.35, ease: EASING }}
+        className="safe-top fixed inset-x-0 top-0 z-50 transition-all duration-500"
+        style={
+          scrolled
+            ? {
+                background:
+                  "linear-gradient(180deg, rgba(8,6,4,0.84) 0%, rgba(6,4,2,0.9) 100%)",
+                backdropFilter: "blur(32px) saturate(180%)",
+                WebkitBackdropFilter: "blur(32px) saturate(180%)",
+                borderBottom: "1px solid rgba(198,169,98,0.12)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.42)",
+              }
+            : {
+                background: "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+              }
+        }
       >
-        {/* Bottom specular line when scrolled */}
-        {scrolled && (
-          <div className="absolute inset-x-0 bottom-0 h-px pointer-events-none"
-               style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.18), transparent)" }} />
-        )}
+        {scrolled ? (
+          <div className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(198,169,98,0.18),transparent)]" />
+        ) : null}
 
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between"
-             style={{ height: scrolled ? 52 : 62, transition:"height 0.45s cubic-bezier(0.22,1,0.36,1)" }}>
-
-          {/* ── LEFT LINKS (desktop) ── */}
-          <nav className="hidden md:flex items-center gap-1 flex-1">
-            {LEFT_LINKS.map(l => <NavLink key={l.href} {...l} />)}
-            <MoreMenu />
+        <div
+          className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10"
+          style={{
+            height: scrolled ? 56 : 64,
+            transition: "height 0.4s cubic-bezier(0.22,1,0.36,1)",
+          }}
+        >
+          <nav className="hidden flex-1 items-center gap-1 lg:flex">
+            {DESKTOP_LEFT.map((item) => (
+              <DesktopNavLink key={item.href} href={item.href} label={item.label} />
+            ))}
           </nav>
 
-          {/* ── LOGO (centered) ── */}
-          <Link href="/" className="group flex flex-col items-center flex-shrink-0 mx-6"
-                onClick={() => setOpen(false)}>
+          <Link
+            href="/"
+            className="group flex min-h-[44px] flex-col items-start justify-center md:items-center lg:mx-6"
+            onClick={() => setOpen(false)}
+          >
             <span
-              className="font-light tracking-[0.42em] uppercase transition-all duration-500 group-hover:opacity-80"
+              className="font-light uppercase tracking-[0.38em] text-white/88 transition-all duration-300 group-hover:text-white"
               style={{
-                fontFamily:"'Cormorant Garamond',serif",
-                fontSize:"clamp(0.78rem,2.2vw,0.96rem)",
-                color:"rgba(255,255,255,0.85)",
-                letterSpacing:"0.42em",
+                fontFamily: "'Cormorant Garamond',serif",
+                fontSize: "clamp(0.8rem,3vw,0.98rem)",
               }}
             >
-              {BRAND.name}
+              VIBEUP
             </span>
-            {/* Gold underline — always visible, dims on scroll */}
-            <div className="mt-1 h-px w-8 transition-all duration-500 group-hover:w-full"
-                 style={{ background:"linear-gradient(90deg, transparent, rgba(198,169,98,0.55), transparent)" }} />
-            <span className="mt-0.5 hidden sm:block"
-                  style={{ fontFamily:"'Jost',sans-serif", fontSize:"6px", letterSpacing:"0.45em", color:"rgba(255,255,255,0.22)", textTransform:"uppercase" }}>
-              {BRAND.sub}
+            <div className="mt-1 h-px w-8 bg-[linear-gradient(90deg,transparent,rgba(198,169,98,0.56),transparent)] transition-all duration-300 group-hover:w-full" />
+            <span className="mt-1 hidden text-[6px] uppercase tracking-[0.42em] text-white/22 sm:block">
+              Events & Services
             </span>
           </Link>
 
-          {/* ── RIGHT LINKS (desktop) ── */}
-          <nav className="hidden md:flex items-center gap-1 flex-1 justify-end">
-            {RIGHT_LINKS.map(l => <NavLink key={l.href} {...l} />)}
-
-            {/* Divider */}
-            <div className="w-px h-4 mx-2" style={{ background:"rgba(255,255,255,0.10)" }} />
-
-            {/* CTA */}
-            <motion.div whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }}>
-              <Link href="/checkout"
-                className="relative overflow-hidden flex items-center gap-2 rounded-full px-5 py-2.5 transition-all duration-400"
-                style={{
-                  background:"linear-gradient(135deg, rgba(198,169,98,0.16), rgba(198,169,98,0.06))",
-                  border:"1px solid rgba(198,169,98,0.32)",
-                  backdropFilter:"blur(16px)",
-                  boxShadow:"0 0 18px rgba(198,169,98,0.10), inset 0 1px 0 rgba(255,255,255,0.08)",
-                  color:"rgba(198,169,98,0.80)",
-                  fontFamily:"'Jost',sans-serif", fontSize:"9px",
-                  letterSpacing:"0.28em", fontWeight:300, textTransform:"uppercase",
-                }}>
-                {/* Shimmer */}
-                <div className="absolute inset-0 pointer-events-none"
-                     style={{ background:"linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%)" }} />
-                <Ticket strokeWidth={1.3} className="w-3.5 h-3.5 relative z-10" />
-                <span className="relative z-10">Buy Tickets</span>
-              </Link>
-            </motion.div>
+          <nav className="hidden flex-1 items-center justify-end gap-1 lg:flex">
+            {DESKTOP_RIGHT.map((item) => (
+              <DesktopNavLink key={item.href} href={item.href} label={item.label} />
+            ))}
+            <Link href="/checkout" className="liquid-button-gold ml-2">
+              <span className="inline-flex items-center gap-2">
+                Buy Tickets
+                <Ticket className="h-3.5 w-3.5" strokeWidth={1.2} />
+              </span>
+            </Link>
           </nav>
 
-          {/* ── MOBILE CONTROLS ── */}
-          <div className="flex md:hidden items-center gap-2 ml-auto">
-            <Link href="/checkout"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full"
-              style={{
-                background:"rgba(198,169,98,0.12)",
-                border:"1px solid rgba(198,169,98,0.25)",
-                color:"rgba(198,169,98,0.75)",
-                fontFamily:"'Jost',sans-serif", fontSize:"8.5px",
-                letterSpacing:"0.22em", textTransform:"uppercase",
-              }}>
-              <Ticket strokeWidth={1.3} className="w-3 h-3" />
-              Tickets
+          <div className="ml-auto flex items-center gap-2 lg:hidden">
+            <Link
+              href="/checkout"
+              className="liquid-button-gold min-h-[44px] !px-4"
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <Ticket className="h-3 w-3" strokeWidth={1.2} />
+                Tickets
+              </span>
             </Link>
 
-            <motion.button
-              onClick={() => setOpen(v => !v)}
-              whileTap={{ scale:0.88 }}
-              className="flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300"
-              style={{
-                background: open ? "rgba(198,169,98,0.12)" : "rgba(255,255,255,0.06)",
-                border: open ? "1px solid rgba(198,169,98,0.28)" : "1px solid rgba(255,255,255,0.10)",
-                color: open ? "rgba(198,169,98,0.80)" : "rgba(255,255,255,0.50)",
-              }}
+            <button
+              type="button"
+              onClick={() => setOpen((current) => !current)}
+              className="nav-mobile-button"
+              aria-label={open ? "Close menu" : "Open menu"}
             >
               <AnimatePresence mode="wait">
-                {open
-                  ? <motion.span key="x" initial={{rotate:-90,opacity:0}} animate={{rotate:0,opacity:1}} exit={{rotate:90,opacity:0}} transition={{duration:0.2}}><X strokeWidth={1.4} className="w-4 h-4"/></motion.span>
-                  : <motion.span key="m" initial={{rotate:90,opacity:0}} animate={{rotate:0,opacity:1}} exit={{rotate:-90,opacity:0}} transition={{duration:0.2}}><Menu strokeWidth={1.4} className="w-4 h-4"/></motion.span>
-                }
+                {open ? (
+                  <motion.span
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.35} />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.35} />
+                  </motion.span>
+                )}
               </AnimatePresence>
-            </motion.button>
+            </button>
           </div>
         </div>
       </motion.header>
 
-      {/* Mobile overlay */}
-      <AnimatePresence>
-        {open && <MobileOverlay onClose={() => setOpen(false)} />}
-      </AnimatePresence>
+      <AnimatePresence>{open ? <MobileOverlay onClose={() => setOpen(false)} /> : null}</AnimatePresence>
     </>
   );
 }

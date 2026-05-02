@@ -70,6 +70,28 @@ export default function CareersPage() {
           <CareersBoard positions={OPEN_POSITIONS} />
         </div>
       </section>
+
+      <section className="px-5 pt-0 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-6xl">
+          <SectionHeader
+            eyebrow="Hiring Rhythm"
+            title="What mobile applicants should expect"
+            goldWord="next"
+            subtitle="We keep the process clear. The goal is not endless back-and-forth. The goal is a fast read on fit, standards, and timing."
+          />
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              "Step 1: submit the role, links, and a concise note on fit.",
+              "Step 2: the team reviews portfolio quality, event relevance, and role alignment.",
+              "Step 3: matched applicants receive interview or follow-up steps by email.",
+            ].map((item, index) => (
+              <GlassCard key={item} gold={index === 1} className="px-5 py-5">
+                <p className="body-copy text-white/66">{item}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

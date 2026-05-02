@@ -188,6 +188,18 @@ function hasObjectEntries(value: Record<string, unknown> | null | undefined) {
   return Boolean(value && Object.keys(value).length);
 }
 
+function matchesDashboardSearch(
+  query: string,
+  values: Array<string | null | undefined>,
+) {
+  if (!query.trim()) {
+    return true;
+  }
+
+  const normalized = query.trim().toLowerCase();
+  return values.some((value) => value?.toLowerCase().includes(normalized));
+}
+
 export function AdminDashboardClient() {
   const [authStatus, setAuthStatus] = useState<
     "checking" | "unauthenticated" | "forbidden" | "ready"
@@ -207,6 +219,7 @@ export function AdminDashboardClient() {
   const [activeReservationId, setActiveReservationId] = useState<string | null>(null);
   const [reservationDetail, setReservationDetail] = useState<ReservationDetail | null>(null);
   const [reservationLoading, setReservationLoading] = useState(false);
+  const [dashboardSearch, setDashboardSearch] = useState("");
 
   // ✅ Track in-flight requests to prevent setState on unmounted components
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -454,6 +467,49 @@ export function AdminDashboardClient() {
     ...(analytics?.monthly_revenue.map((item) => item.revenue) || [1]),
     1,
   );
+  const filteredUsers = users.filter((user) =>
+    matchesDashboardSearch(dashboardSearch, [
+      user.full_name,
+      user.email,
+      user.phone,
+      user.role,
+    ]),
+  );
+  const filteredOrders = orders.filter((order) =>
+    matchesDashboardSearch(dashboardSearch, [
+      order.order_number,
+      order.customer_name,
+      order.customer_email,
+      order.customer_phone,
+      order.events?.title,
+      order.status,
+    ]),
+  );
+  const filteredReservations = reservations.filter((reservation) =>
+    matchesDashboardSearch(dashboardSearch, [
+      reservation.full_name,
+      reservation.email,
+      reservation.ticket_type,
+      reservation.ticket_id,
+      reservation.status,
+      reservation.promo,
+    ]),
+  );
+  const filteredSubscriptions = subscriptions.filter((subscription) =>
+    matchesDashboardSearch(dashboardSearch, [
+      subscription.email,
+      subscription.name,
+      subscription.status,
+    ]),
+  );
+  const filteredEnquiries = enquiries.filter((enquiry) =>
+    matchesDashboardSearch(dashboardSearch, [
+      enquiry.name,
+      enquiry.email,
+      enquiry.status,
+      enquiry.event_type,
+    ]),
+  );
 
   async function openReservationDetails(reservationId: string) {
     setActiveReservationId(reservationId);
@@ -612,7 +668,19 @@ export function AdminDashboardClient() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <div className="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:flex-wrap">
+            <div className="relative min-w-[280px] flex-1 lg:min-w-[320px]">
+              <Search
+                className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--gold)]"
+                strokeWidth={1.2}
+              />
+              <input
+                className="glass-input pl-11"
+                placeholder="Search users, orders, reservations, subscribers, or enquiries"
+                value={dashboardSearch}
+                onChange={(event) => setDashboardSearch(event.target.value)}
+              />
+            </div>
             <LiquidButton onClick={() => void loadDashboardData()} disabled={loading}>
               <span className="inline-flex items-center gap-2">
                 <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} strokeWidth={1.2} />
@@ -658,6 +726,25 @@ export function AdminDashboardClient() {
                 {item.value}
               </p>
             </GlassCard>
+          ))}
+        </div>
+
+        <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {[
+            { label: "Profiles", value: users.length },
+            { label: "Reservations", value: reservations.length },
+            { label: "Subscribers", value: subscriptions.length },
+            { label: "Enquiries", value: enquiries.length },
+          ].map((item) => (
+            <div
+              key={item.label}
+              className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
+            >
+              <p className="eyebrow mb-2">{item.label}</p>
+              <p className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white">
+                {item.value}
+              </p>
+            </div>
           ))}
         </div>
       </GlassCard>
@@ -714,9 +801,10 @@ export function AdminDashboardClient() {
           <div className="flex items-center gap-3">
             <Users className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
             <p className="eyebrow">Recent Users</p>
+            <span className="eyebrow text-white/18">{filteredUsers.length}</span>
           </div>
           <div className="mt-5 space-y-4">
-            {users.map((user) => (
+            {filteredUsers.length ? filteredUsers.map((user) => (
               <div key={user.id} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
                 <p className="font-serif text-[1.5rem] font-light tracking-[0.05em] text-white">
                   {user.full_name || "Unnamed User"}
@@ -736,7 +824,11 @@ export function AdminDashboardClient() {
                   </p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                <p className="body-copy text-white/62">No user profiles match the current search.</p>
+              </div>
+            )}
           </div>
         </GlassCard>
 
@@ -744,9 +836,10 @@ export function AdminDashboardClient() {
           <div className="flex items-center gap-3">
             <UserRound className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
             <p className="eyebrow">Recent Orders</p>
+            <span className="eyebrow text-white/18">{filteredOrders.length}</span>
           </div>
           <div className="mt-5 space-y-4">
-            {orders.map((order) => (
+            {filteredOrders.length ? filteredOrders.map((order) => (
               <div key={order.id} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -769,7 +862,11 @@ export function AdminDashboardClient() {
                   </p>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                <p className="body-copy text-white/62">No orders match the current search.</p>
+              </div>
+            )}
           </div>
         </GlassCard>
 
@@ -777,10 +874,11 @@ export function AdminDashboardClient() {
           <div className="flex items-center gap-3">
             <Search className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
             <p className="eyebrow">Reserve Selections</p>
+            <span className="eyebrow text-white/18">{filteredReservations.length}</span>
           </div>
           <div className="mt-5 space-y-4">
-            {reservations.length ? (
-              reservations.map((reservation) => (
+            {filteredReservations.length ? (
+              filteredReservations.map((reservation) => (
                 <button
                   key={reservation.id}
                   type="button"
@@ -812,7 +910,9 @@ export function AdminDashboardClient() {
             ) : (
               <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
                 <p className="body-copy text-white/62">
-                  No reservation selections have been captured yet.
+                  {dashboardSearch
+                    ? "No reservation selections match the current search."
+                    : "No reservation selections have been captured yet."}
                 </p>
               </div>
             )}
@@ -827,14 +927,18 @@ export function AdminDashboardClient() {
                 Subscribers
               </p>
               <div className="mt-4 space-y-3">
-                {subscriptions.map((subscription) => (
+                {filteredSubscriptions.length ? filteredSubscriptions.map((subscription) => (
                   <div key={subscription.id} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-3">
                     <p className="body-copy text-white/68">{subscription.email}</p>
                     <p className="eyebrow mt-2 text-white/28">
                       {format(new Date(subscription.created_at), "MMM d, yyyy")}
                     </p>
                   </div>
-                ))}
+                )) : (
+                  <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                    <p className="body-copy text-white/62">No subscribers match the current search.</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -845,7 +949,7 @@ export function AdminDashboardClient() {
                 New Enquiries
               </p>
               <div className="mt-4 space-y-3">
-                {enquiries.map((enquiry) => (
+                {filteredEnquiries.length ? filteredEnquiries.map((enquiry) => (
                   <div key={enquiry.id} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-3">
                     <p className="body-copy text-white/68">{enquiry.name}</p>
                     <p className="body-copy text-[0.8rem] text-white/50">{enquiry.email}</p>
@@ -856,7 +960,11 @@ export function AdminDashboardClient() {
                       </p>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                    <p className="body-copy text-white/62">No enquiries match the current search.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

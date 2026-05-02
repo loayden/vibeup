@@ -156,12 +156,12 @@ export default function HomePage() {
               }
               actions={
                 <>
-                  <LiquidLinkButton href="/events">
-                    Explore Events <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
-                  </LiquidLinkButton>
                   <LiquidLinkButton href={featuredCheckoutHref} gold>
                     {featuredEvent?.ticketsAvailable ? "Book Tickets" : "Contact Team"}{" "}
                     <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                  </LiquidLinkButton>
+                  <LiquidLinkButton href="/events">
+                    Explore Events <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                   </LiquidLinkButton>
                 </>
               }
@@ -188,6 +188,57 @@ export default function HomePage() {
               </GlassCard>
             </motion.div>
           ))}
+        </div>
+      </motion.section>
+
+      <motion.section {...revealProps} className="px-5 py-6 sm:px-10 sm:py-8 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <GlassCard warm className="px-5 py-6 md:px-6">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="eyebrow mb-3">How Mobile Booking Works</p>
+                <h2 className="section-title text-[2rem]">
+                  From social click to confirmed <em>entry</em>
+                </h2>
+                <p className="body-copy mt-4 text-white/58">
+                  The mobile flow is built for speed: choose the event, build the order, and move
+                  into secure payment without losing context.
+                </p>
+              </div>
+              <LiquidLinkButton href={featuredCheckoutHref} gold className="w-full justify-center lg:w-auto">
+                {featuredEvent?.ticketsAvailable ? "Start Checkout" : "Talk To The Team"}
+              </LiquidLinkButton>
+            </div>
+
+            <div className="mt-6 grid gap-3 md:grid-cols-3">
+              {[
+                {
+                  icon: CalendarDays,
+                  title: "Choose The Night",
+                  body: "Open the live event page, confirm the date, venue, and current access tiers.",
+                },
+                {
+                  icon: ShieldCheck,
+                  title: "Build The Order",
+                  body: "Ticket quantities, fees, and promo checks happen inside the VibeUp checkout flow.",
+                },
+                {
+                  icon: Sparkles,
+                  title: "Receive Confirmation",
+                  body: "Paid orders trigger QR delivery and clear arrival instructions before the event.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
+                >
+                  <item.icon className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="eyebrow mb-2">{item.title}</p>
+                  <p className="body-copy text-[0.8rem] text-white/60">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
       </motion.section>
 

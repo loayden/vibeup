@@ -64,6 +64,10 @@ export type PublicEvent = {
   seoTitle: string | null;
   seoDescription: string | null;
   galleryUrls: string[];
+  dressCode: string | null;
+  parkingInfo: string | null;
+  ageRestriction: number;
+  additionalInfo: string | null;
   formattedDate: string;
   shortVenue: string;
   cityLine: string;
@@ -203,6 +207,10 @@ function mapEvent(event: EventRow, ticketTypes: TicketTypeRow[]): PublicEvent {
     seoTitle: event.seo_title,
     seoDescription: event.seo_description,
     galleryUrls: event.gallery_urls || [],
+    dressCode: event.dress_code,
+    parkingInfo: event.parking_info,
+    ageRestriction: event.age_restriction || 0,
+    additionalInfo: event.additional_info,
     formattedDate: formatEventDate(event.event_date),
     shortVenue: event.venue_name,
     cityLine: `${venueCity}, ${venueState}`,
@@ -269,6 +277,10 @@ function buildFallbackEventFromUpcoming(
     seoTitle: null,
     seoDescription: null,
     galleryUrls: [],
+    dressCode: "Formal evening wear",
+    parkingInfo: "Guest parking details are shared before arrival.",
+    ageRestriction: 0,
+    additionalInfo: null,
     formattedDate: event.date,
     shortVenue: event.venue,
     cityLine: event.city,
@@ -307,6 +319,10 @@ function buildFallbackPastEvents(): PublicEvent[] {
     seoTitle: null,
     seoDescription: null,
     galleryUrls: [],
+    dressCode: null,
+    parkingInfo: null,
+    ageRestriction: 0,
+    additionalInfo: null,
     formattedDate: event.date,
     shortVenue: event.venue,
     cityLine: "Los Angeles, CA",

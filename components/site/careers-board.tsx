@@ -13,6 +13,21 @@ type BannerState = {
   message: string;
 };
 
+function FieldLabel({
+  children,
+  optional = false,
+}: {
+  children: string;
+  optional?: boolean;
+}) {
+  return (
+    <div className="mb-2 flex items-center justify-between gap-3">
+      <p className="eyebrow">{children}</p>
+      {optional ? <span className="eyebrow text-white/18">Optional</span> : null}
+    </div>
+  );
+}
+
 type Position = (typeof OPEN_POSITIONS)[number];
 
 type CareersBoardProps = {
@@ -24,6 +39,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
   const [expandedRole, setExpandedRole] = useState<string>(positions[0]?.role || "");
   const [banner, setBanner] = useState<BannerState | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resumeMode, setResumeMode] = useState<"later" | "link">("later");
   const formRef = useRef<HTMLDivElement | null>(null);
   const [form, setForm] = useState<{
     name: string;
@@ -53,6 +69,31 @@ export function CareersBoard({ positions }: CareersBoardProps) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (form.name.trim().length < 2) {
+      setBanner({
+        type: "error",
+        message: "Add your name so the hiring team knows who is applying.",
+      });
+      return;
+    }
+
+    if (!form.email.includes("@")) {
+      setBanner({
+        type: "error",
+        message: "Enter a valid email so we can reply with interview or follow-up steps.",
+      });
+      return;
+    }
+
+    if (resumeMode === "link" && form.resume_url && !form.resume_url.startsWith("http")) {
+      setBanner({
+        type: "error",
+        message: "Resume links should start with http or https.",
+      });
+      return;
+    }
+
     setLoading(true);
     setBanner(null);
 
@@ -84,7 +125,9 @@ export function CareersBoard({ positions }: CareersBoardProps) {
 
       setBanner({
         type: "success",
-        message: payload?.message || "Application submitted successfully.",
+        message:
+          payload?.message ||
+          "Application submitted successfully. The team will review fit and follow up with the next step.",
       });
       setForm({
         name: "",
@@ -173,6 +216,20 @@ export function CareersBoard({ positions }: CareersBoardProps) {
             demonstrate your work, and a note on the kind of event environment you want to help
             build.
           </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              "Mobile-friendly quick apply flow",
+              "Links are enough if you are away from a desktop",
+              "Most applicants hear back within 5 to 7 business days",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-[16px] border border-[rgba(198,169,98,0.18)] bg-[rgba(198,169,98,0.05)] px-4 py-4"
+              >
+                <p className="body-copy text-[0.78rem] text-white/64">{item}</p>
+              </div>
+            ))}
+          </div>
 
           <form className="mt-7 space-y-4" onSubmit={handleSubmit}>
             <AnimatePresence>
@@ -199,103 +256,158 @@ export function CareersBoard({ positions }: CareersBoardProps) {
             </AnimatePresence>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <input
-                className="glass-input"
-                placeholder="Full Name"
-                autoComplete="name"
-                style={{ fontSize: "16px" }}
-                value={form.name}
-                onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
-                required
-              />
-              <input
-                className="glass-input"
-                placeholder="Email Address"
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                style={{ fontSize: "16px" }}
-                value={form.email}
-                onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
-                required
-              />
+              <div>
+                <FieldLabel>Full Name</FieldLabel>
+                <input
+                  className="glass-input"
+                  placeholder="Your full name"
+                  autoComplete="name"
+                  style={{ fontSize: "16px" }}
+                  value={form.name}
+                  onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+                  required
+                />
+              </div>
+              <div>
+                <FieldLabel>Email Address</FieldLabel>
+                <input
+                  className="glass-input"
+                  placeholder="Best address for follow-up"
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  style={{ fontSize: "16px" }}
+                  value={form.email}
+                  onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+                  required
+                />
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <input
-                className="glass-input"
-                placeholder="Phone Number"
-                inputMode="tel"
-                autoComplete="tel"
-                style={{ fontSize: "16px" }}
-                value={form.phone}
-                onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
-              />
-              <LiquidSelect
-                options={positions.map((position) => ({
-                  label: position.role,
-                  value: position.role,
-                }))}
-                value={form.role}
-                onChange={(value) => {
-                  setSelectedRole(value);
-                  setForm((current) => ({ ...current, role: value }));
-                }}
-                placeholder="Select a role"
-              />
+              <div>
+                <FieldLabel optional>Phone Number</FieldLabel>
+                <input
+                  className="glass-input"
+                  placeholder="Useful for faster coordination"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  style={{ fontSize: "16px" }}
+                  value={form.phone}
+                  onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+                />
+              </div>
+              <div>
+                <FieldLabel>Role</FieldLabel>
+                <LiquidSelect
+                  options={positions.map((position) => ({
+                    label: position.role,
+                    value: position.role,
+                  }))}
+                  value={form.role}
+                  onChange={(value) => {
+                    setSelectedRole(value);
+                    setForm((current) => ({ ...current, role: value }));
+                  }}
+                  placeholder="Select a role"
+                />
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <input
-                className="glass-input"
-                placeholder="Portfolio URL"
-                type="url"
-                inputMode="url"
-                autoComplete="url"
-                style={{ fontSize: "16px" }}
-                value={form.portfolio_url}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, portfolio_url: event.target.value }))
-                }
-              />
-              <input
-                className="glass-input"
-                placeholder="LinkedIn URL"
-                type="url"
-                inputMode="url"
-                autoComplete="url"
-                style={{ fontSize: "16px" }}
-                value={form.linkedin_url}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, linkedin_url: event.target.value }))
-                }
-              />
+              <div>
+                <FieldLabel optional>Portfolio URL</FieldLabel>
+                <input
+                  className="glass-input"
+                  placeholder="Portfolio, reel, or selected work"
+                  type="url"
+                  inputMode="url"
+                  autoComplete="url"
+                  style={{ fontSize: "16px" }}
+                  value={form.portfolio_url}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, portfolio_url: event.target.value }))
+                  }
+                />
+              </div>
+              <div>
+                <FieldLabel optional>LinkedIn URL</FieldLabel>
+                <input
+                  className="glass-input"
+                  placeholder="LinkedIn profile"
+                  type="url"
+                  inputMode="url"
+                  autoComplete="url"
+                  style={{ fontSize: "16px" }}
+                  value={form.linkedin_url}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, linkedin_url: event.target.value }))
+                  }
+                />
+              </div>
             </div>
 
-            <input
-              className="glass-input"
-              placeholder="Resume Link (Drive, Dropbox, or portfolio page)"
-              type="url"
-              inputMode="url"
-              autoComplete="url"
-              style={{ fontSize: "16px" }}
-              value={form.resume_url}
-              onChange={(event) => setForm((current) => ({ ...current, resume_url: event.target.value }))}
-            />
+            <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className={`${resumeMode === "later" ? "liquid-button-gold" : "liquid-button-ghost"} !min-h-[42px] !px-4`}
+                  onClick={() => {
+                    setResumeMode("later");
+                    setForm((current) => ({ ...current, resume_url: "" }));
+                  }}
+                >
+                  Send Resume Later
+                </button>
+                <button
+                  type="button"
+                  className={`${resumeMode === "link" ? "liquid-button-gold" : "liquid-button-ghost"} !min-h-[42px] !px-4`}
+                  onClick={() => setResumeMode("link")}
+                >
+                  Add Resume Link Now
+                </button>
+              </div>
+              <p className="body-copy mt-4 text-[0.8rem] text-white/60">
+                {resumeMode === "later"
+                  ? "On mobile, you can submit quickly now and send your resume when the team replies."
+                  : "Paste a Drive, Dropbox, or portfolio link if your resume is already hosted."}
+              </p>
+            </div>
 
-            <textarea
-              className="glass-input min-h-[160px] resize-none"
-              placeholder="Tell us why you want to work with VibeUp."
-              rows={5}
-              style={{ fontSize: "16px" }}
-              value={form.message}
-              onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
-            />
+            {resumeMode === "link" ? (
+              <div>
+                <FieldLabel optional>Resume Link</FieldLabel>
+                <input
+                  className="glass-input"
+                  placeholder="Drive, Dropbox, or portfolio resume URL"
+                  type="url"
+                  inputMode="url"
+                  autoComplete="url"
+                  style={{ fontSize: "16px" }}
+                  value={form.resume_url}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, resume_url: event.target.value }))
+                  }
+                />
+              </div>
+            ) : null}
+
+            <div>
+              <FieldLabel optional>Why This Role</FieldLabel>
+              <textarea
+                className="glass-input min-h-[160px] resize-none"
+                placeholder="Tell us why this role fits your background and the kind of event environment you want to help build."
+                rows={5}
+                style={{ fontSize: "16px" }}
+                value={form.message}
+                onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
+              />
+            </div>
 
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <p className="body-copy max-w-xl text-[0.78rem]">
-                Share links instead of attachments when possible. It keeps review faster and
-                helps us evaluate your work in context.
+                Keep it concise. Strong links and a clear note on fit are more useful than a long
+                cover letter on mobile.
               </p>
               <LiquidButton gold type="submit" className="w-full md:w-auto" disabled={loading}>
                 <span className="inline-flex items-center gap-2">

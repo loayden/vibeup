@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { ArrowRight, CheckCircle2, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Mail,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import Image from "next/image";
 
 import { CheckoutExperience } from "@/components/site/checkout-experience";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
-import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
 import {
   getCheckoutEventContext,
   getCheckoutUnavailableMessage,
@@ -100,6 +106,27 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         </div>
       </section>
 
+      <section className="px-5 pt-2 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <GlassCard warm className="px-5 py-5 md:px-6">
+            <div className="grid gap-4 md:grid-cols-3">
+              {[
+                "Step 1: choose quantity by live ticket tier.",
+                "Step 2: create the order inside VibeUp with your contact details.",
+                "Step 3: complete card payment in Stripe and receive QR delivery after confirmation.",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
+                >
+                  <p className="body-copy text-[0.8rem] text-white/62">{item}</p>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+        </div>
+      </section>
+
       <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
@@ -145,11 +172,46 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         </div>
       </section>
 
-      <StickyBuyCTA
-        href="/checkout"
-        price={event?.priceFrom || undefined}
-        label={checkoutReady ? "Checkout Now" : "Ticketing Offline"}
-      />
+      <section className="px-5 pb-10 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-6xl">
+          <GlassCard gold className="px-6 py-7 md:px-8">
+            <div className="grid gap-5 md:grid-cols-[0.9fr_1.1fr]">
+              <div>
+                <p className="eyebrow mb-4">Concierge Help</p>
+                <h2 className="section-title text-[2.2rem]">
+                  Need support before you <em>pay</em>
+                </h2>
+                <p className="body-copy mt-5">
+                  Group seating, inventory clarification, or guest questions can be handled before
+                  payment so the mobile checkout stays clean.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="rounded-[18px] border border-[rgba(198,169,98,0.18)] bg-[rgba(198,169,98,0.05)] px-4 py-4"
+                >
+                  <Mail className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="eyebrow mb-2 text-[var(--gold)]">Email Team</p>
+                  <p className="body-copy text-[0.8rem] text-white/62">{SITE.email}</p>
+                </a>
+                <a
+                  href={SITE.socials.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-[18px] border border-[rgba(198,169,98,0.18)] bg-[rgba(198,169,98,0.05)] px-4 py-4"
+                >
+                  <Phone className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="eyebrow mb-2 text-[var(--gold)]">Guest Support</p>
+                  <p className="body-copy text-[0.8rem] text-white/62">
+                    WhatsApp for time-sensitive ticket help
+                  </p>
+                </a>
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+      </section>
     </main>
   );
 }

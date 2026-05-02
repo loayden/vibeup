@@ -56,6 +56,30 @@ export default function ContactPage() {
         </div>
       </section>
 
+      <section className="px-5 pt-2 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <GlassCard warm className="px-5 py-5 md:px-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="eyebrow mb-2">Need Ticket Support Faster</p>
+                <p className="body-copy text-white/64">
+                  For guest-access or time-sensitive event questions, mobile buyers should use the
+                  fastest channel first.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <LiquidLinkButton href={SITE.socials.whatsapp} gold external>
+                  WhatsApp Support
+                </LiquidLinkButton>
+                <LiquidLinkButton href={`mailto:${SITE.email}`} external>
+                  Email Team
+                </LiquidLinkButton>
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+      </section>
+
       <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.08fr_0.92fr]">
           <GlassCard className="px-6 py-7 md:px-8">

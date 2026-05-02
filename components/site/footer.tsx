@@ -2,20 +2,30 @@ import Link from "next/link";
 
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import { GlassCard } from "@/components/site/liquid";
-import { NAV_LINKS, SECONDARY_NAV_LINKS, SITE } from "@/lib/site-data";
+import { NAV_LINKS, SITE } from "@/lib/site-data";
 
 const footerGroups = [
   {
     title: "Navigation",
-    links: NAV_LINKS,
+    links: NAV_LINKS.filter((link) => link.href !== "/"),
   },
   {
-    title: "Explore",
-    links: SECONDARY_NAV_LINKS,
+    title: "Support",
+    links: [
+      { href: "/faq", label: "FAQ" },
+      { href: "/contact-us", label: "Contact" },
+      { href: "/services", label: "Private Events" },
+      { href: "/checkout", label: "Buy Tickets" },
+    ],
   },
   {
-    title: "Admin",
-    links: [{ href: "/admin/dashboard", label: "Dashboard" }],
+    title: "Company",
+    links: [
+      { href: "/about", label: "About" },
+      { href: "/blog", label: "Journal" },
+      { href: "/careers", label: "Careers" },
+      { href: "/terms", label: "Terms" },
+    ],
   },
 ] as const;
 
@@ -24,7 +34,7 @@ export function SiteFooter() {
     <footer className="relative z-10 px-6 pb-8 pt-10 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <GlassCard warm className="px-6 py-8 md:px-8 md:py-10">
-          <div className="grid gap-8 lg:grid-cols-[1.3fr_1fr_1fr_1.1fr]">
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr_1fr_1.15fr]">
             <div className="space-y-5">
               <p className="eyebrow">VibeUp Events & Services</p>
               <h3 className="section-title text-[2rem]">
@@ -34,6 +44,19 @@ export function SiteFooter() {
                 We build events for clients who want atmosphere, structure, and a
                 luxury standard that holds from arrival to final departure.
               </p>
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link href="/checkout" className="liquid-button-gold w-full justify-center sm:w-auto">
+                  Buy Tickets
+                </Link>
+                <Link
+                  href={SITE.socials.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="liquid-button-ghost w-full justify-center sm:w-auto"
+                >
+                  WhatsApp
+                </Link>
+              </div>
             </div>
 
             {footerGroups.map((group) => (
@@ -51,10 +74,22 @@ export function SiteFooter() {
 
             <div className="space-y-4">
               <p className="eyebrow">Stay Close</p>
-              <p className="body-copy">{SITE.email}</p>
-              <p className="body-copy">{SITE.phonePrimary}</p>
-              <p className="body-copy">{SITE.phoneSecondary}</p>
+              <div className="space-y-3">
+                <Link href={`mailto:${SITE.email}`} className="body-copy block transition hover:text-white/72">
+                  {SITE.email}
+                </Link>
+                <Link href="tel:+19492479309" className="body-copy block transition hover:text-white/72">
+                  {SITE.phonePrimary}
+                </Link>
+                <Link href="tel:+19178187850" className="body-copy block transition hover:text-white/72">
+                  {SITE.phoneSecondary}
+                </Link>
+              </div>
               <div className="h-px subtle-divider" />
+              <p className="body-copy text-[0.78rem] text-white/50">
+                Mobile guests can subscribe here and get early access to releases, table drops,
+                and future event reminders.
+              </p>
               <NewsletterForm compact source="footer" />
             </div>
           </div>
@@ -72,16 +107,36 @@ export function SiteFooter() {
             <span style={{ color: "var(--gold)" }}>ع</span>
           </Link>
           <div className="flex flex-wrap items-center justify-center gap-4 md:justify-end">
-            <Link href={SITE.socials.whatsapp} className="eyebrow text-white/30 transition hover:text-[var(--gold)]">
+            <Link
+              href={SITE.socials.whatsapp}
+              target="_blank"
+              rel="noreferrer"
+              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+            >
               WhatsApp
             </Link>
-            <Link href={SITE.socials.facebook} className="eyebrow text-white/30 transition hover:text-[var(--gold)]">
+            <Link
+              href={SITE.socials.facebook}
+              target="_blank"
+              rel="noreferrer"
+              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+            >
               Facebook
             </Link>
-            <Link href={SITE.socials.instagram} className="eyebrow text-white/30 transition hover:text-[var(--gold)]">
+            <Link
+              href={SITE.socials.instagram}
+              target="_blank"
+              rel="noreferrer"
+              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+            >
               Instagram
             </Link>
-            <Link href={SITE.socials.tiktok} className="eyebrow text-white/30 transition hover:text-[var(--gold)]">
+            <Link
+              href={SITE.socials.tiktok}
+              target="_blank"
+              rel="noreferrer"
+              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+            >
               TikTok
             </Link>
           </div>

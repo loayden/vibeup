@@ -7,7 +7,9 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
+  Mail,
   Minus,
+  Phone,
   Plus,
   ShieldCheck,
 } from "lucide-react";
@@ -16,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 import { CountdownTimer } from "@/components/site/countdown";
 import { GlassCard, LiquidButton } from "@/components/site/liquid";
 import type { PublicEvent, PublicTicketType } from "@/lib/public-events";
+import { SITE } from "@/lib/site-data";
 
 type QuantityMap = Record<string, number>;
 type BannerState = {
@@ -37,6 +40,35 @@ type CheckoutExperienceProps = {
 };
 
 const emptyTicketTypes: PublicTicketType[] = [];
+const checkoutSteps = [
+  {
+    label: "Choose Tickets",
+    body: "Select the right tier and quantity for your group.",
+  },
+  {
+    label: "Add Details",
+    body: "Create the order inside VibeUp before card payment begins.",
+  },
+  {
+    label: "Pay In Stripe",
+    body: "Complete secure payment and receive QR tickets after confirmation.",
+  },
+] as const;
+
+function FieldLabel({
+  children,
+  optional = false,
+}: {
+  children: string;
+  optional?: boolean;
+}) {
+  return (
+    <div className="mb-2 flex items-center justify-between gap-3">
+      <p className="eyebrow">{children}</p>
+      {optional ? <span className="eyebrow text-white/18">Optional</span> : null}
+    </div>
+  );
+}
 
 function buildInitialQuantities(ticketTypes: PublicTicketType[]): QuantityMap {
   return ticketTypes.reduce<QuantityMap>((accumulator, ticketType) => {
@@ -122,6 +154,10 @@ export function CheckoutExperience({
     }));
   const subtotal = selectedTickets.reduce(
     (sum, ticketType) => sum + ticketType.price * ticketType.quantity,
+    0,
+  );
+  const totalSelectedTickets = selectedTickets.reduce(
+    (sum, ticketType) => sum + ticketType.quantity,
     0,
   );
   const discountAmount =
@@ -348,6 +384,11 @@ export function CheckoutExperience({
   const orderSummaryContent = (
     <GlassCard dark className="px-5 py-5">
       <p className="eyebrow mb-4">Order Summary</p>
+      <p className="body-copy text-[0.8rem] text-white/54">
+        {selectedTickets.length
+          ? `${totalSelectedTickets} ticket${totalSelectedTickets > 1 ? "s" : ""} currently selected`
+          : "No ticket tiers selected yet"}
+      </p>
       <div className="space-y-4">
         {selectedTickets.length ? (
           selectedTickets.map((ticketType) => (
@@ -401,12 +442,31 @@ export function CheckoutExperience({
           ${total.toFixed(2)}
         </p>
       </div>
+      <p className="body-copy mt-4 text-[0.78rem] text-white/52">
+        Final card payment is completed in Stripe after this VibeUp order is created.
+      </p>
     </GlassCard>
   );
 
   return (
     <div className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
       <div className="space-y-8">
+        <GlassCard className="px-5 py-5">
+          <p className="eyebrow mb-4">Mobile Purchase Flow</p>
+          <div className="grid gap-3 md:grid-cols-3">
+            {checkoutSteps.map((step, index) => (
+              <div
+                key={step.label}
+                className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
+              >
+                <p className="eyebrow mb-2 text-[var(--gold)]">Step {index + 1}</p>
+                <p className="body-copy text-white/68">{step.label}</p>
+                <p className="body-copy mt-2 text-[0.78rem] text-white/50">{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </GlassCard>
+
         <GlassCard warm className="px-6 py-6 md:px-8">
           <p className="eyebrow mb-4">Signature Countdown</p>
           <CountdownTimer
@@ -465,6 +525,25 @@ export function CheckoutExperience({
                       ${ticketType.price}
                     </p>
                     <p className="body-copy mt-4">{ticketType.description}</p>
+                    <div className="mt-4 space-y-2">
+                      {(ticketType.includes.length
+                        ? ticketType.includes.slice(0, 3)
+                        : [
+                            ticketType.remainingQuantity != null
+                              ? `${ticketType.remainingQuantity} seats currently remaining`
+                              : "Live inventory is available for this tier",
+                            `Up to ${ticketType.maxPerOrder} tickets per order`,
+                            "QR delivery follows successful payment confirmation",
+                          ]
+                      ).map((item) => (
+                        <div
+                          key={item}
+                          className="rounded-[14px] border border-white/8 bg-white/[0.02] px-3 py-3"
+                        >
+                          <p className="body-copy text-[0.78rem] text-white/58">{item}</p>
+                        </div>
+                      ))}
+                    </div>
                   </button>
 
                   <div className="mt-6 flex items-center justify-between gap-4">
@@ -539,54 +618,66 @@ export function CheckoutExperience({
           </p>
 
           <form id="checkout-order-form" className="mt-7 space-y-4" onSubmit={handleSubmit}>
-            <input
-              className="glass-input"
-              placeholder="Full Name"
-              autoComplete="name"
-              style={{ fontSize: "16px" }}
-              value={form.name}
-              onChange={(eventObject) =>
-                setForm((current) => ({ ...current, name: eventObject.target.value }))
-              }
-            />
-            <input
-              className="glass-input"
-              placeholder="Email Address"
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              style={{ fontSize: "16px" }}
-              value={form.email}
-              onChange={(eventObject) =>
-                setForm((current) => ({ ...current, email: eventObject.target.value }))
-              }
-            />
-            <input
-              className="glass-input"
-              placeholder="Phone Number"
-              inputMode="tel"
-              autoComplete="tel"
-              style={{ fontSize: "16px" }}
-              value={form.phone}
-              onChange={(eventObject) =>
-                setForm((current) => ({ ...current, phone: eventObject.target.value }))
-              }
-            />
-
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+            <div>
+              <FieldLabel>Full Name</FieldLabel>
               <input
                 className="glass-input"
-                placeholder="Promo code"
-                autoComplete="off"
+                placeholder="Name on the order"
+                autoComplete="name"
                 style={{ fontSize: "16px" }}
-                value={form.promo}
+                value={form.name}
                 onChange={(eventObject) =>
-                  setForm((current) => ({ ...current, promo: eventObject.target.value }))
+                  setForm((current) => ({ ...current, name: eventObject.target.value }))
                 }
               />
+            </div>
+            <div>
+              <FieldLabel>Email Address</FieldLabel>
+              <input
+                className="glass-input"
+                placeholder="Where should we deliver tickets?"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                style={{ fontSize: "16px" }}
+                value={form.email}
+                onChange={(eventObject) =>
+                  setForm((current) => ({ ...current, email: eventObject.target.value }))
+                }
+              />
+            </div>
+            <div>
+              <FieldLabel optional>Phone Number</FieldLabel>
+              <input
+                className="glass-input"
+                placeholder="Useful for guest support and urgent updates"
+                inputMode="tel"
+                autoComplete="tel"
+                style={{ fontSize: "16px" }}
+                value={form.phone}
+                onChange={(eventObject) =>
+                  setForm((current) => ({ ...current, phone: eventObject.target.value }))
+                }
+              />
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+              <div className="sm:col-span-1">
+                <FieldLabel optional>Promo Code</FieldLabel>
+                <input
+                  className="glass-input"
+                  placeholder="Add code if VibeUp sent one"
+                  autoComplete="off"
+                  style={{ fontSize: "16px" }}
+                  value={form.promo}
+                  onChange={(eventObject) =>
+                    setForm((current) => ({ ...current, promo: eventObject.target.value }))
+                  }
+                />
+              </div>
               <LiquidButton
                 type="button"
-                className="w-full sm:w-auto"
+                className="w-full self-end sm:w-auto"
                 onClick={applyPromo}
                 disabled={promoState.loading || !checkoutEnabled}
               >
@@ -609,6 +700,41 @@ export function CheckoutExperience({
             </AnimatePresence>
 
             <div className="hidden md:block">{orderSummaryContent}</div>
+
+            <GlassCard dark className="px-5 py-5">
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                <p className="eyebrow">Need Help Before Payment</p>
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <a
+                  href={SITE.socials.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                    <div>
+                      <p className="eyebrow mb-1 text-[var(--gold)]">WhatsApp</p>
+                      <p className="body-copy text-[0.8rem] text-white/62">Fastest guest support</p>
+                    </div>
+                  </div>
+                </a>
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                    <div>
+                      <p className="eyebrow mb-1 text-[var(--gold)]">Email Team</p>
+                      <p className="body-copy text-[0.8rem] text-white/62">{SITE.email}</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </GlassCard>
 
             <LiquidButton
               gold
@@ -665,10 +791,10 @@ export function CheckoutExperience({
           <button
             type="button"
             onClick={() => setSummaryOpen((current) => !current)}
-            className="liquid-button-ghost min-w-[128px] justify-center !px-4"
+            className="liquid-button-ghost min-w-[148px] justify-center !px-4"
           >
             <span className="inline-flex items-center gap-2">
-              Summary
+              {totalSelectedTickets ? `${totalSelectedTickets} Ticket${totalSelectedTickets > 1 ? "s" : ""}` : "Summary"}
               {summaryOpen ? (
                 <ChevronDown className="h-4 w-4" strokeWidth={1.3} />
               ) : (
