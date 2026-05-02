@@ -6,6 +6,7 @@ import { LuxuryCursor } from "@/components/site/luxury-cursor";
 import { Orbs } from "@/components/site/orbs";
 import { Navbar } from "@/components/navbar";
 import { ErrorBoundary } from "@/app/components/error-boundary";
+import { getAppUrl } from "@/lib/env";
 import { SITE } from "@/lib/site-data";
 import "./globals.css";
 
@@ -22,11 +23,28 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getAppUrl()),
   title: {
     default: SITE.name,
     template: `%s | ${SITE.shortName}`,
   },
   description: SITE.description,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: SITE.name,
+    description: SITE.description,
+    siteName: SITE.name,
+    type: "website",
+    images: ["/arabnights-1200.webp"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.name,
+    description: SITE.description,
+    images: ["/arabnights-1200.webp"],
+  },
 };
 
 export default function RootLayout({

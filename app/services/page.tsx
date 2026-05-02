@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowRight, Layers3, Megaphone, Sparkles, Wand2 } from "lucide-react";
 import Image from "next/image";
 
@@ -10,6 +11,12 @@ import {
   SERVICE_PROCESS,
   SERVICES,
 } from "@/lib/site-data";
+
+export const metadata: Metadata = {
+  title: "Services",
+  description:
+    "Explore VibeUp planning, production, ticketing, branding, media, and consulting services for premium events and celebrations.",
+};
 
 const serviceFaq = [
   {

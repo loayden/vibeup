@@ -8,30 +8,47 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { GlassCard, LiquidLinkButton } from "@/components/site/liquid";
-import type { PAST_EVENTS, UPCOMING_EVENTS } from "@/lib/site-data";
-
-type UpcomingEvent = (typeof UPCOMING_EVENTS)[number];
-type PastEvent = (typeof PAST_EVENTS)[number];
+import type { PublicEvent } from "@/lib/public-events";
 
 type EventsShowcaseProps = {
-  upcoming: readonly UpcomingEvent[];
-  past: readonly PastEvent[];
+  upcoming: readonly PublicEvent[];
+  past: readonly PublicEvent[];
 };
 
-function getStatusLabel(status: UpcomingEvent["status"]) {
-  if (status === "limited") {
+function getStatusLabel(event: PublicEvent) {
+  if (event.eventState === "limited") {
     return "Limited";
+  }
+
+  if (event.eventState === "sold_out") {
+    return "Sold Out";
+  }
+
+  if (event.eventState === "past") {
+    return "Memories";
+  }
+
+  if (event.eventState === "cancelled") {
+    return "Cancelled";
   }
 
   return "Upcoming";
 }
 
-function statusClass(status: UpcomingEvent["status"]) {
-  if (status === "limited") {
+function statusClass(event: PublicEvent) {
+  if (event.eventState === "limited") {
     return "glass-card glass-card-gold";
   }
 
+  if (event.eventState === "sold_out") {
+    return "glass-card glass-card-dark";
+  }
+
   return "glass-card";
+}
+
+function buildCalendarMonthLabel(event: PublicEvent) {
+  return format(new Date(event.eventDate), "MMMM yyyy");
 }
 
 export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
@@ -45,20 +62,20 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
     ...upcoming.map((event) => ({
       id: event.slug,
       title: event.title,
-      dateLabel: event.date,
-      monthLabel: format(new Date(event.isoDate), "MMMM yyyy"),
-      venue: event.venue,
+      dateLabel: event.formattedDate,
+      monthLabel: buildCalendarMonthLabel(event),
+      venue: event.shortVenue,
       href: `/events/${event.slug}`,
       kind: "upcoming" as const,
-      status: getStatusLabel(event.status),
+      status: getStatusLabel(event),
     })),
     ...past.map((event) => ({
-      id: event.title,
+      id: event.slug,
       title: event.title,
-      dateLabel: event.date,
-      monthLabel: format(new Date(event.date), "MMMM yyyy"),
-      venue: event.venue,
-      href: "/gallery",
+      dateLabel: event.formattedDate,
+      monthLabel: buildCalendarMonthLabel(event),
+      venue: event.shortVenue,
+      href: `/events/${event.slug}`,
       kind: "past" as const,
       status: "Memories",
     })),
@@ -134,66 +151,74 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                 >
                   <GlassCard hover className="h-full overflow-hidden p-3">
                     <div className="grid gap-0 sm:block">
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-[18px] sm:aspect-[16/10] sm:overflow-hidden">
-                      <Image
-                        src={event.image}
-                        alt={event.title}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw"
-                        className="object-cover transition duration-500 hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
-                      <div className="absolute left-4 top-4">
-                        <div className={`${statusClass(event.status)} rounded-full px-4 py-2`}>
-                          <div className="spec-line" />
-                          <p className="eyebrow text-white/50">{getStatusLabel(event.status)}</p>
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-[18px] sm:aspect-[16/10]">
+                        <Image
+                          src={event.coverImageUrl}
+                          alt={event.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 42vw"
+                          className="object-cover transition duration-500 hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
+                        <div className="absolute left-4 top-4">
+                          <div className={`${statusClass(event)} rounded-full px-4 py-2`}>
+                            <div className="spec-line" />
+                            <p className="eyebrow text-white/50">{getStatusLabel(event)}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="px-3 pb-3 pt-5 sm:pt-6">
-                      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                        <div>
-                          <p className="eyebrow mb-3">Ticketed Experience</p>
-                          <h3 className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white sm:text-[2rem]">
-                            {event.title}
-                          </h3>
-                        </div>
-                        <p className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[1.8rem]">
-                          From ${event.priceFrom}
-                        </p>
-                      </div>
-
-                      <div className="gold-divider-left mt-4 h-px w-24" />
-
-                      <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                        <GlassCard dark className="px-4 py-4">
-                          <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                          <p className="eyebrow mb-2">Date</p>
-                          <p className="body-copy text-white/68">{event.date}</p>
-                        </GlassCard>
-                        <GlassCard dark className="px-4 py-4">
-                          <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                          <p className="eyebrow mb-2">Venue</p>
-                          <p className="body-copy text-white/68">
-                            {event.venue}
-                            <br />
-                            {event.city}
+                      <div className="px-3 pb-3 pt-5 sm:pt-6">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                          <div>
+                            <p className="eyebrow mb-3">Ticketed Experience</p>
+                            <h3 className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white sm:text-[2rem]">
+                              {event.title}
+                            </h3>
+                          </div>
+                          <p className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[1.8rem]">
+                            {event.priceFrom > 0 ? `From $${event.priceFrom}` : "Invite Only"}
                           </p>
-                        </GlassCard>
-                      </div>
+                        </div>
 
-                      <p className="body-copy mt-5">{event.summary}</p>
+                        <div className="gold-divider-left mt-4 h-px w-24" />
 
-                      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-                        <LiquidLinkButton href={`/events/${event.slug}`} gold className="w-full justify-center sm:w-auto">
-                          View Event <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
-                        </LiquidLinkButton>
-                        <LiquidLinkButton href="/checkout" className="w-full justify-center sm:w-auto">
-                          Get Tickets <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
-                        </LiquidLinkButton>
+                        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                          <GlassCard dark className="px-4 py-4">
+                            <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                            <p className="eyebrow mb-2">Date</p>
+                            <p className="body-copy text-white/68">{event.formattedDate}</p>
+                          </GlassCard>
+                          <GlassCard dark className="px-4 py-4">
+                            <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                            <p className="eyebrow mb-2">Venue</p>
+                            <p className="body-copy text-white/68">
+                              {event.shortVenue}
+                              <br />
+                              {event.cityLine}
+                            </p>
+                          </GlassCard>
+                        </div>
+
+                        <p className="body-copy mt-5">{event.shortDescription}</p>
+
+                        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                          <LiquidLinkButton
+                            href={`/events/${event.slug}`}
+                            gold
+                            className="w-full justify-center sm:w-auto"
+                          >
+                            View Event <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                          </LiquidLinkButton>
+                          <LiquidLinkButton
+                            href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
+                            className="w-full justify-center sm:w-auto"
+                          >
+                            {event.ticketsAvailable ? "Get Tickets" : "Contact Team"}{" "}
+                            <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                          </LiquidLinkButton>
+                        </div>
                       </div>
-                    </div>
                     </div>
                   </GlassCard>
                 </motion.div>
@@ -216,7 +241,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {visiblePast.map((event, index) => (
                   <motion.div
-                    key={event.title}
+                    key={event.slug}
                     initial={{ opacity: 0, y: 24 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -225,7 +250,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                     <GlassCard hover className="h-full overflow-hidden p-3">
                       <div className="relative aspect-[4/5] overflow-hidden rounded-[18px]">
                         <Image
-                          src={event.image}
+                          src={event.coverImageUrl}
                           alt={event.title}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -238,19 +263,22 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                       </div>
 
                       <div className="px-3 pb-3 pt-5">
-                        <p className="eyebrow mb-3">{event.attendance}</p>
+                        <p className="eyebrow mb-3">{event.formattedDate}</p>
                         <h3 className="font-serif text-[1.8rem] font-light tracking-[0.05em] text-white">
                           {event.title}
                         </h3>
                         <div className="gold-divider-left mt-4 h-px w-20" />
                         <p className="body-copy mt-5 text-white/68">
-                          {event.date}
+                          {event.shortVenue}
                           <br />
-                          {event.venue}
+                          {event.cityLine}
                         </p>
-                        <p className="body-copy mt-5">{event.summary}</p>
-                        <Link href="/gallery" className="liquid-button-ghost mt-6 inline-flex w-full justify-center sm:w-auto">
-                          View Gallery
+                        <p className="body-copy mt-5">{event.shortDescription}</p>
+                        <Link
+                          href={`/events/${event.slug}`}
+                          className="liquid-button-ghost mt-6 inline-flex w-full justify-center sm:w-auto"
+                        >
+                          View Event Detail
                         </Link>
                       </div>
                     </GlassCard>
@@ -281,7 +309,8 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                 <div className="lg:w-60">
                   <p className="eyebrow mb-3">Calendar Window</p>
                   <h3 className="section-title text-[2rem]">
-                    {monthLabel.split(" ")[0]} <em>{monthLabel.split(" ").slice(1).join(" ")}</em>
+                    {monthLabel.split(" ")[0]}{" "}
+                    <em>{monthLabel.split(" ").slice(1).join(" ")}</em>
                   </h3>
                 </div>
 

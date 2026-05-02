@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ArrowRight, Award, Building2, Globe2, Quote, Sparkles } from "lucide-react";
 import Image from "next/image";
 
@@ -11,6 +12,12 @@ import {
   TEAM,
   VALUES,
 } from "@/lib/site-data";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Learn how VibeUp approaches luxury event production, cultural programming, guest experience, and premium private celebrations.",
+};
 
 export default function AboutPage() {
   return (

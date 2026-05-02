@@ -1,10 +1,12 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CalendarDays, Clock3, MapPin, Sparkles } from "lucide-react";
 import Image from "next/image";
 
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
 import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
-import { SITE, TICKET_TYPES, UPCOMING_EVENTS } from "@/lib/site-data";
+import { getPublicEventBySlug } from "@/lib/public-events";
+import { SITE } from "@/lib/site-data";
 
 type EventPageProps = {
   params: Promise<{
@@ -12,7 +14,7 @@ type EventPageProps = {
   }>;
 };
 
-const eventDetails: Record<
+const detailFallbacks: Record<
   string,
   {
     overview: string;
@@ -45,7 +47,7 @@ const eventDetails: Record<
     highlights: [
       "Refined red-carpet arrival and guest reception",
       "Premium hospitality and luxury seating tiers",
-      "Live headline performance by Abdel Karim Hamdan",
+      "Live headline performance with cinematic production support",
       "Elegant room styling and controlled atmosphere pacing",
     ],
     venueNotes: [
@@ -56,34 +58,150 @@ const eventDetails: Record<
   },
 };
 
-export function generateStaticParams() {
-  return UPCOMING_EVENTS.map((event) => ({
-    slug: event.slug,
-  }));
+function buildDefaultDetail(event: NonNullable<Awaited<ReturnType<typeof getPublicEventBySlug>>>) {
+  return {
+    overview: event.description,
+    flow: [
+      {
+        title: "Arrival",
+        body:
+          "Guest check-in, welcome support, and early hospitality are paced to make the first impression feel calm, premium, and deliberate.",
+      },
+      {
+        title: "Dining",
+        body:
+          "Table service and guest seating are structured around comfort, visibility, and a clean transition into the headline portion of the event.",
+      },
+      {
+        title: "Performance",
+        body:
+          "The main program is timed to lift the room, keep sightlines clear, and protect the emotional peak of the night.",
+      },
+      {
+        title: "Close",
+        body:
+          "The final sequence keeps energy high while exit flow, guest movement, and event close remain controlled.",
+      },
+    ],
+    highlights: [
+      event.shortDescription,
+      event.ticketTypes.length
+        ? `${event.ticketTypes.length} ticket tiers currently published for this event`
+        : "Ticket tier information will appear when inventory is published",
+      event.ticketsAvailable
+        ? "Live ticket inventory is currently available through VibeUp checkout"
+        : "The team is holding or refreshing ticket inventory right now",
+      event.venueAddress || `${event.shortVenue}, ${event.cityLine}`,
+    ],
+    venueNotes: [
+      { label: "Venue", value: `${event.shortVenue}, ${event.cityLine}` },
+      { label: "Event Date", value: event.formattedDate },
+      {
+        label: "Doors Open",
+        value: event.doorsOpen
+          ? new Date(event.doorsOpen).toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "2-digit",
+            })
+          : "Timing shared in your confirmation email",
+      },
+    ],
+  };
+}
+
+export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await getPublicEventBySlug(slug);
+
+  if (!event) {
+    return {
+      title: "Event Not Found",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  return {
+    title: event.seoTitle || event.title,
+    description: event.seoDescription || event.shortDescription,
+    alternates: {
+      canonical: `/events/${event.slug}`,
+    },
+    openGraph: {
+      title: event.seoTitle || event.title,
+      description: event.seoDescription || event.shortDescription,
+      images: [event.coverImageUrl],
+      type: "website",
+    },
+  };
 }
 
 export default async function EventDetailPage({ params }: EventPageProps) {
   const { slug } = await params;
-  const event = UPCOMING_EVENTS.find((item) => item.slug === slug);
+  const event = await getPublicEventBySlug(slug);
 
   if (!event) {
     notFound();
   }
 
-  const detail = eventDetails[slug] || eventDetails["arab-nights"];
+  const detail = detailFallbacks[slug] || buildDefaultDetail(event);
+  const appUrl =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    "https://vibeup-event.vercel.app";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    description: event.shortDescription,
+    startDate: event.eventDate,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus:
+      event.eventState === "cancelled"
+        ? "https://schema.org/EventCancelled"
+        : "https://schema.org/EventScheduled",
+    image: [event.coverImageUrl],
+    location: {
+      "@type": "Place",
+      name: event.shortVenue,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: event.venueAddress || undefined,
+        addressLocality: event.venueCity,
+        addressRegion: event.venueState || undefined,
+        addressCountry: event.venueCountry || "US",
+      },
+    },
+    offers: event.ticketTypes.map((ticketType) => ({
+      "@type": "Offer",
+      price: ticketType.price,
+      priceCurrency: ticketType.currency,
+      availability: ticketType.isSoldOut
+        ? "https://schema.org/SoldOut"
+        : "https://schema.org/InStock",
+      url: `${appUrl}/checkout?event=${event.slug}`,
+    })),
+    organizer: {
+      "@type": "Organization",
+      name: SITE.name,
+      email: SITE.email,
+    },
+  };
 
   return (
     <main className="overflow-x-hidden pb-20">
       <PageHero
         eyebrow="Event Detail"
-        title={event.title.split(" ").slice(0, -1).join(" ")}
+        title={event.title.split(" ").slice(0, -1).join(" ") || event.title}
         goldWord={event.title.split(" ").slice(-1).join(" ")}
         description={detail.overview}
         media={
           <GlassCard className="overflow-hidden p-3">
             <div className="relative min-h-[520px] overflow-hidden rounded-[18px]">
               <Image
-                src={event.image}
+                src={event.coverImageUrl}
                 alt={event.title}
                 fill
                 priority
@@ -95,20 +213,32 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         }
         actions={
           <>
-            <LiquidLinkButton href="/checkout" gold>
-              Reserve Tickets
+            <LiquidLinkButton
+              href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
+              gold
+            >
+              {event.ticketsAvailable ? "Start Checkout" : "Contact Team"}
             </LiquidLinkButton>
             <LiquidLinkButton href="/events">Back To Events</LiquidLinkButton>
           </>
         }
       />
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <section className="px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {[
-            { icon: CalendarDays, label: "Date", value: event.date },
-            { icon: MapPin, label: "Venue", value: `${event.venue}, ${event.city}` },
-            { icon: Clock3, label: "From", value: `$${event.priceFrom}` },
+            { icon: CalendarDays, label: "Date", value: event.formattedDate },
+            { icon: MapPin, label: "Venue", value: `${event.shortVenue}, ${event.cityLine}` },
+            {
+              icon: Clock3,
+              label: "Pricing",
+              value: event.priceFrom > 0 ? `From $${event.priceFrom}` : "Available on request",
+            },
           ].map((item) => (
             <GlassCard key={item.label} gold className="px-5 py-5">
               <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
@@ -152,7 +282,10 @@ export default async function EventDetailPage({ params }: EventPageProps) {
             </div>
             <div className="mt-5 space-y-4">
               {detail.highlights.map((item) => (
-                <div key={item} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                <div
+                  key={item}
+                  className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
+                >
                   <p className="body-copy text-white/68">{item}</p>
                 </div>
               ))}
@@ -162,18 +295,27 @@ export default async function EventDetailPage({ params }: EventPageProps) {
           <GlassCard className="px-6 py-6">
             <p className="eyebrow mb-4">Ticket Access</p>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {TICKET_TYPES.map((ticket) => (
-                <GlassCard key={ticket.id} dark className="px-4 py-4">
-                  <p className="eyebrow mb-2">{ticket.badge || "Access Tier"}</p>
-                  <h3 className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white">
-                    {ticket.name}
-                  </h3>
-                  <p className="mt-3 font-serif text-[1.8rem] font-light tracking-[0.05em] text-[var(--gold)]">
-                    ${ticket.price}
+              {event.ticketTypes.length ? (
+                event.ticketTypes.map((ticketType) => (
+                  <GlassCard key={ticketType.id} dark className="px-4 py-4">
+                    <p className="eyebrow mb-2">{ticketType.badge || "Access Tier"}</p>
+                    <h3 className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white">
+                      {ticketType.name}
+                    </h3>
+                    <p className="mt-3 font-serif text-[1.8rem] font-light tracking-[0.05em] text-[var(--gold)]">
+                      ${ticketType.price}
+                    </p>
+                    <p className="body-copy mt-4">{ticketType.description}</p>
+                  </GlassCard>
+                ))
+              ) : (
+                <GlassCard dark className="px-5 py-5 md:col-span-2 xl:col-span-3">
+                  <p className="body-copy text-white/68">
+                    Ticket tiers are not published for this event yet. Contact the team if you
+                    need access.
                   </p>
-                  <p className="body-copy mt-4">{ticket.description}</p>
                 </GlassCard>
-              ))}
+              )}
             </div>
           </GlassCard>
         </div>
@@ -193,18 +335,23 @@ export default async function EventDetailPage({ params }: EventPageProps) {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <LiquidLinkButton href="/checkout" gold>
-                Book Your Seats
+              <LiquidLinkButton
+                href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
+                gold
+              >
+                {event.ticketsAvailable ? "Book Your Seats" : "Contact The Team"}
               </LiquidLinkButton>
-              <LiquidLinkButton href={SITE.buyUrl} external>
-                Official Payment Link
-              </LiquidLinkButton>
+              <LiquidLinkButton href="/events">View More Events</LiquidLinkButton>
             </div>
           </GlassCard>
         </div>
       </section>
 
-      <StickyBuyCTA href="/checkout" price={event.priceFrom} label="Book Seats" />
+      <StickyBuyCTA
+        href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
+        price={event.priceFrom || undefined}
+        label={event.ticketsAvailable ? "Book Seats" : "Contact Team"}
+      />
     </main>
   );
 }

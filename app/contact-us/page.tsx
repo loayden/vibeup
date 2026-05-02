@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { Clock3, Mail, MapPin, Phone } from "lucide-react";
 
 import { ContactForm } from "@/components/site/contact-form";
 import { LazyMap } from "@/components/site/lazy-map";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
 import { SITE } from "@/lib/site-data";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Contact VibeUp for private events, partnerships, cultural programs, premium celebrations, and ticketing support.",
+};
 
 export default function ContactPage() {
   return (

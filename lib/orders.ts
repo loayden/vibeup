@@ -112,6 +112,7 @@ export function canAccessOrder(
   order: TableRow<"orders">,
   profile: AuthProfile | null,
   email?: string | null,
+  sessionId?: string | null,
 ) {
   if (profile && ["admin", "super_admin"].includes(profile.role)) {
     return true;
@@ -126,6 +127,10 @@ export function canAccessOrder(
   }
 
   if (email && normalizeEmail(email) === normalizeEmail(order.customer_email)) {
+    return true;
+  }
+
+  if (sessionId && order.stripe_session_id && sessionId === order.stripe_session_id) {
     return true;
   }
 

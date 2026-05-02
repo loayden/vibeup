@@ -3,11 +3,7 @@ import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { NextRequest, NextResponse } from "next/server";
 
-import {
-  getAdminNotificationEmail,
-  getJwtExpiresIn,
-  getServerEnv,
-} from "@/lib/env";
+import { getJwtExpiresIn, getServerEnv } from "@/lib/env";
 import { isMissingSupabaseTableError } from "@/lib/supabase-errors";
 import {
   createPublicServerClient,
@@ -45,10 +41,6 @@ function getJwtSecret() {
   return new TextEncoder().encode(getServerEnv("JWT_SECRET"));
 }
 
-export function isPrimaryAdminEmail(email: string) {
-  return normalizeEmail(email) === normalizeEmail(getAdminNotificationEmail());
-}
-
 export function buildFallbackProfile(input: {
   id: string;
   email: string;
@@ -62,7 +54,7 @@ export function buildFallbackProfile(input: {
     email: normalizeEmail(input.email),
     phone: null,
     avatar_url: null,
-    role: isPrimaryAdminEmail(input.email) ? "super_admin" : "customer",
+    role: "customer",
     email_verified: true,
     marketing_opt_in: false,
     created_at: now,

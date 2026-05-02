@@ -722,8 +722,15 @@ export function AdminDashboardClient() {
                   {user.full_name || "Unnamed User"}
                 </p>
                 <p className="body-copy mt-3 text-white/68">{user.email}</p>
+                <p className="body-copy mt-2 text-white/52">{user.phone || "No phone on file"}</p>
                 <div className="mt-4 flex flex-wrap gap-4">
                   <p className="eyebrow text-white/28">{user.role}</p>
+                  <p className="eyebrow text-white/28">
+                    {user.email_verified ? "Email Verified" : "Email Pending"}
+                  </p>
+                  <p className="eyebrow text-white/28">
+                    {user.marketing_opt_in ? "Marketing Opt-In" : "No Marketing"}
+                  </p>
                   <p className="eyebrow text-white/28">
                     {format(new Date(user.created_at), "MMM d, yyyy")}
                   </p>

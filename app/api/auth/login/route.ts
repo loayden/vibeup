@@ -69,12 +69,14 @@ export async function POST(request: NextRequest) {
 
     const response = jsonResponse(
       {
-        token: sessionToken,
         user: {
           id: authUser.id,
           email: authUser.email,
         },
         profile,
+        session: {
+          created: true,
+        },
       },
       {
         origin: request.headers.get("origin"),

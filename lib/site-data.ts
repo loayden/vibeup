@@ -783,7 +783,7 @@ export const OPEN_POSITIONS = [
 ] as const;
 
 export const TRUST_SIGNALS = [
-  "Secure payment processing",
-  "Instant booking confirmation",
-  "QR-based event entry",
+  "Stripe-hosted card payment with internal order tracking",
+  "Confirmation email and QR tickets after paid webhook confirmation",
+  "Live inventory awareness and order visibility inside the admin dashboard",
 ] as const;

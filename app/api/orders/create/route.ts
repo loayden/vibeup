@@ -219,7 +219,7 @@ export async function POST(request: NextRequest) {
         success_url: absoluteUrl(
           `/orders/${orderNumber}/success?session_id={CHECKOUT_SESSION_ID}`,
         ),
-        cancel_url: absoluteUrl("/checkout?cancelled=true"),
+        cancel_url: absoluteUrl(`/checkout?cancelled=true&event=${event.slug}`),
         line_items: [
           {
             price_data: {

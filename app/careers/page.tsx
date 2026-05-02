@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { ArrowRight, Sparkles, Users2, Wand2 } from "lucide-react";
 
 import { CareersBoard } from "@/components/site/careers-board";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
 import { CAREER_BENEFITS, OPEN_POSITIONS } from "@/lib/site-data";
+
+export const metadata: Metadata = {
+  title: "Careers",
+  description:
+    "Explore open roles at VibeUp and apply to help build premium cultural events, productions, and guest experiences.",
+};
 
 export default function CareersPage() {
   return (

@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { GlassCard, PageHero } from "@/components/site/liquid";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description:
+    "Review VibeUp ticketing, event rules, refund expectations, liability limits, and guest responsibilities.",
+};
 
 const termsSections = [
   {

@@ -11,8 +11,10 @@ import {
   Sparkles,
 } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import { CountdownTimer } from "@/components/site/countdown";
+import { HomeHeroVisual } from "@/components/site/home-hero-visual";
 import {
   GlassCard,
   LiquidLinkButton,
@@ -22,7 +24,7 @@ import {
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
 import { SwipeCarousel } from "@/components/site/swipe-carousel";
-import { useDeviceProfile } from "@/components/site/use-device-profile";
+import type { PublicEventsFeed, PublicTicketType } from "@/lib/public-events";
 import {
   FEATURED_EVENT,
   GALLERY_ITEMS,
@@ -46,7 +48,44 @@ const serviceHighlights = SERVICES.slice(0, 4);
 const galleryHighlights = GALLERY_ITEMS.slice(0, 6);
 
 export default function HomePage() {
-  const { shouldUseLiteMedia } = useDeviceProfile();
+  const [eventsFeed, setEventsFeed] = useState<PublicEventsFeed | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch("/api/public/events-feed", {
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch live event feed");
+        }
+
+        const payload = (await response.json()) as PublicEventsFeed;
+        setEventsFeed(payload);
+      })
+      .catch((error) => {
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+
+        console.error("Unable to refresh home event feed", error);
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  const featuredEvent = eventsFeed?.featured;
+  const nextEvent = eventsFeed?.nextEvent;
+  const featuredTicketTypes: Array<PublicTicketType | (typeof TICKET_TYPES)[number]> =
+    featuredEvent?.ticketTypes.length ? featuredEvent.ticketTypes : [...TICKET_TYPES];
+  const featuredCheckoutHref =
+    featuredEvent?.ticketsAvailable && featuredEvent.slug
+      ? `/checkout?event=${featuredEvent.slug}`
+      : "/contact-us";
+  const featuredDetailHref = featuredEvent?.slug ? `/events/${featuredEvent.slug}` : "/events";
   const testimonialCards = TESTIMONIALS.map((testimonial) => (
     <GlassCard key={testimonial.name} hover className="h-full px-6 py-6">
       <p className="font-serif text-[2rem] font-light leading-snug text-white">
@@ -62,30 +101,7 @@ export default function HomePage() {
   return (
     <main className="overflow-x-hidden">
       <section className="relative min-h-[85vh] overflow-hidden sm:min-h-screen">
-        <Image
-          src="/arabnights-1200.webp"
-          alt="Hero background"
-          fill
-          className="absolute inset-0 object-cover"
-          priority
-          quality={75}
-          sizes="100vw"
-        />
-
-        {!shouldUseLiteMedia ? (
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster="/arabnights-1200.webp"
-            preload="none"
-            style={{ filter: "brightness(0.34) saturate(0.88)" }}
-          >
-            <source src={SITE.heroVideo} type="video/mp4" />
-          </video>
-        ) : null}
+        <HomeHeroVisual />
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.62)_82%)]" />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(180deg,transparent,#080808)]" />
@@ -101,8 +117,8 @@ export default function HomePage() {
                 <GlassCard className="p-4 md:p-5">
                   <div className="overflow-hidden rounded-[18px]">
                     <Image
-                      src="/arabnights-1200.webp"
-                      alt="Arab Nights featured event"
+                      src={featuredEvent?.coverImageUrl || "/arabnights-1200.webp"}
+                      alt={featuredEvent?.title || "Arab Nights featured event"}
                       width={1100}
                       height={1300}
                       className="h-[300px] w-full object-cover sm:h-[420px] md:h-[460px]"
@@ -112,9 +128,21 @@ export default function HomePage() {
                   </div>
                   <div className="grid gap-3 px-1 pb-2 pt-5 sm:grid-cols-3">
                     {[
-                      { icon: CalendarDays, label: "Next Signature Night", value: "March 28, 2026" },
-                      { icon: MapPin, label: "Venue", value: SITE.venue },
-                      { icon: Music4, label: "Headline Moment", value: "Abdel Karim Hamdan" },
+                      {
+                        icon: CalendarDays,
+                        label: "Next Signature Night",
+                        value: nextEvent?.formattedDate || "Live schedule pending",
+                      },
+                      {
+                        icon: MapPin,
+                        label: "Venue",
+                        value: nextEvent?.shortVenue || SITE.venue,
+                      },
+                      {
+                        icon: Music4,
+                        label: "Headline Moment",
+                        value: featuredEvent?.title || "Marquee cultural production",
+                      },
                     ].map((item) => (
                       <div key={item.label} className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
                         <div className="spec-line" />
@@ -131,8 +159,9 @@ export default function HomePage() {
                   <LiquidLinkButton href="/events">
                     Explore Events <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                   </LiquidLinkButton>
-                  <LiquidLinkButton href="/checkout" gold>
-                    Book Tickets <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                  <LiquidLinkButton href={featuredCheckoutHref} gold>
+                    {featuredEvent?.ticketsAvailable ? "Book Tickets" : "Contact Team"}{" "}
+                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                   </LiquidLinkButton>
                 </>
               }
@@ -170,12 +199,29 @@ export default function HomePage() {
             goldWord="ready"
             subtitle="The next headline VibeUp night is already on the calendar. Tickets, guest flow, and hospitality tiers are structured for an elegant, high-energy evening from first arrival to final close."
           />
-          <CountdownTimer targetDate={new Date(SITE.countdownIso)} label="Next marquee countdown" />
+          <CountdownTimer
+            targetDate={new Date(nextEvent?.countdownIso || SITE.countdownIso)}
+            label={nextEvent ? `Until ${nextEvent.title}` : "Next marquee countdown"}
+          />
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {[
-              { icon: CalendarDays, label: "Event", value: "Abdel Karim’s Arab Nights" },
-              { icon: MapPin, label: "Venue", value: SITE.venue },
-              { icon: Sparkles, label: "Experience", value: "Black-tie atmosphere with live performance" },
+              {
+                icon: CalendarDays,
+                label: "Event",
+                value: nextEvent?.title || "VibeUp signature night",
+              },
+              {
+                icon: MapPin,
+                label: "Venue",
+                value: nextEvent?.shortVenue || SITE.venue,
+              },
+              {
+                icon: Sparkles,
+                label: "Experience",
+                value:
+                  nextEvent?.shortDescription ||
+                  "Black-tie atmosphere with live performance",
+              },
             ].map((item) => (
               <GlassCard key={item.label} className="px-5 py-5">
                 <item.icon className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
@@ -190,54 +236,76 @@ export default function HomePage() {
       <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
-            eyebrow={FEATURED_EVENT.eyebrow}
-            title="Arab Nights"
-            goldWord="returns"
-            subtitle={FEATURED_EVENT.description}
+            eyebrow="Featured Event"
+            title={featuredEvent?.title.split(" ").slice(0, -1).join(" ") || "Arab Nights"}
+            goldWord={featuredEvent?.title.split(" ").slice(-1).join(" ") || "returns"}
+            subtitle={featuredEvent?.description || FEATURED_EVENT.description}
           />
           <GlassCard hover className="grid overflow-hidden rounded-[26px] lg:grid-cols-[1fr_1.08fr]">
             <div className="relative min-h-[360px]">
               <Image
-                src={FEATURED_EVENT.image}
-                alt={FEATURED_EVENT.title}
+                src={featuredEvent?.coverImageUrl || FEATURED_EVENT.image}
+                alt={featuredEvent?.title || FEATURED_EVENT.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 44vw"
               />
             </div>
-            <div className="px-6 py-7 md:px-8 md:py-8">
-              <p className="eyebrow mb-4">Signature Experience</p>
-              <h3 className="section-title text-[2.25rem]">
-                {FEATURED_EVENT.title} <em>night</em>
-              </h3>
-              <div className="gold-divider-left mt-5 h-px w-24" />
-              <div className="mt-6 grid gap-4 md:grid-cols-2">
-                <GlassCard dark className="px-4 py-4">
-                  <p className="eyebrow mb-2">Date</p>
-                  <p className="body-copy text-white/70">{FEATURED_EVENT.date}</p>
-                </GlassCard>
-                <GlassCard dark className="px-4 py-4">
-                  <p className="eyebrow mb-2">Venue</p>
-                  <p className="body-copy text-white/70">{FEATURED_EVENT.venue}</p>
-                </GlassCard>
-              </div>
-              <div className="mt-6 grid gap-3">
-                {FEATURED_EVENT.details.map((detail) => (
-                  <GlassCard key={detail} className="px-4 py-4">
-                    <p className="body-copy text-white/68">{detail}</p>
+              <div className="px-6 py-7 md:px-8 md:py-8">
+                <p className="eyebrow mb-4">Signature Experience</p>
+                <h3 className="section-title text-[2.25rem]">
+                  {featuredEvent?.title || FEATURED_EVENT.title} <em>night</em>
+                </h3>
+                <div className="gold-divider-left mt-5 h-px w-24" />
+                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                  <GlassCard dark className="px-4 py-4">
+                    <p className="eyebrow mb-2">Date</p>
+                    <p className="body-copy text-white/70">
+                      {featuredEvent?.formattedDate || FEATURED_EVENT.date}
+                    </p>
                   </GlassCard>
-                ))}
+                  <GlassCard dark className="px-4 py-4">
+                    <p className="eyebrow mb-2">Venue</p>
+                    <p className="body-copy text-white/70">
+                      {featuredEvent?.shortVenue || FEATURED_EVENT.venue}
+                    </p>
+                  </GlassCard>
+                </div>
+                <div className="mt-6 grid gap-3">
+                  {(
+                    featuredEvent?.ticketTypes.length
+                      ? [
+                          featuredEvent.ticketsAvailable
+                            ? "Live checkout is active for this event."
+                            : "Ticket inventory is currently unavailable.",
+                          `Pricing starts at $${featuredEvent.priceFrom}`,
+                          featuredEvent.shortDescription,
+                          `${featuredEvent.shortVenue}, ${featuredEvent.cityLine}`,
+                        ]
+                      : FEATURED_EVENT.details
+                  ).map((detail) => (
+                    <GlassCard key={detail} className="px-4 py-4">
+                      <p className="body-copy text-white/68">{detail}</p>
+                    </GlassCard>
+                  ))}
+                </div>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                  <LiquidLinkButton
+                    href={featuredCheckoutHref}
+                    gold
+                    className="w-full justify-center sm:w-auto"
+                  >
+                    {featuredEvent?.ticketsAvailable ? "Reserve Seats" : "Contact Team"}
+                  </LiquidLinkButton>
+                  <LiquidLinkButton
+                    href={featuredDetailHref}
+                    className="w-full justify-center sm:w-auto"
+                  >
+                    View Event Detail
+                  </LiquidLinkButton>
+                </div>
               </div>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-                <LiquidLinkButton href="/checkout" gold className="w-full justify-center sm:w-auto">
-                  Reserve Seats
-                </LiquidLinkButton>
-                <LiquidLinkButton href={SITE.buyUrl} external className="w-full justify-center sm:w-auto">
-                  Official Ticket Link
-                </LiquidLinkButton>
-              </div>
-            </div>
-          </GlassCard>
+            </GlassCard>
         </div>
       </motion.section>
 
@@ -280,7 +348,7 @@ export default function HomePage() {
             subtitle="Each tier is structured around sightlines, service flow, and the feeling you want your night to carry. The categories are designed to make the room feel premium at every level."
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {TICKET_TYPES.map((ticket, index) => (
+            {featuredTicketTypes.map((ticket, index) => (
               <motion.div
                 key={ticket.id}
                 initial={{ opacity: 0, y: 22 }}
@@ -308,7 +376,11 @@ export default function HomePage() {
                     ${ticket.price}
                   </p>
                   <p className="body-copy mt-4">{ticket.description}</p>
-                  <LiquidLinkButton href="/checkout" gold className="mt-7 w-full justify-center">
+                  <LiquidLinkButton
+                    href={featuredCheckoutHref}
+                    gold
+                    className="mt-7 w-full justify-center"
+                  >
                     Reserve Seat
                   </LiquidLinkButton>
                 </GlassCard>
@@ -441,7 +513,11 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      <StickyBuyCTA href="/checkout" price={120} />
+      <StickyBuyCTA
+        href={featuredCheckoutHref}
+        price={featuredEvent?.ticketsAvailable ? featuredEvent.priceFrom : undefined}
+        label={featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Contact Team"}
+      />
     </main>
   );
 }

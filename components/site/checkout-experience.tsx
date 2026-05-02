@@ -1,101 +1,270 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Check, ChevronDown, ChevronUp, Minus, Plus, ShieldCheck } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Minus,
+  Plus,
+  ShieldCheck,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import { CountdownTimer } from "@/components/site/countdown";
-import { GlassCard, LiquidButton, LiquidLinkButton } from "@/components/site/liquid";
-import { SITE, TICKET_TYPES, TRUST_SIGNALS } from "@/lib/site-data";
+import { GlassCard, LiquidButton } from "@/components/site/liquid";
+import type { PublicEvent, PublicTicketType } from "@/lib/public-events";
 
 type QuantityMap = Record<string, number>;
 type BannerState = {
   type: "success" | "error" | "info";
   message: string;
 };
+type PromoState = {
+  code: string | null;
+  discountAmount: number;
+  description: string | null;
+  loading: boolean;
+};
 
-const initialQuantities = TICKET_TYPES.reduce<QuantityMap>((accumulator, ticket) => {
-  accumulator[ticket.id] = 0;
-  return accumulator;
-}, {});
+type CheckoutExperienceProps = {
+  event: PublicEvent | null;
+  trustSignals: string[];
+  unavailableMessage: string;
+  wasCancelled?: boolean;
+};
 
-export function CheckoutExperience() {
-  const [quantities, setQuantities] = useState<QuantityMap>(initialQuantities);
+const emptyTicketTypes: PublicTicketType[] = [];
+
+function buildInitialQuantities(ticketTypes: PublicTicketType[]): QuantityMap {
+  return ticketTypes.reduce<QuantityMap>((accumulator, ticketType) => {
+    accumulator[ticketType.id] = 0;
+    return accumulator;
+  }, {});
+}
+
+function renderBannerStyles(type: BannerState["type"]) {
+  if (type === "success") {
+    return {
+      background: "rgba(52,211,153,0.08)",
+      border: "1px solid rgba(52,211,153,0.18)",
+    };
+  }
+
+  if (type === "error") {
+    return {
+      background: "rgba(255,60,60,0.07)",
+      border: "1px solid rgba(255,80,80,0.18)",
+    };
+  }
+
+  return {
+    background: "rgba(198,169,98,0.08)",
+    border: "1px solid rgba(198,169,98,0.18)",
+  };
+}
+
+export function CheckoutExperience({
+  event,
+  trustSignals,
+  unavailableMessage,
+  wasCancelled = false,
+}: CheckoutExperienceProps) {
+  const ticketTypes = event?.ticketTypes || emptyTicketTypes;
+  const [quantities, setQuantities] = useState<QuantityMap>(() =>
+    buildInitialQuantities(ticketTypes),
+  );
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     promo: "",
   });
-  const [appliedPromo, setAppliedPromo] = useState<string | null>(null);
+  const [promoState, setPromoState] = useState<PromoState>({
+    code: null,
+    discountAmount: 0,
+    description: null,
+    loading: false,
+  });
   const [banner, setBanner] = useState<BannerState | null>(null);
   const [loading, setLoading] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
-
-  // ✅ Track in-flight requests
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // ✅ Cleanup on unmount
+  useEffect(() => {
+    setQuantities(buildInitialQuantities(ticketTypes));
+    setSummaryOpen(false);
+  }, [ticketTypes]);
+
   useEffect(() => {
     return () => {
       abortControllerRef.current?.abort();
     };
   }, []);
 
-  const selectedTickets = TICKET_TYPES.filter((ticket) => quantities[ticket.id] > 0).map(
-    (ticket) => ({
-      ...ticket,
-      quantity: quantities[ticket.id],
-    }),
-  );
+  useEffect(() => {
+    if (wasCancelled) {
+      setBanner({
+        type: "info",
+        message:
+          "Stripe checkout was cancelled before payment completed. Your selections are still here if you want to try again.",
+      });
+    }
+  }, [wasCancelled]);
+
+  const selectedTickets = ticketTypes
+    .filter((ticketType) => (quantities[ticketType.id] || 0) > 0)
+    .map((ticketType) => ({
+      ...ticketType,
+      quantity: quantities[ticketType.id],
+    }));
   const subtotal = selectedTickets.reduce(
-    (sum, ticket) => sum + ticket.price * ticket.quantity,
+    (sum, ticketType) => sum + ticketType.price * ticketType.quantity,
     0,
   );
-  const fee = subtotal > 0 ? Number((subtotal * 0.03).toFixed(2)) : 0;
-  const total = subtotal + fee;
+  const discountAmount =
+    promoState.code && subtotal > 0 ? Math.min(promoState.discountAmount, subtotal) : 0;
+  const discountedSubtotal = Math.max(subtotal - discountAmount, 0);
+  const fee = discountedSubtotal > 0 ? Number((discountedSubtotal * 0.03).toFixed(2)) : 0;
+  const total = discountedSubtotal + fee;
+  const checkoutEnabled = Boolean(event?.id && event.ticketsAvailable && ticketTypes.length > 0);
 
   function toggleTicketSelection(ticketId: string) {
     setQuantities((current) => ({
       ...current,
       [ticketId]: current[ticketId] > 0 ? 0 : 1,
     }));
+    setBanner(null);
   }
 
   function updateQuantity(ticketId: string, direction: "up" | "down") {
     setQuantities((current) => {
+      const ticketType = ticketTypes.find((candidate) => candidate.id === ticketId);
+      const maxPerOrder = ticketType?.maxPerOrder || 10;
+      const currentQuantity = current[ticketId] || 0;
       const nextQuantity =
         direction === "up"
-          ? Math.min((current[ticketId] || 0) + 1, 10)
-          : Math.max((current[ticketId] || 0) - 1, 0);
+          ? Math.min(currentQuantity + 1, maxPerOrder)
+          : Math.max(currentQuantity - 1, 0);
 
       return {
         ...current,
         [ticketId]: nextQuantity,
       };
     });
+    setBanner(null);
   }
 
-  function applyPromo() {
+  async function applyPromo() {
     if (!form.promo.trim()) {
-      setAppliedPromo(null);
+      setPromoState({
+        code: null,
+        discountAmount: 0,
+        description: null,
+        loading: false,
+      });
       setBanner({
         type: "info",
-        message: "Add a code first. Concierge review is available during final confirmation.",
+        message: "Add a promo code if you received one from the VibeUp team.",
       });
       return;
     }
 
-    setAppliedPromo(form.promo.trim().toUpperCase());
-    setBanner({
-      type: "info",
-      message:
-        "Promo code saved. Final validation is completed during ticket confirmation and payment.",
-    });
+    if (!event?.id) {
+      setBanner({
+        type: "error",
+        message: unavailableMessage,
+      });
+      return;
+    }
+
+    if (!selectedTickets.length) {
+      setBanner({
+        type: "error",
+        message: "Select at least one ticket tier before applying a promo code.",
+      });
+      return;
+    }
+
+    setPromoState((current) => ({ ...current, loading: true }));
+    setBanner(null);
+
+    try {
+      const response = await fetch("/api/orders/validate-promo", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          code: form.promo.trim(),
+          event_id: event.id,
+          subtotal,
+          ticket_type_ids: selectedTickets.map((ticketType) => ticketType.id),
+        }),
+      });
+
+      const payload = (await response.json()) as {
+        error?: string;
+        valid?: boolean;
+        discount_amount?: number;
+        description?: string | null;
+      };
+
+      if (!response.ok || !payload.valid) {
+        setPromoState({
+          code: null,
+          discountAmount: 0,
+          description: null,
+          loading: false,
+        });
+        setBanner({
+          type: "error",
+          message: payload.error || "Promo code validation failed.",
+        });
+        return;
+      }
+
+      setPromoState({
+        code: form.promo.trim().toUpperCase(),
+        discountAmount: payload.discount_amount || 0,
+        description: payload.description || null,
+        loading: false,
+      });
+      setBanner({
+        type: "success",
+        message:
+          payload.discount_amount && payload.discount_amount > 0
+            ? `Promo applied. Your order is reduced by $${payload.discount_amount.toFixed(2)}.`
+            : "Promo validated for this order.",
+      });
+    } catch (error) {
+      console.error("Promo validation failed", error);
+      setPromoState({
+        code: null,
+        discountAmount: 0,
+        description: null,
+        loading: false,
+      });
+      setBanner({
+        type: "error",
+        message: "Unable to validate promo code right now.",
+      });
+    }
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(eventObject: React.FormEvent<HTMLFormElement>) {
+    eventObject.preventDefault();
+
+    if (!checkoutEnabled || !event?.id) {
+      setBanner({
+        type: "error",
+        message: unavailableMessage,
+      });
+      return;
+    }
 
     if (!selectedTickets.length) {
       setBanner({
@@ -105,98 +274,71 @@ export function CheckoutExperience() {
       return;
     }
 
-    if (!form.name || !form.email) {
+    if (!form.name.trim() || !form.email.trim()) {
       setBanner({
         type: "error",
-        message: "Your name and email are required to save the reservation.",
+        message: "Your name and email are required to continue to payment.",
       });
       return;
     }
 
     setLoading(true);
     setBanner(null);
-
-    // ✅ Cancel previous request
     abortControllerRef.current?.abort();
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
 
     try {
-      const response = await fetch("/api/reservations", {
+      const response = await fetch("/api/orders/create", {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          full_name: form.name,
-          email: form.email,
-          phone: form.phone || undefined,
-          promo: appliedPromo,
-          items: selectedTickets.map((ticket) => ({
-            id: ticket.id,
-            name: ticket.name,
-            quantity: ticket.quantity,
+          event_id: event.id,
+          customer_name: form.name.trim(),
+          customer_email: form.email.trim(),
+          customer_phone: form.phone.trim() || null,
+          promo_code: promoState.code,
+          items: selectedTickets.map((ticketType) => ({
+            ticket_type_id: ticketType.id,
+            quantity: ticketType.quantity,
           })),
         }),
         signal,
       });
 
-      if (signal.aborted) return;
+      const payload = (await response.json()) as {
+        error?: string;
+        checkout_url?: string;
+      };
 
-      let errorMessage = "Unable to save your reservation right now.";
-
-      if (!response.ok) {
-        try {
-          // ✅ Proper error message extraction
-          const payload = (await response.json()) as { error?: string; message?: string };
-          errorMessage = payload?.error || payload?.message || errorMessage;
-        } catch {
-          // ✅ Handle parse errors properly
-          console.error("Response parse error", {
-            status: response.status,
-            statusText: response.statusText,
-          });
-
-          if (response.status === 500) {
-            errorMessage = "Server error. Please try again later.";
-          } else if (response.status === 429) {
-            errorMessage = "Too many requests. Please wait before trying again.";
-          }
-        }
-
+      if (!response.ok || !payload.checkout_url) {
         setBanner({
           type: "error",
-          message: errorMessage,
+          message: payload.error || "Unable to create your order right now.",
         });
         return;
       }
 
-      const payload = (await response.json()) as { message?: string };
-
       setBanner({
         type: "success",
-        message:
-          payload?.message ||
-          "Your reservation has been saved. Continue to the official ticket page to complete final purchase.",
+        message: "Order created. Redirecting you to secure Stripe Checkout now.",
       });
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        promo: "",
-      });
-      setAppliedPromo(null);
-      setQuantities(initialQuantities);
+      window.location.assign(payload.checkout_url);
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") {
         return;
       }
-      console.error("Checkout error", error);
+
+      console.error("Order creation failed", error);
       setBanner({
         type: "error",
         message:
-          error instanceof Error ? error.message : "Unable to save your reservation right now.",
+          error instanceof Error
+            ? error.message
+            : "Unable to create your order right now.",
       });
     } finally {
       setLoading(false);
@@ -208,14 +350,14 @@ export function CheckoutExperience() {
       <p className="eyebrow mb-4">Order Summary</p>
       <div className="space-y-4">
         {selectedTickets.length ? (
-          selectedTickets.map((ticket) => (
-            <div key={ticket.id} className="flex items-start justify-between gap-4">
+          selectedTickets.map((ticketType) => (
+            <div key={ticketType.id} className="flex items-start justify-between gap-4">
               <div>
-                <p className="body-copy text-white/70">{ticket.name}</p>
-                <p className="eyebrow mt-2 text-white/28">Quantity {ticket.quantity}</p>
+                <p className="body-copy text-white/70">{ticketType.name}</p>
+                <p className="eyebrow mt-2 text-white/28">Quantity {ticketType.quantity}</p>
               </div>
               <p className="body-copy text-white/70">
-                ${(ticket.price * ticket.quantity).toFixed(2)}
+                ${(ticketType.price * ticketType.quantity).toFixed(2)}
               </p>
             </div>
           ))
@@ -232,13 +374,21 @@ export function CheckoutExperience() {
           <p className="body-copy text-white/70">${subtotal.toFixed(2)}</p>
         </div>
         <div className="flex items-center justify-between">
+          <p className="body-copy">Promo Discount</p>
+          <p className="body-copy text-white/70">
+            {discountAmount > 0 ? `-$${discountAmount.toFixed(2)}` : "$0.00"}
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
           <p className="body-copy">Estimated Fees</p>
           <p className="body-copy text-white/70">${fee.toFixed(2)}</p>
         </div>
         <div className="flex items-center justify-between">
           <p className="body-copy">Promo Status</p>
-          <p className="body-copy text-white/70">
-            {appliedPromo ? `Saved: ${appliedPromo}` : "Optional"}
+          <p className="body-copy text-right text-white/70">
+            {promoState.code
+              ? `${promoState.code}${promoState.description ? ` · ${promoState.description}` : ""}`
+              : "Optional"}
           </p>
         </div>
       </div>
@@ -259,109 +409,145 @@ export function CheckoutExperience() {
       <div className="space-y-8">
         <GlassCard warm className="px-6 py-6 md:px-8">
           <p className="eyebrow mb-4">Signature Countdown</p>
-          <CountdownTimer targetDate={new Date(SITE.countdownIso)} label="Until the next marquee night" />
+          <CountdownTimer
+            targetDate={new Date(event?.countdownIso || new Date().toISOString())}
+            label={event ? `Until ${event.title}` : "Live inventory unavailable"}
+          />
         </GlassCard>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
-          {TICKET_TYPES.map((ticket) => {
-            const quantity = quantities[ticket.id] || 0;
-            const selected = quantity > 0;
+          {ticketTypes.length ? (
+            ticketTypes.map((ticketType) => {
+              const quantity = quantities[ticketType.id] || 0;
+              const selected = quantity > 0;
+              const soldOut = ticketType.isSoldOut;
 
-            return (
-              <GlassCard
-                key={ticket.id}
-                hover
-                className={`px-5 py-5 ${selected ? "border-[rgba(198,169,98,0.32)] shadow-[0_24px_64px_rgba(0,0,0,0.55),0_0_28px_rgba(198,169,98,0.10),inset_0_1px_0_rgba(255,255,255,0.14)]" : ""}`}
-              >
-                <button
-                  type="button"
-                  className="block w-full text-left"
-                  onClick={() => toggleTicketSelection(ticket.id)}
+              return (
+                <GlassCard
+                  key={ticketType.id}
+                  hover={!soldOut}
+                  className={`px-5 py-5 ${selected ? "border-[rgba(198,169,98,0.32)] shadow-[0_24px_64px_rgba(0,0,0,0.55),0_0_28px_rgba(198,169,98,0.10),inset_0_1px_0_rgba(255,255,255,0.14)]" : ""} ${soldOut ? "opacity-65" : ""}`}
                 >
-                  <div
-                    className="mb-5 h-1.5 rounded-full"
-                    style={{ background: `linear-gradient(90deg, ${ticket.color}, transparent)` }}
-                  />
+                  <button
+                    type="button"
+                    className="block w-full text-left"
+                    onClick={() => {
+                      if (!soldOut) {
+                        toggleTicketSelection(ticketType.id);
+                      }
+                    }}
+                    disabled={soldOut}
+                  >
+                    <div
+                      className="mb-5 h-1.5 rounded-full"
+                      style={{
+                        background: `linear-gradient(90deg, ${ticketType.color}, transparent)`,
+                      }}
+                    />
 
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="eyebrow mb-3">Ticket Tier</p>
-                      <h3 className="font-serif text-[1.75rem] font-light tracking-[0.05em] text-white sm:text-[1.85rem]">
-                        {ticket.name}
-                      </h3>
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="eyebrow mb-3">Ticket Tier</p>
+                        <h3 className="font-serif text-[1.75rem] font-light tracking-[0.05em] text-white sm:text-[1.85rem]">
+                          {ticketType.name}
+                        </h3>
+                      </div>
+                      {ticketType.badge ? (
+                        <span className="liquid-button-gold px-4 py-2 !text-[9px]">
+                          {ticketType.badge}
+                        </span>
+                      ) : soldOut ? (
+                        <span className="liquid-button-ghost px-4 py-2 !text-[9px]">Sold Out</span>
+                      ) : null}
                     </div>
-                    {ticket.badge ? (
-                      <span className="liquid-button-gold px-4 py-2 !text-[9px]">{ticket.badge}</span>
+
+                    <p className="mt-4 font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[2.1rem]">
+                      ${ticketType.price}
+                    </p>
+                    <p className="body-copy mt-4">{ticketType.description}</p>
+                  </button>
+
+                  <div className="mt-6 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        className="nav-mobile-button !h-12 !w-12"
+                        type="button"
+                        onClick={(eventObject) => {
+                          eventObject.stopPropagation();
+                          updateQuantity(ticketType.id, "down");
+                        }}
+                        disabled={soldOut}
+                        data-cursor="hover"
+                      >
+                        <Minus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
+                      </button>
+                      <span className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-white">
+                        {quantity}
+                      </span>
+                      <button
+                        className="nav-mobile-button !h-12 !w-12"
+                        type="button"
+                        onClick={(eventObject) => {
+                          eventObject.stopPropagation();
+                          updateQuantity(ticketType.id, "up");
+                        }}
+                        disabled={soldOut}
+                        data-cursor="hover"
+                      >
+                        <Plus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
+                      </button>
+                    </div>
+
+                    {selected ? (
+                      <div className="flex items-center gap-2 rounded-full border border-[rgba(198,169,98,0.24)] bg-[rgba(198,169,98,0.10)] px-3 py-2">
+                        <Check className="h-3.5 w-3.5 text-[var(--gold)]" strokeWidth={1.5} />
+                        <span className="eyebrow text-[var(--gold)]">Selected</span>
+                      </div>
+                    ) : soldOut ? (
+                      <div className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-2">
+                        <span className="eyebrow text-white/45">Unavailable</span>
+                      </div>
                     ) : null}
                   </div>
-
-                  <p className="mt-4 font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[2.1rem]">
-                    ${ticket.price}
-                  </p>
-                  <p className="body-copy mt-4">{ticket.description}</p>
-                </button>
-
-                <div className="mt-6 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <button
-                      className="nav-mobile-button !h-12 !w-12"
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        updateQuantity(ticket.id, "down");
-                      }}
-                      data-cursor="hover"
-                    >
-                      <Minus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
-                    </button>
-                    <span className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-white">
-                      {quantity}
-                    </span>
-                    <button
-                      className="nav-mobile-button !h-12 !w-12"
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        updateQuantity(ticket.id, "up");
-                      }}
-                      data-cursor="hover"
-                    >
-                      <Plus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
-                    </button>
-                  </div>
-
-                  {selected ? (
-                    <div className="flex items-center gap-2 rounded-full border border-[rgba(198,169,98,0.24)] bg-[rgba(198,169,98,0.10)] px-3 py-2">
-                      <Check className="h-3.5 w-3.5 text-[var(--gold)]" strokeWidth={1.5} />
-                      <span className="eyebrow text-[var(--gold)]">Selected</span>
-                    </div>
-                  ) : null}
+                </GlassCard>
+              );
+            })
+          ) : (
+            <GlassCard dark className="px-6 py-8 sm:col-span-2 xl:col-span-2">
+              <div className="flex items-start gap-4">
+                <AlertTriangle className="mt-1 h-4 w-4 text-[var(--gold)]" strokeWidth={1.3} />
+                <div>
+                  <p className="eyebrow mb-3">Ticketing Unavailable</p>
+                  <p className="body-copy text-white/68">{unavailableMessage}</p>
                 </div>
-              </GlassCard>
-            );
-          })}
+              </div>
+            </GlassCard>
+          )}
         </div>
       </div>
 
       <div className="space-y-6">
         <GlassCard gold className="px-6 py-6 md:px-7">
-          <p className="eyebrow mb-4">Reservation Form</p>
+          <p className="eyebrow mb-4">Order Form</p>
           <h2 className="section-title text-[2.2rem]">
-            Save your <em>selection</em>
+            Complete your <em>order</em>
           </h2>
           <p className="body-copy mt-4">
-            Choose your tiers, save your reservation, and continue to the official ticket page
-            for payment completion.
+            {checkoutEnabled
+              ? "Your order is created inside VibeUp first, then card payment continues securely in Stripe Checkout."
+              : unavailableMessage}
           </p>
 
-          <form id="checkout-reservation-form" className="mt-7 space-y-4" onSubmit={handleSubmit}>
+          <form id="checkout-order-form" className="mt-7 space-y-4" onSubmit={handleSubmit}>
             <input
               className="glass-input"
               placeholder="Full Name"
               autoComplete="name"
               style={{ fontSize: "16px" }}
               value={form.name}
-              onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+              onChange={(eventObject) =>
+                setForm((current) => ({ ...current, name: eventObject.target.value }))
+              }
             />
             <input
               className="glass-input"
@@ -371,7 +557,9 @@ export function CheckoutExperience() {
               autoComplete="email"
               style={{ fontSize: "16px" }}
               value={form.email}
-              onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+              onChange={(eventObject) =>
+                setForm((current) => ({ ...current, email: eventObject.target.value }))
+              }
             />
             <input
               className="glass-input"
@@ -380,20 +568,29 @@ export function CheckoutExperience() {
               autoComplete="tel"
               style={{ fontSize: "16px" }}
               value={form.phone}
-              onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+              onChange={(eventObject) =>
+                setForm((current) => ({ ...current, phone: eventObject.target.value }))
+              }
             />
 
             <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
               <input
                 className="glass-input"
-                placeholder="Promo or concierge code"
+                placeholder="Promo code"
                 autoComplete="off"
                 style={{ fontSize: "16px" }}
                 value={form.promo}
-                onChange={(event) => setForm((current) => ({ ...current, promo: event.target.value }))}
+                onChange={(eventObject) =>
+                  setForm((current) => ({ ...current, promo: eventObject.target.value }))
+                }
               />
-              <LiquidButton type="button" className="w-full sm:w-auto" onClick={applyPromo}>
-                Apply
+              <LiquidButton
+                type="button"
+                className="w-full sm:w-auto"
+                onClick={applyPromo}
+                disabled={promoState.loading || !checkoutEnabled}
+              >
+                {promoState.loading ? "Checking" : "Apply"}
               </LiquidButton>
             </div>
 
@@ -404,20 +601,7 @@ export function CheckoutExperience() {
                   animate={{ opacity: 1, y: 0, height: "auto" }}
                   exit={{ opacity: 0, y: -8, height: 0 }}
                   className="overflow-hidden rounded-[18px] px-4 py-3"
-                  style={{
-                    background:
-                      banner.type === "success"
-                        ? "rgba(52,211,153,0.08)"
-                        : banner.type === "error"
-                          ? "rgba(255,60,60,0.07)"
-                          : "rgba(198,169,98,0.08)",
-                    border:
-                      banner.type === "success"
-                        ? "1px solid rgba(52,211,153,0.18)"
-                        : banner.type === "error"
-                          ? "1px solid rgba(255,80,80,0.18)"
-                          : "1px solid rgba(198,169,98,0.18)",
-                  }}
+                  style={renderBannerStyles(banner.type)}
                 >
                   <p className="body-copy text-[0.8rem] text-white/70">{banner.message}</p>
                 </motion.div>
@@ -426,9 +610,18 @@ export function CheckoutExperience() {
 
             <div className="hidden md:block">{orderSummaryContent}</div>
 
-            <LiquidButton gold type="submit" className="w-full justify-center" disabled={loading}>
+            <LiquidButton
+              gold
+              type="submit"
+              className="w-full justify-center"
+              disabled={loading || !checkoutEnabled}
+            >
               <span className="inline-flex items-center gap-2">
-                {loading ? "Saving Reservation" : "Reserve Selection"}
+                {loading
+                  ? "Preparing Checkout"
+                  : checkoutEnabled
+                    ? "Continue To Stripe"
+                    : "Ticketing Unavailable"}
                 <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
               </span>
             </LiquidButton>
@@ -438,20 +631,17 @@ export function CheckoutExperience() {
         <GlassCard warm className="px-6 py-6">
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.3} />
-            <p className="eyebrow">Trust Signals</p>
+            <p className="eyebrow">Order Signals</p>
           </div>
           <div className="mt-5 space-y-3">
-            {TRUST_SIGNALS.map((item) => (
-              <div key={item} className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-3">
+            {trustSignals.map((item) => (
+              <div
+                key={item}
+                className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-3"
+              >
                 <p className="body-copy text-white/65">{item}</p>
               </div>
             ))}
-          </div>
-
-          <div className="mt-6">
-            <LiquidLinkButton href={SITE.buyUrl} gold external className="w-full justify-center">
-              Proceed To Official Payment
-            </LiquidLinkButton>
           </div>
         </GlassCard>
       </div>
@@ -489,11 +679,17 @@ export function CheckoutExperience() {
 
           <button
             type="submit"
-            form="checkout-reservation-form"
-            disabled={loading}
+            form="checkout-order-form"
+            disabled={loading || !checkoutEnabled}
             className="liquid-button-gold flex min-h-[56px] flex-1 items-center justify-between !px-5"
           >
-            <span>{loading ? "Saving" : "Proceed To Payment"}</span>
+            <span>
+              {loading
+                ? "Preparing"
+                : checkoutEnabled
+                  ? "Continue To Stripe"
+                  : "Unavailable"}
+            </span>
             <span className="font-serif text-[1.1rem] tracking-[0.03em]">${total.toFixed(2)}</span>
           </button>
         </div>

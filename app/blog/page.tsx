@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import { BookOpenText, Newspaper, Sparkles } from "lucide-react";
 
 import { BlogShowcase } from "@/components/site/blog-showcase";
 import { GlassCard, PageHero, SectionHeader } from "@/components/site/liquid";
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import { BLOG_POSTS } from "@/lib/site-data";
+
+export const metadata: Metadata = {
+  title: "Journal",
+  description:
+    "Read VibeUp articles on event strategy, production thinking, artist moments, and premium guest experience.",
+};
 
 export default function BlogPage() {
   return (

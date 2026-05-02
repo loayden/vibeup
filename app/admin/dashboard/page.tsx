@@ -1,5 +1,16 @@
+import type { Metadata } from "next";
 import { AdminDashboardClient } from "@/components/site/admin-dashboard";
 import { PageHero } from "@/components/site/liquid";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+  description:
+    "Administrative dashboard for monitoring VibeUp users, orders, reservations, revenue, and operational signals.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function AdminDashboardPage() {
   return (

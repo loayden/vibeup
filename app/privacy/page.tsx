@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { GlassCard, PageHero } from "@/components/site/liquid";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "Review how VibeUp collects, uses, stores, and shares guest, booking, and communication data.",
+};
 
 const privacySections = [
   {

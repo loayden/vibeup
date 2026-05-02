@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { FaqShowcase } from "@/components/site/faq-showcase";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
 import { FAQ_GROUPS } from "@/lib/site-data";
+
+export const metadata: Metadata = {
+  title: "FAQ",
+  description:
+    "Find answers about tickets, event policies, private bookings, payments, and the VibeUp guest experience.",
+};
 
 export default function FaqPage() {
   return (

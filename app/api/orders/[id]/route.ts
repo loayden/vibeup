@@ -14,9 +14,10 @@ export async function GET(
     const order = await getOrderWithRelationsByNumber(id);
     const authResult = await getAuthUser(request);
     const email = request.nextUrl.searchParams.get("email");
+    const sessionId = request.nextUrl.searchParams.get("session_id");
 
     const profile = authResult.ok ? authResult.profile : null;
-    const hasAccess = canAccessOrder(order, profile, email);
+    const hasAccess = canAccessOrder(order, profile, email, sessionId);
 
     if (!hasAccess) {
       return errorResponse("Order not found", 404, {

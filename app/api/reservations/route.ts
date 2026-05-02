@@ -207,7 +207,7 @@ export async function POST(request: NextRequest) {
           return jsonResponse(
             {
               message:
-                "Reservation received through the backup channel. Continue to the official ticket page to complete purchase.",
+                "Reservation received through the backup channel. The VibeUp team can follow up manually while live inventory or checkout is being restored.",
             },
             {
               status: 201,
