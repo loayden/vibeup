@@ -17,7 +17,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { GlassCard, LiquidButton } from "@/components/site/liquid";
 
@@ -148,6 +148,19 @@ type DashboardStats = {
   revenue_this_month: number;
 };
 
+type HealthCheck = {
+  key: string;
+  label: string;
+  status: "healthy" | "degraded" | "offline";
+  detail: string;
+};
+
+type AdminListResponse<T> = {
+  degraded?: boolean;
+  degraded_message?: string | null;
+  source?: string;
+} & T;
+
 type AuthProfile = {
   id: string;
   full_name: string | null;
@@ -216,6 +229,7 @@ export function AdminDashboardClient() {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [users, setUsers] = useState<Profile[]>([]);
   const [reservations, setReservations] = useState<ReservationSummary[]>([]);
+  const [healthChecks, setHealthChecks] = useState<HealthCheck[]>([]);
   const [activeReservationId, setActiveReservationId] = useState<string | null>(null);
   const [reservationDetail, setReservationDetail] = useState<ReservationDetail | null>(null);
   const [reservationLoading, setReservationLoading] = useState(false);
@@ -225,7 +239,29 @@ export function AdminDashboardClient() {
   const abortControllerRef = useRef<AbortController | null>(null);
   const loadDashboardAbortRef = useRef<AbortController | null>(null);
 
-  async function loadDashboardData() {
+  async function fetchAdminJson<T>(url: string, signal: AbortSignal): Promise<T> {
+    const response = await fetch(url, {
+      credentials: "include",
+      signal,
+    });
+    const payload = (await response.json().catch(() => null)) as
+      | (T & { error?: string; message?: string })
+      | null;
+
+    if (!response.ok) {
+      throw new Error(
+        payload?.error || payload?.message || `Unable to load ${url}.`,
+      );
+    }
+
+    if (!payload) {
+      throw new Error(`Empty response returned by ${url}.`);
+    }
+
+    return payload;
+  }
+
+  const loadDashboardData = useCallback(async () => {
     setLoading(true);
     setBanner(null);
 
@@ -237,26 +273,20 @@ export function AdminDashboardClient() {
     try {
       // ✅ Use Promise.allSettled for partial failure handling
       const responses = await Promise.allSettled([
-        fetch("/api/admin/dashboard", { credentials: "include", signal }).then((r) =>
-          r.json()
-        ),
-        fetch("/api/admin/analytics", { credentials: "include", signal }).then((r) =>
-          r.json()
-        ),
-        fetch("/api/admin/orders", { credentials: "include", signal }).then((r) =>
-          r.json()
-        ),
-        fetch("/api/admin/subscriptions", { credentials: "include", signal }).then(
-          (r) => r.json()
-        ),
-        fetch("/api/admin/enquiries", { credentials: "include", signal }).then((r) =>
-          r.json()
-        ),
-        fetch("/api/admin/users", { credentials: "include", signal }).then((r) =>
-          r.json()
-        ),
-        fetch("/api/admin/reservations", { credentials: "include", signal }).then(
-          (r) => r.json()
+        fetchAdminJson<{
+          stats: DashboardStats;
+          health?: HealthCheck[];
+          degraded?: boolean;
+          degraded_message?: string | null;
+        }>("/api/admin/dashboard", signal),
+        fetchAdminJson<AnalyticsPayload>("/api/admin/analytics", signal),
+        fetchAdminJson<{ orders?: Order[] }>("/api/admin/orders", signal),
+        fetchAdminJson<{ subscriptions?: Subscription[] }>("/api/admin/subscriptions", signal),
+        fetchAdminJson<{ enquiries?: Enquiry[] }>("/api/admin/enquiries", signal),
+        fetchAdminJson<AdminListResponse<{ users?: Profile[] }>>("/api/admin/users", signal),
+        fetchAdminJson<AdminListResponse<{ reservations?: ReservationSummary[] }>>(
+          "/api/admin/reservations",
+          signal,
         ),
       ]);
 
@@ -273,10 +303,15 @@ export function AdminDashboardClient() {
         usersResult,
         reservationsResult,
       ] = responses;
+      const degradedMessages: string[] = [];
 
       // ✅ Set each piece of state independently
       if (statsResult.status === "fulfilled") {
         setStats(statsResult.value.stats);
+        setHealthChecks(statsResult.value.health || []);
+        if (statsResult.value.degraded_message) {
+          degradedMessages.push(statsResult.value.degraded_message);
+        }
       }
       if (analyticsResult.status === "fulfilled") {
         setAnalytics(analyticsResult.value);
@@ -292,17 +327,25 @@ export function AdminDashboardClient() {
       }
       if (usersResult.status === "fulfilled") {
         setUsers(usersResult.value.users || []);
+        if (usersResult.value.degraded_message) {
+          degradedMessages.push(usersResult.value.degraded_message);
+        }
       }
       if (reservationsResult.status === "fulfilled") {
         setReservations(reservationsResult.value.reservations || []);
+        if (reservationsResult.value.degraded_message) {
+          degradedMessages.push(reservationsResult.value.degraded_message);
+        }
       }
 
       // ✅ Show warning if some endpoints failed
       const failedFetches = responses.filter((r) => r.status === "rejected");
-      if (failedFetches.length > 0) {
+      if (failedFetches.length > 0 || degradedMessages.length > 0) {
         setBanner({
           type: "info",
-          message: `Some dashboard data is unavailable (${failedFetches.length}/${responses.length} sections offline). Showing available data.`,
+          message:
+            degradedMessages[0] ||
+            `Some dashboard data is unavailable (${failedFetches.length}/${responses.length} sections offline). Showing available data.`,
         });
       }
     } catch (error) {
@@ -319,7 +362,7 @@ export function AdminDashboardClient() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   async function checkAuth() {
     // ✅ Cancel previous auth check
@@ -378,7 +421,7 @@ export function AdminDashboardClient() {
     if (authStatus === "ready") {
       void loadDashboardData();
     }
-  }, [authStatus]);
+  }, [authStatus, loadDashboardData]);
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -454,6 +497,7 @@ export function AdminDashboardClient() {
     setEnquiries([]);
     setUsers([]);
     setReservations([]);
+    setHealthChecks([]);
     setActiveReservationId(null);
     setReservationDetail(null);
     setAuthStatus("unauthenticated");
@@ -747,6 +791,47 @@ export function AdminDashboardClient() {
             </div>
           ))}
         </div>
+
+        {healthChecks.length ? (
+          <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+            {healthChecks.map((item) => (
+              <div
+                key={item.key}
+                className="rounded-[18px] border px-4 py-4"
+                style={{
+                  borderColor:
+                    item.status === "healthy"
+                      ? "rgba(52,211,153,0.18)"
+                      : item.status === "offline"
+                        ? "rgba(255,80,80,0.18)"
+                        : "rgba(198,169,98,0.18)",
+                  background:
+                    item.status === "healthy"
+                      ? "rgba(52,211,153,0.05)"
+                      : item.status === "offline"
+                        ? "rgba(255,60,60,0.05)"
+                        : "rgba(198,169,98,0.06)",
+                }}
+              >
+                <p className="eyebrow mb-2">{item.label}</p>
+                <p
+                  className="eyebrow mb-3"
+                  style={{
+                    color:
+                      item.status === "healthy"
+                        ? "rgba(110,231,183,0.92)"
+                        : item.status === "offline"
+                          ? "rgba(255,140,140,0.88)"
+                          : "rgba(198,169,98,0.88)",
+                  }}
+                >
+                  {item.status}
+                </p>
+                <p className="body-copy text-[0.78rem] text-white/60">{item.detail}</p>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </GlassCard>
 
       <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">

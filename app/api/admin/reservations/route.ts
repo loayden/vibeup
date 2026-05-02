@@ -41,6 +41,10 @@ export async function GET(request: NextRequest) {
           reservations: [],
           total: 0,
           has_more: false,
+          source: "unavailable",
+          degraded: true,
+          degraded_message:
+            "Supabase admin access is unavailable, so reservation records cannot be loaded.",
         },
         {
           origin: request.headers.get("origin"),
@@ -79,6 +83,10 @@ export async function GET(request: NextRequest) {
           reservations: [],
           total: 0,
           has_more: false,
+          source: "degraded",
+          degraded: true,
+          degraded_message:
+            "Reservation data is currently unavailable from the database. Showing an empty operational state instead of fallback rows.",
         },
         {
           origin: request.headers.get("origin"),
@@ -103,6 +111,9 @@ export async function GET(request: NextRequest) {
         reservations,
         total: count || 0,
         has_more: count ? offset + limit < count : false,
+        source: "database",
+        degraded: false,
+        degraded_message: null,
       },
       {
         origin: request.headers.get("origin"),

@@ -74,6 +74,9 @@ export default function ContactPage() {
                 <LiquidLinkButton href={`mailto:${SITE.email}`} external>
                   Email Team
                 </LiquidLinkButton>
+                <LiquidLinkButton href="/orders/find">
+                  Find Order
+                </LiquidLinkButton>
               </div>
             </div>
           </GlassCard>

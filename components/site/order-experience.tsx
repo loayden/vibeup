@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CalendarDays, CheckCircle2, Clock3, Mail, MapPin, Ticket, XCircle } from "lucide-react";
+import { CalendarDays, CheckCircle2, Clock3, Mail, MapPin, RefreshCw, Ticket, XCircle } from "lucide-react";
 import { format } from "date-fns";
 import Image from "next/image";
 
@@ -115,6 +115,15 @@ export function OrderExperience({
     loading: true,
     error: null,
   });
+  const [resendState, setResendState] = useState<{
+    loading: boolean;
+    message: string | null;
+    type: "error" | "success" | null;
+  }>({
+    loading: false,
+    message: null,
+    type: null,
+  });
   const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -222,6 +231,53 @@ export function OrderExperience({
 
   const order = state.order;
   const statusCopy = getStatusCopy(order.status, success);
+  const lookupEmail = email || order.customer_email || null;
+
+  async function handleResendTickets() {
+    setResendState({
+      loading: true,
+      message: null,
+      type: null,
+    });
+
+    try {
+      const response = await fetch(`/api/orders/${order.order_number}/resend`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: lookupEmail,
+          session_id: sessionId,
+        }),
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | { message?: string; error?: string }
+        | null;
+
+      if (!response.ok) {
+        setResendState({
+          loading: false,
+          message: payload?.error || "Unable to resend tickets right now.",
+          type: "error",
+        });
+        return;
+      }
+
+      setResendState({
+        loading: false,
+        message: payload?.message || "Ticket email sent successfully.",
+        type: "success",
+      });
+    } catch (error) {
+      setResendState({
+        loading: false,
+        message: error instanceof Error ? error.message : "Unable to resend tickets right now.",
+        type: "error",
+      });
+    }
+  }
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
@@ -339,7 +395,42 @@ export function OrderExperience({
         </GlassCard>
 
         <GlassCard warm className="px-6 py-6">
-          <p className="eyebrow mb-4">QR Tickets</p>
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="eyebrow">QR Tickets</p>
+            {order.status === "paid" ? (
+              <button
+                type="button"
+                onClick={() => void handleResendTickets()}
+                className="liquid-button-ghost w-full justify-center sm:w-auto"
+                disabled={resendState.loading}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <RefreshCw
+                    className={`h-3.5 w-3.5 ${resendState.loading ? "animate-spin" : ""}`}
+                    strokeWidth={1.2}
+                  />
+                  {resendState.loading ? "Sending Email" : "Resend Tickets"}
+                </span>
+              </button>
+            ) : null}
+          </div>
+          {resendState.message ? (
+            <div
+              className="mb-4 rounded-[18px] px-4 py-3"
+              style={{
+                background:
+                  resendState.type === "success"
+                    ? "rgba(52,211,153,0.08)"
+                    : "rgba(255,60,60,0.07)",
+                border:
+                  resendState.type === "success"
+                    ? "1px solid rgba(52,211,153,0.18)"
+                    : "1px solid rgba(255,80,80,0.18)",
+              }}
+            >
+              <p className="body-copy text-[0.8rem] text-white/72">{resendState.message}</p>
+            </div>
+          ) : null}
           {order.tickets.length ? (
             <div className="space-y-4">
               {order.tickets.map((ticket) => (

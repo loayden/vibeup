@@ -43,6 +43,7 @@ const MOBILE_PRIMARY = [
 const MOBILE_SECONDARY = [
   { label: "Gallery", href: "/gallery", icon: ImageIcon },
   { label: "About", href: "/about", icon: UserRound },
+  { label: "Find Order", href: "/orders/find", icon: Ticket },
   { label: "Journal", href: "/blog", icon: ArrowRight },
   { label: "Careers", href: "/careers", icon: Briefcase },
   { label: "FAQ", href: "/faq", icon: HelpCircle },
@@ -111,6 +112,12 @@ function MobileOverlay({
         label: "Email",
         href: `mailto:${SITE.email}`,
         note: SITE.email,
+        external: false,
+      },
+      {
+        label: "Find Order",
+        href: "/orders/find",
+        note: "Open or resend paid tickets",
         external: false,
       },
     ],

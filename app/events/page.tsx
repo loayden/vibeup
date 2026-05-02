@@ -16,6 +16,10 @@ export const metadata: Metadata = {
 export default async function EventsPage() {
   const feed = await getPublicEventsFeed();
   const featuredEvent = feed.featured;
+  const featuredCheckoutHref =
+    featuredEvent?.ticketsAvailable && featuredEvent.eventState !== "past"
+      ? `/checkout?event=${featuredEvent.slug}`
+      : "/contact-us";
 
   return (
     <main className="overflow-x-hidden pb-20">
@@ -40,13 +44,28 @@ export default async function EventsPage() {
         }
         actions={
           <>
-            <LiquidLinkButton href={featuredEvent ? `/checkout?event=${featuredEvent.slug}` : "/checkout"} gold>
-              Reserve Tickets <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+            <LiquidLinkButton href={featuredCheckoutHref} gold>
+              {featuredEvent?.ticketsAvailable ? "Reserve Tickets" : "Contact Team"}{" "}
+              <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
             </LiquidLinkButton>
             <LiquidLinkButton href="/contact-us">Book A Private Event</LiquidLinkButton>
           </>
         }
       />
+
+      {feed.degraded ? (
+        <section className="px-5 py-4 sm:px-10 lg:px-16">
+          <div className="mx-auto max-w-7xl">
+            <GlassCard warm className="px-5 py-5">
+              <p className="eyebrow mb-3">Catalog Status</p>
+              <p className="body-copy text-white/68">
+                {feed.degraded_message ||
+                  "The live event catalog is unavailable, so this page is showing a curated fallback schedule. Checkout stays closed until live inventory is restored."}
+              </p>
+            </GlassCard>
+          </div>
+        </section>
+      ) : null}
 
       <section className="px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -148,7 +167,7 @@ export default async function EventsPage() {
       ) : null}
 
       <StickyBuyCTA
-        href={featuredEvent?.ticketsAvailable ? `/checkout?event=${featuredEvent.slug}` : "/contact-us"}
+        href={featuredCheckoutHref}
         price={featuredEvent?.priceFrom || undefined}
       />
     </main>

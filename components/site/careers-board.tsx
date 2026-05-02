@@ -13,6 +13,8 @@ type BannerState = {
   message: string;
 };
 
+type FormErrors = Partial<Record<"name" | "email" | "resume_url", string>>;
+
 function FieldLabel({
   children,
   optional = false,
@@ -28,6 +30,14 @@ function FieldLabel({
   );
 }
 
+function FieldError({ message }: { message?: string }) {
+  if (!message) {
+    return null;
+  }
+
+  return <p className="mt-2 text-[0.72rem] tracking-[0.08em] text-[rgba(255,140,140,0.88)]">{message}</p>;
+}
+
 type Position = (typeof OPEN_POSITIONS)[number];
 
 type CareersBoardProps = {
@@ -39,7 +49,10 @@ export function CareersBoard({ positions }: CareersBoardProps) {
   const [expandedRole, setExpandedRole] = useState<string>(positions[0]?.role || "");
   const [banner, setBanner] = useState<BannerState | null>(null);
   const [loading, setLoading] = useState(false);
-  const [resumeMode, setResumeMode] = useState<"later" | "link">("later");
+  const [resumeMode, setResumeMode] = useState<"later" | "link" | "upload">("upload");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [uploadingResume, setUploadingResume] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
   const formRef = useRef<HTMLDivElement | null>(null);
   const [form, setForm] = useState<{
     name: string;
@@ -67,10 +80,22 @@ export function CareersBoard({ positions }: CareersBoardProps) {
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  function updateField<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
+    setForm((current) => ({ ...current, [key]: value }));
+    if (key === "name" || key === "email" || key === "resume_url") {
+      setErrors((current) => ({ ...current, [key]: undefined }));
+    }
+    setBanner(null);
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (form.name.trim().length < 2) {
+      setErrors((current) => ({
+        ...current,
+        name: "Use the name you want the hiring team to reply to.",
+      }));
       setBanner({
         type: "error",
         message: "Add your name so the hiring team knows who is applying.",
@@ -79,6 +104,10 @@ export function CareersBoard({ positions }: CareersBoardProps) {
     }
 
     if (!form.email.includes("@")) {
+      setErrors((current) => ({
+        ...current,
+        email: "Use a real email address so interview or follow-up steps can reach you.",
+      }));
       setBanner({
         type: "error",
         message: "Enter a valid email so we can reply with interview or follow-up steps.",
@@ -86,7 +115,23 @@ export function CareersBoard({ positions }: CareersBoardProps) {
       return;
     }
 
+    if (resumeMode === "upload" && !resumeFile) {
+      setErrors((current) => ({
+        ...current,
+        resume_url: "Attach a resume file or switch to the link/later option.",
+      }));
+      setBanner({
+        type: "error",
+        message: "Attach a resume file or choose another resume option before submitting.",
+      });
+      return;
+    }
+
     if (resumeMode === "link" && form.resume_url && !form.resume_url.startsWith("http")) {
+      setErrors((current) => ({
+        ...current,
+        resume_url: "Resume links should begin with http or https.",
+      }));
       setBanner({
         type: "error",
         message: "Resume links should start with http or https.",
@@ -96,8 +141,42 @@ export function CareersBoard({ positions }: CareersBoardProps) {
 
     setLoading(true);
     setBanner(null);
+    let uploadedResumeUrl = form.resume_url || null;
 
     try {
+      if (resumeMode === "upload" && resumeFile) {
+        setUploadingResume(true);
+        const uploadForm = new FormData();
+        uploadForm.set("resume", resumeFile);
+        uploadForm.set("name", form.name.trim());
+        uploadForm.set("role", form.role.trim());
+
+        const uploadResponse = await fetch("/api/uploads/resume", {
+          method: "POST",
+          body: uploadForm,
+        });
+
+        const uploadPayload = (await uploadResponse.json().catch(() => null)) as
+          | { url?: string; error?: string }
+          | null;
+
+        if (!uploadResponse.ok || !uploadPayload?.url) {
+          setErrors((current) => ({
+            ...current,
+            resume_url: uploadPayload?.error || "Resume upload failed. Use link or later if needed.",
+          }));
+          setBanner({
+            type: "error",
+            message:
+              uploadPayload?.error ||
+              "Resume upload failed. Use the link option or send it later if storage is unavailable.",
+          });
+          return;
+        }
+
+        uploadedResumeUrl = uploadPayload.url;
+      }
+
       const response = await fetch("/api/applications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -106,7 +185,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
           phone: form.phone || null,
           portfolio_url: form.portfolio_url || null,
           linkedin_url: form.linkedin_url || null,
-          resume_url: form.resume_url || null,
+          resume_url: uploadedResumeUrl || null,
           message: form.message || null,
         }),
       });
@@ -129,6 +208,8 @@ export function CareersBoard({ positions }: CareersBoardProps) {
           payload?.message ||
           "Application submitted successfully. The team will review fit and follow up with the next step.",
       });
+      setErrors({});
+      setResumeFile(null);
       setForm({
         name: "",
         email: "",
@@ -145,6 +226,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
         message: "Unable to submit your application.",
       });
     } finally {
+      setUploadingResume(false);
       setLoading(false);
     }
   }
@@ -264,9 +346,10 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                   autoComplete="name"
                   style={{ fontSize: "16px" }}
                   value={form.name}
-                  onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+                  onChange={(event) => updateField("name", event.target.value)}
                   required
                 />
+                <FieldError message={errors.name} />
               </div>
               <div>
                 <FieldLabel>Email Address</FieldLabel>
@@ -278,9 +361,10 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                   autoComplete="email"
                   style={{ fontSize: "16px" }}
                   value={form.email}
-                  onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+                  onChange={(event) => updateField("email", event.target.value)}
                   required
                 />
+                <FieldError message={errors.email} />
               </div>
             </div>
 
@@ -294,7 +378,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                   autoComplete="tel"
                   style={{ fontSize: "16px" }}
                   value={form.phone}
-                  onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+                  onChange={(event) => updateField("phone", event.target.value)}
                 />
               </div>
               <div>
@@ -351,10 +435,21 @@ export function CareersBoard({ positions }: CareersBoardProps) {
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
+                  className={`${resumeMode === "upload" ? "liquid-button-gold" : "liquid-button-ghost"} !min-h-[42px] !px-4`}
+                  onClick={() => {
+                    setResumeMode("upload");
+                    setBanner(null);
+                  }}
+                >
+                  Upload Resume
+                </button>
+                <button
+                  type="button"
                   className={`${resumeMode === "later" ? "liquid-button-gold" : "liquid-button-ghost"} !min-h-[42px] !px-4`}
                   onClick={() => {
                     setResumeMode("later");
-                    setForm((current) => ({ ...current, resume_url: "" }));
+                    setResumeFile(null);
+                    updateField("resume_url", "");
                   }}
                 >
                   Send Resume Later
@@ -362,17 +457,44 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 <button
                   type="button"
                   className={`${resumeMode === "link" ? "liquid-button-gold" : "liquid-button-ghost"} !min-h-[42px] !px-4`}
-                  onClick={() => setResumeMode("link")}
+                  onClick={() => {
+                    setResumeMode("link");
+                    setResumeFile(null);
+                    setBanner(null);
+                  }}
                 >
                   Add Resume Link Now
                 </button>
               </div>
               <p className="body-copy mt-4 text-[0.8rem] text-white/60">
-                {resumeMode === "later"
+                {resumeMode === "upload"
+                  ? "Upload a PDF, DOC, or DOCX file directly from your phone if you have it ready."
+                  : resumeMode === "later"
                   ? "On mobile, you can submit quickly now and send your resume when the team replies."
                   : "Paste a Drive, Dropbox, or portfolio link if your resume is already hosted."}
               </p>
             </div>
+
+            {resumeMode === "upload" ? (
+              <div>
+                <FieldLabel optional>Resume File</FieldLabel>
+                <input
+                  className="glass-input file:mr-4 file:rounded-full file:border-0 file:bg-[rgba(198,169,98,0.14)] file:px-4 file:py-2 file:text-[0.75rem] file:tracking-[0.18em] file:text-[var(--gold)]"
+                  type="file"
+                  accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  style={{ fontSize: "16px" }}
+                  onChange={(event) => {
+                    setResumeFile(event.target.files?.[0] || null);
+                    setErrors((current) => ({ ...current, resume_url: undefined }));
+                    setBanner(null);
+                  }}
+                />
+                <p className="body-copy mt-3 text-[0.8rem] text-white/56">
+                  {resumeFile ? `Attached: ${resumeFile.name}` : "No file selected yet."}
+                </p>
+                <FieldError message={errors.resume_url} />
+              </div>
+            ) : null}
 
             {resumeMode === "link" ? (
               <div>
@@ -385,10 +507,9 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                   autoComplete="url"
                   style={{ fontSize: "16px" }}
                   value={form.resume_url}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, resume_url: event.target.value }))
-                  }
+                  onChange={(event) => updateField("resume_url", event.target.value)}
                 />
+                <FieldError message={errors.resume_url} />
               </div>
             ) : null}
 
@@ -400,7 +521,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 rows={5}
                 style={{ fontSize: "16px" }}
                 value={form.message}
-                onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
+                onChange={(event) => updateField("message", event.target.value)}
               />
             </div>
 
@@ -409,9 +530,9 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 Keep it concise. Strong links and a clear note on fit are more useful than a long
                 cover letter on mobile.
               </p>
-              <LiquidButton gold type="submit" className="w-full md:w-auto" disabled={loading}>
+              <LiquidButton gold type="submit" className="w-full md:w-auto" disabled={loading || uploadingResume}>
                 <span className="inline-flex items-center gap-2">
-                  {loading ? "Submitting" : "Submit Application"}
+                  {uploadingResume ? "Uploading Resume" : loading ? "Submitting" : "Submit Application"}
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                 </span>
               </LiquidButton>

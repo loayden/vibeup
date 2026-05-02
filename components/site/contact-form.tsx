@@ -12,6 +12,8 @@ type BannerState = {
   message: string;
 };
 
+type FormErrors = Partial<Record<"name" | "email" | "message", string>>;
+
 const eventTypes = [
   { value: "corporate", label: "Corporate" },
   { value: "private", label: "Private Party" },
@@ -51,6 +53,14 @@ function FieldLabel({
   );
 }
 
+function FieldError({ message }: { message?: string }) {
+  if (!message) {
+    return null;
+  }
+
+  return <p className="mt-2 text-[0.72rem] tracking-[0.08em] text-[rgba(255,140,140,0.88)]">{message}</p>;
+}
+
 export function ContactForm() {
   const [form, setForm] = useState<{
     name: string;
@@ -75,11 +85,24 @@ export function ContactForm() {
   });
   const [banner, setBanner] = useState<BannerState | null>(null);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  function updateField<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
+    setForm((current) => ({ ...current, [key]: value }));
+    if (key === "name" || key === "email" || key === "message") {
+      setErrors((current) => ({ ...current, [key]: undefined }));
+    }
+    setBanner(null);
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (form.name.trim().length < 2) {
+      setErrors((current) => ({
+        ...current,
+        name: "Use the real guest or client name so the reply can stay personal.",
+      }));
       setBanner({
         type: "error",
         message: "Add the guest or client name so the team knows who to reply to.",
@@ -88,6 +111,10 @@ export function ContactForm() {
     }
 
     if (!form.email.includes("@")) {
+      setErrors((current) => ({
+        ...current,
+        email: "Use a reachable email so proposal or ticket support does not get lost.",
+      }));
       setBanner({
         type: "error",
         message: "Enter a valid email so we can send the next step clearly.",
@@ -96,6 +123,10 @@ export function ContactForm() {
     }
 
     if (form.message.trim().length < 24) {
+      setErrors((current) => ({
+        ...current,
+        message: "Add a little more detail so the first reply can be useful instead of generic.",
+      }));
       setBanner({
         type: "error",
         message:
@@ -156,6 +187,7 @@ export function ContactForm() {
           payload?.message ||
           "Your enquiry is in. The team will review the brief and reply with the clearest next step.",
       });
+      setErrors({});
       setForm({
         name: "",
         email: "",
@@ -220,9 +252,10 @@ export function ContactForm() {
             autoComplete="name"
             style={{ fontSize: "16px" }}
             value={form.name}
-            onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
+            onChange={(event) => updateField("name", event.target.value)}
             required
           />
+          <FieldError message={errors.name} />
         </div>
         <div>
           <FieldLabel>Email Address</FieldLabel>
@@ -234,9 +267,10 @@ export function ContactForm() {
             autoComplete="email"
             style={{ fontSize: "16px" }}
             value={form.email}
-            onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))}
+            onChange={(event) => updateField("email", event.target.value)}
             required
           />
+          <FieldError message={errors.email} />
         </div>
       </div>
 
@@ -250,7 +284,7 @@ export function ContactForm() {
             autoComplete="tel"
             style={{ fontSize: "16px" }}
             value={form.phone}
-            onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))}
+            onChange={(event) => updateField("phone", event.target.value)}
           />
         </div>
         <div>
@@ -261,7 +295,7 @@ export function ContactForm() {
             autoComplete="organization"
             style={{ fontSize: "16px" }}
             value={form.company}
-            onChange={(event) => setForm((current) => ({ ...current, company: event.target.value }))}
+            onChange={(event) => updateField("company", event.target.value)}
           />
         </div>
       </div>
@@ -300,7 +334,7 @@ export function ContactForm() {
             type="date"
             style={{ fontSize: "16px" }}
             value={form.event_date}
-            onChange={(event) => setForm((current) => ({ ...current, event_date: event.target.value }))}
+            onChange={(event) => updateField("event_date", event.target.value)}
           />
         </div>
         <div>
@@ -323,9 +357,10 @@ export function ContactForm() {
           rows={5}
           style={{ fontSize: "16px" }}
           value={form.message}
-          onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
+          onChange={(event) => updateField("message", event.target.value)}
           required
         />
+        <FieldError message={errors.message} />
       </div>
 
       <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">

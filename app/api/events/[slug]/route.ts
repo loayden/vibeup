@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
-import { createAdminClient } from "@/lib/supabase-server";
+import { getPublicEventBySlug, getPublicEventsFeed } from "@/lib/public-events";
 
 export async function GET(
   request: NextRequest,
@@ -9,38 +9,20 @@ export async function GET(
 ) {
   try {
     const { slug } = await context.params;
-    const supabase = createAdminClient();
+    const [event, feed] = await Promise.all([getPublicEventBySlug(slug), getPublicEventsFeed()]);
 
-    const { data: event, error } = await supabase
-      .from("events")
-      .select("*")
-      .eq("slug", slug)
-      .eq("status", "published")
-      .single();
-
-    if (error || !event) {
+    if (!event) {
       return errorResponse("Event not found", 404, {
         origin: request.headers.get("origin"),
       });
     }
 
-    const { data: ticketTypes, error: ticketError } = await supabase
-      .from("ticket_types")
-      .select("*")
-      .eq("event_id", event.id)
-      .eq("is_visible", true)
-      .order("sort_order", { ascending: true });
-
-    if (ticketError) {
-      throw ticketError;
-    }
-
     return jsonResponse(
       {
-        event: {
-          ...event,
-          ticket_types: ticketTypes || [],
-        },
+        event,
+        source: feed.source,
+        degraded: feed.degraded,
+        degraded_message: feed.degraded_message,
       },
       {
         origin: request.headers.get("origin"),

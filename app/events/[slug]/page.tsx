@@ -14,7 +14,7 @@ import Image from "next/image";
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
 import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
-import { getPublicEventBySlug } from "@/lib/public-events";
+import { getPublicEventBySlug, getPublicEventsFeed } from "@/lib/public-events";
 import { SITE } from "@/lib/site-data";
 
 type EventPageProps = {
@@ -195,7 +195,7 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 
 export default async function EventDetailPage({ params }: EventPageProps) {
   const { slug } = await params;
-  const event = await getPublicEventBySlug(slug);
+  const [event, feed] = await Promise.all([getPublicEventBySlug(slug), getPublicEventsFeed()]);
 
   if (!event) {
     notFound();
@@ -269,15 +269,39 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         actions={
           <>
             <LiquidLinkButton
-              href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
+              href={
+                event.ticketsAvailable && event.eventState !== "past"
+                  ? `/checkout?event=${event.slug}`
+                  : "/contact-us"
+              }
               gold
             >
-              {event.ticketsAvailable ? "Start Checkout" : "Contact Team"}
+              {event.ticketsAvailable && event.eventState !== "past" ? "Start Checkout" : "Contact Team"}
             </LiquidLinkButton>
             <LiquidLinkButton href="/events">Back To Events</LiquidLinkButton>
           </>
         }
       />
+
+      {feed.degraded || !event.ticketsAvailable ? (
+        <section className="px-5 py-4 sm:px-10 lg:px-16">
+          <div className="mx-auto max-w-7xl">
+            <GlassCard warm className="px-5 py-5">
+              <p className="eyebrow mb-3">
+                {feed.degraded ? "Live Catalog Status" : "Ticketing Status"}
+              </p>
+              <p className="body-copy text-white/68">
+                {feed.degraded
+                  ? feed.degraded_message ||
+                    "This event page is running on fallback schedule data. Logistics remain visible, but checkout stays honest about live inventory availability."
+                  : event.eventState === "past"
+                    ? "This event is now part of the archive. Use the contact flow if you need private-event support or want updates about the next release."
+                    : "Ticket inventory is currently unavailable for this event, so VibeUp is keeping checkout closed instead of risking a broken purchase flow."}
+              </p>
+            </GlassCard>
+          </div>
+        </section>
+      ) : null}
 
       <script
         type="application/ld+json"

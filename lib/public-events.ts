@@ -81,6 +81,8 @@ export type PublicEventsFeed = {
   featured: PublicEvent | null;
   nextEvent: PublicEvent | null;
   source: "database" | "fallback";
+  degraded: boolean;
+  degraded_message: string | null;
 };
 
 const fallbackTicketColors = [
@@ -94,6 +96,10 @@ const fallbackTicketColors = [
 
 function formatEventDate(value: string) {
   return format(new Date(value), "MMMM d, yyyy");
+}
+
+function isPastIsoDate(value: string) {
+  return new Date(value).getTime() < Date.now();
 }
 
 function formatEventState(event: EventRow, ticketTypes: PublicTicketType[]) {
@@ -247,6 +253,11 @@ function buildFallbackEventFromUpcoming(
   options?: { featured?: boolean },
 ): PublicEvent {
   const ticketTypes = buildFallbackTicketTypes();
+  const eventState = isPastIsoDate(event.isoDate)
+    ? ("past" as const)
+    : event.status === "limited"
+      ? ("limited" as const)
+      : ("upcoming" as const);
 
   return {
     id: null,
@@ -266,7 +277,7 @@ function buildFallbackEventFromUpcoming(
     coverImageUrl: event.image,
     category: "cultural",
     dbStatus: "published",
-    eventState: event.status === "limited" ? "limited" : "upcoming",
+    eventState,
     featured: options?.featured || false,
     maxCapacity: null,
     currentAttendees: 0,
@@ -335,7 +346,7 @@ async function fetchDatabaseEvents(): Promise<PublicEventsFeed | null> {
   const supabase = tryCreateAdminClient();
 
   if (!supabase) {
-    return null;
+    throw new Error("Live event inventory is unavailable because Supabase admin access is not configured.");
   }
 
   const { data: events, error } = await supabase
@@ -350,7 +361,7 @@ async function fetchDatabaseEvents(): Promise<PublicEventsFeed | null> {
     .order("event_date", { ascending: true });
 
   if (error || !events) {
-    return null;
+    throw error || new Error("Live event inventory is currently unavailable.");
   }
 
   const mappedEvents = events.map((event) =>
@@ -382,10 +393,14 @@ async function fetchDatabaseEvents(): Promise<PublicEventsFeed | null> {
     featured,
     nextEvent,
     source: "database",
+    degraded: false,
+    degraded_message: null,
   };
 }
 
 export const getPublicEventsFeed = cache(async (): Promise<PublicEventsFeed> => {
+  let degradedMessage: string | null = null;
+
   try {
     const databaseFeed = await fetchDatabaseEvents();
 
@@ -394,20 +409,35 @@ export const getPublicEventsFeed = cache(async (): Promise<PublicEventsFeed> => 
     }
   } catch (error) {
     console.warn("Falling back to static public event data", error);
+    degradedMessage =
+      error instanceof Error && error.message
+        ? `${error.message} Public pages are showing a curated fallback schedule instead of the live event catalog.`
+        : "Live event inventory is unavailable, so public pages are showing a curated fallback schedule instead of the real-time catalog.";
   }
 
-  const upcoming = UPCOMING_EVENTS.map((event, index) =>
+  const fallbackEvents = UPCOMING_EVENTS.map((event, index) =>
     buildFallbackEventFromUpcoming(event, { featured: index === 0 }),
   );
+  const upcoming = fallbackEvents.filter((event) => event.eventState !== "past");
   const past = buildFallbackPastEvents();
-  const featured = upcoming[0] || buildFallbackEventFromUpcoming(UPCOMING_EVENTS[0], { featured: true });
+  const featured =
+    upcoming.find((event) => event.featured) ||
+    upcoming[0] ||
+    fallbackEvents.find((event) => event.featured) ||
+    fallbackEvents[0] ||
+    null;
+  const nextEvent = upcoming[0] || null;
 
   return {
     upcoming,
-    past,
+    past: [...fallbackEvents.filter((event) => event.eventState === "past"), ...past],
     featured,
-    nextEvent: upcoming[0] || null,
+    nextEvent,
     source: "fallback",
+    degraded: true,
+    degraded_message:
+      degradedMessage ||
+      "Live event inventory is unavailable, so public pages are showing a curated fallback schedule instead of the real-time catalog.",
   };
 });
 
@@ -421,41 +451,51 @@ export const getPublicEventBySlug = cache(async (slug: string) => {
 });
 
 export const getCheckoutEventContext = cache(async (slug = "arab-nights") => {
-  const supabase = tryCreateAdminClient();
-
-  if (!supabase) {
-    return null;
-  }
-
-  const { data: event, error } = await supabase
-    .from("events")
-    .select(
-      `
-        *,
-        ticket_types (*)
-      `,
-    )
-    .eq("slug", slug)
-    .eq("status", "published")
-    .single();
-
-  if (error || !event) {
-    return null;
-  }
-
-  const ticketTypes = ((event.ticket_types || []) as TicketTypeRow[])
-    .filter((ticketType) => ticketType.is_visible)
-    .sort((left, right) => left.sort_order - right.sort_order);
-
-  return mapEvent(event, ticketTypes);
+  const feed = await getPublicEventsFeed();
+  const catalog = [...feed.upcoming, ...feed.past];
+  return catalog.find((event) => event.slug === slug) || null;
 });
 
-export function getTrustMessagingForEvent(event: PublicEvent | null) {
+export async function getCheckoutPageContext(slug?: string | null) {
+  const feed = await getPublicEventsFeed();
+  const catalog = [...feed.upcoming, ...feed.past];
+  const availableEvents = feed.upcoming.filter(
+    (event) => event.eventState !== "cancelled" && event.eventState !== "past",
+  );
+  const selectedEvent =
+    (slug ? catalog.find((event) => event.slug === slug) : null) ||
+    availableEvents.find((event) => event.ticketsAvailable) ||
+    availableEvents[0] ||
+    feed.featured ||
+    null;
+
+  return {
+    feed,
+    event: selectedEvent,
+    availableEvents,
+    requestedSlug: slug || null,
+    selectionMissing: Boolean(slug) && !catalog.some((event) => event.slug === slug),
+  };
+}
+
+export function getTrustMessagingForEvent(
+  event: PublicEvent | null,
+  options?: { degraded?: boolean; degradedMessage?: string | null },
+) {
+  if (options?.degraded) {
+    return [
+      options.degradedMessage ||
+        "Live event inventory is unavailable, so the public experience is operating in a clearly marked fallback mode.",
+      "Ticket purchases are blocked when the live catalog is unavailable, so guests are not sent into an unreliable payment path.",
+      "Use the contact and waitlist actions instead of directing guests into checkout until the live catalog is restored.",
+    ];
+  }
+
   if (!event || !event.ticketsAvailable || !event.id) {
     return [
       "Ticketing is temporarily unavailable until live event inventory is restored.",
-      "The checkout is designed for first-party Stripe payment and internal order confirmation.",
-      "If live inventory is offline, contact the VibeUp team before sending guests to purchase.",
+      "VibeUp only opens first-party Stripe checkout when the live event catalog is healthy and inventory is available.",
+      "If the event is currently unavailable, use the waitlist or support actions instead of pushing guests into a broken payment flow.",
     ];
   }
 
@@ -466,6 +506,13 @@ export function getTrustMessagingForEvent(event: PublicEvent | null) {
   ];
 }
 
-export function getCheckoutUnavailableMessage() {
+export function getCheckoutUnavailableMessage(options?: {
+  degraded?: boolean;
+  eventTitle?: string | null;
+}) {
+  if (options?.degraded) {
+    return `Live ticket inventory is unavailable right now. ${options.eventTitle ? `${options.eventTitle} is being shown from fallback schedule data,` : "The event catalog"} so checkout stays closed until the database or payment environment is restored. Contact ${SITE.email} for concierge help.`;
+  }
+
   return `Live ticket inventory is unavailable right now. Contact ${SITE.email} while the event database or payment environment is being restored.`;
 }

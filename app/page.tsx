@@ -79,6 +79,7 @@ export default function HomePage() {
 
   const featuredEvent = eventsFeed?.featured;
   const nextEvent = eventsFeed?.nextEvent;
+  const liveCatalogHealthy = Boolean(eventsFeed && !eventsFeed.degraded);
   const featuredTicketTypes: Array<PublicTicketType | (typeof TICKET_TYPES)[number]> =
     featuredEvent?.ticketTypes.length ? featuredEvent.ticketTypes : [...TICKET_TYPES];
   const featuredCheckoutHref =
@@ -170,6 +171,20 @@ export default function HomePage() {
         </div>
       </section>
 
+      {eventsFeed?.degraded ? (
+        <section className="px-5 py-4 sm:px-10 lg:px-16">
+          <div className="mx-auto max-w-7xl">
+            <GlassCard warm className="px-5 py-5">
+              <p className="eyebrow mb-3">Live Catalog Status</p>
+              <p className="body-copy text-white/68">
+                {eventsFeed.degraded_message ||
+                  "The live event database is unavailable. This page is showing a curated fallback schedule, and ticket purchase stays closed until the real catalog is healthy again."}
+              </p>
+            </GlassCard>
+          </div>
+        </section>
+      ) : null}
+
       <motion.section {...revealProps} className="px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 lg:grid-cols-4">
           {HERO_STATS.map((item, index) => (
@@ -201,8 +216,9 @@ export default function HomePage() {
                   From social click to confirmed <em>entry</em>
                 </h2>
                 <p className="body-copy mt-4 text-white/58">
-                  The mobile flow is built for speed: choose the event, build the order, and move
-                  into secure payment without losing context.
+                  {liveCatalogHealthy
+                    ? "The mobile flow is built for speed: choose the event, build the order, and move into secure payment without losing context."
+                    : "The mobile flow stays honest when live ticket inventory is offline: review the event, contact the team, or join the list instead of being pushed into a broken purchase path."}
                 </p>
               </div>
               <LiquidLinkButton href={featuredCheckoutHref} gold className="w-full justify-center lg:w-auto">
@@ -396,7 +412,11 @@ export default function HomePage() {
             eyebrow="Access Options"
             title="Choose the right level of"
             goldWord="arrival"
-            subtitle="Each tier is structured around sightlines, service flow, and the feeling you want your night to carry. The categories are designed to make the room feel premium at every level."
+            subtitle={
+              liveCatalogHealthy
+                ? "Each tier is structured around sightlines, service flow, and the feeling you want your night to carry. Pricing and availability below are tied to the live event catalog."
+                : "These access tiers are representative of the VibeUp guest experience. Live pricing and availability reopen only when the real event catalog is healthy."
+            }
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featuredTicketTypes.map((ticket, index) => (
@@ -432,7 +452,9 @@ export default function HomePage() {
                     gold
                     className="mt-7 w-full justify-center"
                   >
-                    Reserve Seat
+                    {liveCatalogHealthy && featuredEvent?.ticketsAvailable
+                      ? "Reserve Seat"
+                      : "Request Access"}
                   </LiquidLinkButton>
                 </GlassCard>
               </motion.div>
@@ -519,7 +541,7 @@ export default function HomePage() {
             eyebrow="Client Voices"
             title="How the experience"
             goldWord="lands"
-            subtitle="Our best feedback tends to say the same thing in different ways: the room feels calm, elevated, and fully considered, even when the event energy is high."
+            subtitle="Our best feedback tends to say the same thing in different ways: the room feels calm, elevated, and fully considered, even when the event energy is high. These are representative client and guest impressions, not live booking metrics."
           />
           <div className="hidden gap-5 lg:grid lg:grid-cols-3">{testimonialCards}</div>
           <div className="lg:hidden">
@@ -534,7 +556,7 @@ export default function HomePage() {
             eyebrow="Partners"
             title="Trusted by venues, producers, and"
             goldWord="collaborators"
-            subtitle="We work best in rooms where quality matters, timing matters, and the brand around the event matters as much as the event itself."
+            subtitle="We work best in rooms where quality matters, timing matters, and the brand around the event matters as much as the event itself. These partner references are brand proof, not live event inventory signals."
           />
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
             {PARTNERS.map((partner) => (

@@ -16,6 +16,7 @@ const footerGroups = [
       { href: "/contact-us", label: "Contact" },
       { href: "/services", label: "Private Events" },
       { href: "/checkout", label: "Buy Tickets" },
+      { href: "/orders/find", label: "Find Order" },
     ],
   },
   {

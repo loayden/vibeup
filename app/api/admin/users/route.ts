@@ -26,9 +26,13 @@ export async function GET(request: NextRequest) {
     if (!supabase) {
       return jsonResponse(
         {
-          users: [authResult.profile],
-          total: 1,
+          users: [],
+          total: 0,
           has_more: false,
+          source: "unavailable",
+          degraded: true,
+          degraded_message:
+            "Supabase admin access is unavailable, so user profiles cannot be loaded.",
         },
         {
           origin: request.headers.get("origin"),
@@ -112,6 +116,10 @@ export async function GET(request: NextRequest) {
             users: fallbackUsers,
             total: fallbackUsers.length,
             has_more: false,
+            source: "auth_fallback",
+            degraded: true,
+            degraded_message:
+              "Profiles table is unavailable. Showing auth-directory users without full profile records.",
           },
           {
             origin: request.headers.get("origin"),
@@ -127,6 +135,9 @@ export async function GET(request: NextRequest) {
         users: users || [],
         total: count || 0,
         has_more: count ? offset + limit < count : false,
+        source: "profiles",
+        degraded: false,
+        degraded_message: null,
       },
       {
         origin: request.headers.get("origin"),
