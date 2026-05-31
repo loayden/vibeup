@@ -4,7 +4,7 @@ import { GlassCard, PageHero } from "@/components/site/liquid";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Review how VibeUp collects, uses, stores, and shares guest, booking, and communication data.",
+    "Review how ZOYA collects, uses, stores, and shares guest, booking, and communication data.",
 };
 
 const privacySections = [
@@ -16,7 +16,7 @@ const privacySections = [
   {
     title: "How We Use Data",
     body:
-      "We use collected information to manage bookings, communicate event updates, issue tickets, respond to enquiries, improve the guest experience, and maintain the operational quality of the VibeUp platform.",
+      "We use collected information to manage bookings, communicate event updates, issue tickets, respond to enquiries, improve the guest experience, and maintain the operational quality of the ZOYA platform.",
   },
   {
     title: "Third Parties",
@@ -31,7 +31,7 @@ const privacySections = [
   {
     title: "Contact",
     body:
-      "If you need to review, correct, or delete your data, contact VibeUp Events & Services through the contact page and include enough detail for us to locate the relevant account or booking record.",
+      "If you need to review, correct, or delete your data, contact ZOYA Events & Services through the contact page and include enough detail for us to locate the relevant account or booking record.",
   },
 ] as const;
 
@@ -40,9 +40,9 @@ export default function PrivacyPage() {
     <main className="overflow-x-hidden pb-20">
       <PageHero
         eyebrow="Privacy"
-        title="How VibeUp handles your"
+        title="How ZOYA handles your"
         goldWord="information"
-        description="This summary explains what information we collect, why we use it, and how it supports bookings, communication, and the broader operation of the VibeUp platform."
+        description="This summary explains what information we collect, why we use it, and how it supports bookings, communication, and the broader operation of the ZOYA platform."
         align="center"
       />
 

@@ -15,14 +15,14 @@ import {
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Explore VibeUp planning, production, ticketing, branding, media, and consulting services for premium events and celebrations.",
+    "Explore ZOYA planning, production, ticketing, branding, media, and consulting services for premium events and celebrations.",
 };
 
 const serviceFaq = [
   {
     question: "Do you only produce public ticketed events?",
     answer:
-      "No. VibeUp produces public, private, corporate, and partner-led experiences. The same production standards can be scaled to intimate dinners or large live events.",
+      "No. ZOYA produces public, private, corporate, and partner-led experiences. The same production standards can be scaled to intimate dinners or large live events.",
   },
   {
     question: "Can you handle creative direction as well as logistics?",
@@ -61,10 +61,10 @@ export default function ServicesPage() {
         description="We provide planning, creative direction, marketing, technical production, hospitality, and operating structure for events that need to look refined, feel smooth, and perform well commercially."
         media={
           <GlassCard className="overflow-hidden p-3">
-            <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
+            <div className="relative min-h-[320px] sm:min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
                 src="/stage-1600.webp"
-                alt="VibeUp services"
+                alt="ZOYA services"
                 fill
                 priority
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"

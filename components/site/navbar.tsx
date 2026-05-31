@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { SITE } from "@/lib/site-data";
 
@@ -130,7 +130,7 @@ function MobileOverlay({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.35, ease: EASING }}
-      className="safe-top safe-bottom fixed inset-0 z-[100] flex flex-col"
+      className="safe-top safe-bottom fixed inset-0 z-[100] flex flex-col overflow-y-auto"
       style={{
         background:
           "linear-gradient(160deg, rgba(14,10,6,0.97), rgba(9,6,3,0.99))",
@@ -153,7 +153,7 @@ function MobileOverlay({
               textTransform: "uppercase",
             }}
           >
-            VIBEUP
+            {SITE.shortName.toUpperCase()}
           </p>
           <p className="mt-1 text-[7px] uppercase tracking-[0.36em] text-white/24">
             Events & Services
@@ -164,6 +164,7 @@ function MobileOverlay({
           type="button"
           onClick={onClose}
           className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/58"
+          aria-label="Close menu"
         >
           <X className="h-4 w-4" strokeWidth={1.3} />
         </button>
@@ -275,6 +276,7 @@ function MobileOverlay({
 export function SiteNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const lockedScrollYRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -285,17 +287,27 @@ export function SiteNavbar() {
 
   useEffect(() => {
     if (!open) {
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
       return;
     }
 
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
+    const { body } = document;
+    const previousPosition = body.style.position;
+    const previousTop = body.style.top;
+    const previousWidth = body.style.width;
+    const previousOverflow = body.style.overflow;
+
+    lockedScrollYRef.current = window.scrollY;
+    body.style.position = "fixed";
+    body.style.top = `-${lockedScrollYRef.current}px`;
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
 
     return () => {
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
+      body.style.position = previousPosition;
+      body.style.top = previousTop;
+      body.style.width = previousWidth;
+      body.style.overflow = previousOverflow;
+      window.scrollTo(0, lockedScrollYRef.current);
     };
   }, [open]);
 
@@ -352,7 +364,7 @@ export function SiteNavbar() {
                 fontSize: "clamp(0.8rem,3vw,0.98rem)",
               }}
             >
-              VIBEUP
+              {SITE.shortName.toUpperCase()}
             </span>
             <div className="mt-1 h-px w-8 bg-[linear-gradient(90deg,transparent,rgba(198,169,98,0.56),transparent)] transition-all duration-300 group-hover:w-full" />
             <span className="mt-1 hidden text-[6px] uppercase tracking-[0.42em] text-white/22 sm:block">

@@ -708,7 +708,7 @@ export function AdminDashboardClient() {
             </h2>
             <p className="body-copy mt-5 max-w-2xl">
               Monitor recent revenue, ticket movement, subscribers, incoming enquiries, and the
-              latest user profiles without leaving the main VibeUp experience.
+              latest user profiles without leaving the main ZOYA experience.
             </p>
           </div>
 
@@ -1081,7 +1081,7 @@ export function AdminDashboardClient() {
                       Reserve selection <em>context</em>
                     </h3>
                     <p className="body-copy mt-4 max-w-xl">
-                      Review the captured reservation, the matched VibeUp user profile, and every
+                      Review the captured reservation, the matched ZOYA user profile, and every
                       order we can link by customer email.
                     </p>
                   </div>
@@ -1158,7 +1158,7 @@ export function AdminDashboardClient() {
                           <div className="mt-5 space-y-4">
                             <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
                               <p className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-white">
-                                {reservationDetail.linked_user.full_name || "VibeUp User"}
+                                {reservationDetail.linked_user.full_name || "ZOYA User"}
                               </p>
                               <div className="mt-4 flex flex-wrap gap-4">
                                 <p className="eyebrow text-white/28">

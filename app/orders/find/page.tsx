@@ -6,7 +6,7 @@ import { PageHero } from "@/components/site/liquid";
 export const metadata: Metadata = {
   title: "Find Order",
   description:
-    "Open an existing VibeUp order, verify payment status, or resend confirmed ticket delivery.",
+    "Open an existing ZOYA order, verify payment status, or resend confirmed ticket delivery.",
   robots: {
     index: false,
     follow: false,

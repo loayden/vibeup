@@ -291,7 +291,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
         <GlassCard gold className="px-6 py-7 md:px-8">
           <p className="eyebrow mb-4">Application Form</p>
           <h3 className="section-title text-[2.3rem]">
-            Apply for <em>{selectedRole || "VibeUp"}</em>
+            Apply for <em>{selectedRole || "ZOYA"}</em>
           </h3>
           <p className="body-copy mt-5 max-w-2xl">
             We prefer concise, thoughtful applications. Share the role you want, links that

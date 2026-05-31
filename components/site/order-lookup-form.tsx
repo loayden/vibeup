@@ -48,7 +48,7 @@ export function OrderLookupForm() {
     if (form.orderNumber.trim().length < 4) {
       setBanner({
         type: "error",
-        message: "Enter the order number from your VibeUp confirmation email.",
+        message: "Enter the order number from your ZOYA confirmation email.",
       });
       return false;
     }
@@ -239,7 +239,7 @@ export function OrderLookupForm() {
           <p className="eyebrow text-[var(--gold)]">Support Note</p>
           <p className="body-copy text-white/68">
             If the order is still pending, the fastest next step is to check the confirmation email
-            first, then contact VibeUp support with the order number.
+            first, then contact ZOYA support with the order number.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <a href="mailto:vibesup.event@gmail.com" className="liquid-button-ghost w-full justify-center sm:w-auto">

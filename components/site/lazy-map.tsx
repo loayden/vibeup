@@ -18,7 +18,7 @@ export function LazyMap({ embedUrl, openUrl }: LazyMapProps) {
       <div className="overflow-hidden rounded-[18px]">
         {loaded ? (
           <iframe
-            title="VibeUp Location"
+            title="ZOYA Location"
             src={embedUrl}
             className="h-[360px] w-full border-0 sm:h-[420px]"
             loading="lazy"

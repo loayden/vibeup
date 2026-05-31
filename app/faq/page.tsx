@@ -6,7 +6,7 @@ import { FAQ_GROUPS } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "Find answers about tickets, event policies, private bookings, payments, and the VibeUp guest experience.",
+    "Find answers about tickets, event policies, private bookings, payments, and the ZOYA guest experience.",
 };
 
 export default function FaqPage() {
@@ -16,7 +16,7 @@ export default function FaqPage() {
         eyebrow="FAQ"
         title="Answers for guests, clients, and event"
         goldWord="partners"
-        description="This page covers the questions we hear most often around tickets, event policies, private bookings, payments, and the way VibeUp works behind the scenes."
+        description="This page covers the questions we hear most often around tickets, event policies, private bookings, payments, and the way ZOYA works behind the scenes."
         align="center"
       />
 
@@ -59,7 +59,7 @@ export default function FaqPage() {
             </p>
             <div className="mt-8 flex justify-center">
               <LiquidLinkButton href="/contact-us" gold>
-                Contact VibeUp
+                Contact ZOYA
               </LiquidLinkButton>
             </div>
           </GlassCard>

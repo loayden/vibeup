@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { getAuthUser } from "@/lib/auth";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
+import { isMissingServerEnvError } from "@/lib/env";
 import { validatePromoCode } from "@/lib/orders";
 import { getStripeClient } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase-server";
@@ -36,7 +37,23 @@ export async function POST(request: NextRequest) {
   try {
     const payload = orderSchema.parse(await request.json());
     const supabase = createAdminClient();
-    const stripe = getStripeClient();
+    let stripe: ReturnType<typeof getStripeClient>;
+
+    try {
+      stripe = getStripeClient();
+    } catch (error) {
+      if (isMissingServerEnvError(error, "STRIPE_SECRET_KEY")) {
+        return errorResponse(
+          "Secure payment is temporarily unavailable. Contact support before trying again.",
+          503,
+          {
+            origin: request.headers.get("origin"),
+          },
+        );
+      }
+
+      throw error;
+    }
 
     const { data: event, error: eventError } = await supabase
       .from("events")
@@ -213,7 +230,6 @@ export async function POST(request: NextRequest) {
 
     try {
       const session = await stripe.checkout.sessions.create({
-        payment_method_types: ["card"],
         mode: "payment",
         customer_email: normalizedCustomerEmail,
         success_url: absoluteUrl(

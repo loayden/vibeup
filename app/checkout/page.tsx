@@ -22,7 +22,7 @@ import { SITE } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "Checkout",
   description:
-    "Build a real VibeUp order, continue through secure Stripe payment, and receive confirmed ticket delivery after payment succeeds.",
+    "Choose tickets, add guest details, pay securely, and receive confirmed ZOYA ticket delivery after payment succeeds.",
 };
 
 type CheckoutPageProps = {
@@ -37,21 +37,32 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
   const checkoutContext = await getCheckoutPageContext(requestedEventSlug);
   const { feed, event, availableEvents, selectionMissing } = checkoutContext;
   const hasExplicitSelection = Boolean(requestedEventSlug && !selectionMissing);
+  const paymentReady = Boolean(process.env.STRIPE_SECRET_KEY);
   const checkoutReady = Boolean(
     hasExplicitSelection &&
       event?.id &&
       event.ticketsAvailable &&
       !feed.degraded &&
-      event.eventState !== "past",
+      event.eventState !== "past" &&
+      paymentReady,
   );
   const unavailableMessage = getCheckoutUnavailableMessage({
     degraded: feed.degraded,
     eventTitle: event?.title || null,
   });
-  const trustSignals = getTrustMessagingForEvent(event, {
-    degraded: feed.degraded,
-    degradedMessage: feed.degraded_message,
-  });
+  const checkoutBlockedMessage = paymentReady
+    ? unavailableMessage
+    : `Secure payment is temporarily unavailable. Contact ${SITE.email} while Stripe settings are restored.`;
+  const trustSignals = paymentReady
+    ? getTrustMessagingForEvent(event, {
+        degraded: feed.degraded,
+        degradedMessage: feed.degraded_message,
+      })
+    : [
+        "Secure payment is not configured in this environment, so checkout is closed before guests enter payment details.",
+        "Add the Stripe server key in deployment settings to reopen first-party checkout.",
+        `For urgent support, contact ${SITE.email}.`,
+      ];
   const eventPickerEvents = availableEvents.length ? availableEvents : feed.upcoming;
 
   return (
@@ -64,15 +75,15 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
           !hasExplicitSelection
             ? "Choose the event first so the mobile checkout can stay explicit about date, venue, inventory, and ticket tiers before any guest details are entered."
             : checkoutReady
-            ? "Choose the ticket tiers that fit your night, create the order inside VibeUp, and continue into secure Stripe payment without leaving the VibeUp commerce flow."
-            : unavailableMessage
+            ? "Choose tickets, add your details, and continue to secure card payment with a clear total before you pay."
+            : checkoutBlockedMessage
         }
         media={
           <GlassCard className="overflow-hidden p-3">
-            <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
+            <div className="relative min-h-[320px] sm:min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
                 src={event?.coverImageUrl || "/arabnights-1200.webp"}
-                alt={event?.title || "VibeUp checkout"}
+                alt={event?.title || "ZOYA checkout"}
                 fill
                 priority
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
@@ -180,10 +191,12 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
               icon: ShieldCheck,
               label: "First-Party Order",
               body: checkoutReady
-                ? "Your order is created inside the VibeUp platform before card payment begins, so order state, totals, and customer details stay in one system."
+                ? "Your order is created inside the ZOYA platform before card payment begins, so order state, totals, and customer details stay in one system."
                 : !hasExplicitSelection
                   ? "Choose the event first so checkout opens against the correct live catalog instead of assuming a default night."
-                  : "Live event inventory is unavailable, so checkout is intentionally blocked instead of sending guests into an unreliable purchase flow.",
+                  : paymentReady
+                    ? "Live event inventory is unavailable, so checkout is intentionally blocked instead of sending guests into an unreliable purchase flow."
+                    : "Secure payment is not configured in this environment, so checkout is intentionally blocked until Stripe keys are restored.",
             },
             {
               icon: CheckCircle2,
@@ -211,8 +224,8 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             <div className="grid gap-4 md:grid-cols-3">
               {[
                 "Step 1: choose quantity by live ticket tier.",
-                "Step 2: create the order inside VibeUp with your contact details.",
-                "Step 3: complete card payment in Stripe and receive QR delivery after confirmation.",
+                "Step 2: add your contact details for ticket delivery.",
+                "Step 3: pay securely and receive QR delivery after confirmation.",
               ].map((item) => (
                 <div
                   key={item}
@@ -234,7 +247,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
             goldWord="pricing"
             subtitle={
               hasExplicitSelection
-                ? "Choose quantity by access tier, validate any promo code, and move into secure Stripe Checkout with a real VibeUp order already created."
+                ? "Choose quantity by access tier, validate any promo code, and continue to secure card payment with a real ZOYA order already prepared."
                 : "Checkout opens after you explicitly choose the event. That keeps mobile buyers oriented and prevents cross-event confusion."
             }
           />
@@ -243,6 +256,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
               event={event}
               trustSignals={trustSignals}
               unavailableMessage={unavailableMessage}
+              paymentReady={paymentReady}
               wasCancelled={cancelled === "true"}
             />
           ) : (
@@ -264,7 +278,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
           {[
             {
               title: "Order Ownership",
-              body: "VibeUp now owns the order record from the start of checkout, which means the team can see customer details, totals, ticket items, and post-payment status in the admin dashboard.",
+              body: "ZOYA now owns the order record from the start of checkout, which means the team can see customer details, totals, ticket items, and post-payment status in the admin dashboard.",
             },
             {
               title: "Ticket Delivery",

@@ -9,7 +9,7 @@ import { SITE } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact VibeUp for private events, partnerships, cultural programs, premium celebrations, and ticketing support.",
+    "Contact ZOYA for private events, partnerships, cultural programs, premium celebrations, and ticketing support.",
 };
 
 export default function ContactPage() {
@@ -157,7 +157,7 @@ export default function ContactPage() {
             eyebrow="Find Us"
             title="Los Angeles remains our operating"
             goldWord="center"
-            subtitle="Most VibeUp productions are anchored in Los Angeles, with project support available for expansion markets and destination opportunities."
+            subtitle="Most ZOYA productions are anchored in Los Angeles, with project support available for expansion markets and destination opportunities."
           />
 
           <LazyMap

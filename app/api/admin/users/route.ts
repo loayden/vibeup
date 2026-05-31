@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
               fullName:
                 typeof user.user_metadata?.full_name === "string"
                   ? user.user_metadata.full_name
-                  : user.email || "VibeUp User",
+                  : user.email || "ZOYA User",
             });
 
             if (role && profile.role !== sanitizeText(role, 30)) {
@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
               fullName:
                 typeof user.user_metadata?.full_name === "string"
                   ? user.user_metadata.full_name
-                  : user.email || "VibeUp User",
+                  : user.email || "ZOYA User",
             }),
           );
 

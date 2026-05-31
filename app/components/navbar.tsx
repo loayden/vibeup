@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 /* ─────────────────────────────────────────
    CONFIG
 ───────────────────────────────────────── */
-const BRAND = { name: "VIBEUP", sub: "Events & Services" };
+const BRAND = { name: "ZOYA", sub: "Events & Services" };
 
 const LEFT_LINKS  = [
   { label: "Events",   href: "/events"   },
@@ -27,7 +27,7 @@ const MORE_LINKS = [
   { label:"Blog",    href:"/blog",       desc:"Tips & spotlights",        icon:<Rss         strokeWidth={1.2} className="w-3.5 h-3.5"/> },
   { label:"FAQ",     href:"/faq",        desc:"Common questions",         icon:<HelpCircle  strokeWidth={1.2} className="w-3.5 h-3.5"/> },
   { label:"Contact", href:"/contact-us", desc:"Reach our team",           icon:<Phone       strokeWidth={1.2} className="w-3.5 h-3.5"/> },
-  { label:"Careers", href:"/careers",    desc:"Join VibeUp",              icon:<Briefcase   strokeWidth={1.2} className="w-3.5 h-3.5"/> },
+  { label:"Careers", href:"/careers",    desc:"Join ZOYA",              icon:<Briefcase   strokeWidth={1.2} className="w-3.5 h-3.5"/> },
 ];
 
 const ALL_MOBILE = [

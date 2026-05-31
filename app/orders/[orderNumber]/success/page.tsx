@@ -15,7 +15,7 @@ type OrderSuccessPageProps = {
 export const metadata: Metadata = {
   title: "Order Success",
   description:
-    "Payment complete. Review your confirmed VibeUp order and retrieve your QR tickets.",
+    "Payment complete. Review your confirmed ZOYA order and retrieve your QR tickets.",
   robots: {
     index: false,
     follow: false,
@@ -35,7 +35,7 @@ export default async function OrderSuccessPage({
         eyebrow="Payment Result"
         title="Your order has been"
         goldWord="received"
-        description="Stripe sent you back to VibeUp after checkout. This page verifies the order, shows the current payment state, and exposes any QR tickets already generated."
+        description="Stripe sent you back to ZOYA after checkout. This page verifies the order, shows the current payment state, and exposes any QR tickets already generated."
       />
 
       <section className="px-5 pb-20 sm:px-10 lg:px-16">

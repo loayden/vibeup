@@ -34,7 +34,7 @@ import {
   SITE,
   TESTIMONIALS,
   TICKET_TYPES,
-  WHY_VIBEUP,
+  WHY_ZOYA,
 } from "@/lib/site-data";
 
 const revealProps = {
@@ -110,7 +110,7 @@ export default function HomePage() {
         <div className="relative z-10 flex min-h-[85vh] items-center px-5 pt-28 sm:min-h-screen sm:px-10 sm:pt-32 lg:px-16">
           <div className="mx-auto w-full max-w-7xl">
             <PageHero
-              eyebrow="VibeUp Events & Services"
+              eyebrow="ZOYA Events & Services"
               title="Creating unforgettable"
               goldWord="experiences"
               description="A premium event company shaping cultural nights, private parties, gala dinners, and luxury celebrations with clear creative direction, disciplined production, and the kind of room energy guests remember long after the last song."
@@ -236,7 +236,7 @@ export default function HomePage() {
                 {
                   icon: ShieldCheck,
                   title: "Build The Order",
-                  body: "Ticket quantities, fees, and promo checks happen inside the VibeUp checkout flow.",
+                  body: "Ticket quantities, fees, and promo checks happen inside the ZOYA checkout flow.",
                 },
                 {
                   icon: Sparkles,
@@ -264,7 +264,7 @@ export default function HomePage() {
             eyebrow="Count Down"
             title="The room is almost"
             goldWord="ready"
-            subtitle="The next headline VibeUp night is already on the calendar. Tickets, guest flow, and hospitality tiers are structured for an elegant, high-energy evening from first arrival to final close."
+            subtitle="The next headline ZOYA night is already on the calendar. Tickets, guest flow, and hospitality tiers are structured for an elegant, high-energy evening from first arrival to final close."
           />
           <CountdownTimer
             targetDate={new Date(nextEvent?.countdownIso || SITE.countdownIso)}
@@ -275,7 +275,7 @@ export default function HomePage() {
               {
                 icon: CalendarDays,
                 label: "Event",
-                value: nextEvent?.title || "VibeUp signature night",
+                value: nextEvent?.title || "ZOYA signature night",
               },
               {
                 icon: MapPin,
@@ -379,13 +379,13 @@ export default function HomePage() {
       <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
-            eyebrow="Why VibeUp"
+            eyebrow="Why ZOYA"
             title="Premium nights need stronger"
             goldWord="control"
             subtitle="We are hired when clients want the evening to feel expensive, effortless, and culturally alive. That takes more than decoration. It takes real production structure."
           />
           <div className="grid gap-5 lg:grid-cols-3">
-            {WHY_VIBEUP.map((item, index) => {
+            {WHY_ZOYA.map((item, index) => {
               const icons = [Music4, ShieldCheck, Globe2];
               const Icon = icons[index];
 
@@ -415,7 +415,7 @@ export default function HomePage() {
             subtitle={
               liveCatalogHealthy
                 ? "Each tier is structured around sightlines, service flow, and the feeling you want your night to carry. Pricing and availability below are tied to the live event catalog."
-                : "These access tiers are representative of the VibeUp guest experience. Live pricing and availability reopen only when the real event catalog is healthy."
+                : "These access tiers are representative of the ZOYA guest experience. Live pricing and availability reopen only when the real event catalog is healthy."
             }
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -497,7 +497,7 @@ export default function HomePage() {
             eyebrow="Past Moments"
             title="Proof of atmosphere and"
             goldWord="scale"
-            subtitle="A selection of frames from previous productions, capturing the visual texture, room energy, and production finish that define the VibeUp signature."
+            subtitle="A selection of frames from previous productions, capturing the visual texture, room energy, and production finish that define the ZOYA signature."
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {galleryHighlights.map((item, index) => (
@@ -577,7 +577,7 @@ export default function HomePage() {
             </h2>
             <p className="body-copy mx-auto mt-5 max-w-2xl">
               Receive first access to new releases, private event announcements, premium table
-              opportunities, and editorial recaps from VibeUp productions.
+              opportunities, and editorial recaps from ZOYA productions.
             </p>
             <div className="mt-8 flex justify-center">
               <NewsletterForm source="home-cta" />

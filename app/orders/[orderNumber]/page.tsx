@@ -16,7 +16,7 @@ type OrderPageProps = {
 export const metadata: Metadata = {
   title: "Order Details",
   description:
-    "Review your VibeUp order status, ticket items, and QR entry passes after checkout.",
+    "Review your ZOYA order status, ticket items, and QR entry passes after checkout.",
   robots: {
     index: false,
     follow: false,
@@ -33,7 +33,7 @@ export default async function OrderPage({ params, searchParams }: OrderPageProps
         eyebrow="Order Detail"
         title="Review your ticket"
         goldWord="order"
-        description="This page shows the current VibeUp order state, ticket items, payment result, and any QR passes already generated for entry."
+        description="This page shows the current ZOYA order state, ticket items, payment result, and any QR passes already generated for entry."
       />
 
       <section className="px-5 pb-20 sm:px-10 lg:px-16">

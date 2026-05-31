@@ -10,7 +10,7 @@ import { getPublicEventsFeed } from "@/lib/public-events";
 export const metadata: Metadata = {
   title: "Events",
   description:
-    "Browse live VibeUp events, ticket availability, venues, and premium cultural experiences from the active event catalog.",
+    "Browse live ZOYA events, ticket availability, venues, and premium cultural experiences from the active event catalog.",
 };
 
 export default async function EventsPage() {
@@ -27,13 +27,13 @@ export default async function EventsPage() {
         eyebrow="Events Calendar"
         title="Signature nights and curated"
         goldWord="experiences"
-        description="Explore the public side of VibeUp through the live event catalog: premium cultural evenings, gala formats, rooftop experiences, and milestone celebrations with real ticket visibility."
+        description="Explore the public side of ZOYA through the live event catalog: premium cultural evenings, gala formats, rooftop experiences, and milestone celebrations with real ticket visibility."
         media={
           <GlassCard className="overflow-hidden p-3">
-            <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
+            <div className="relative min-h-[320px] sm:min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
                 src={featuredEvent?.coverImageUrl || "/arabnights-1200.webp"}
-                alt={featuredEvent?.title || "VibeUp events"}
+                alt={featuredEvent?.title || "ZOYA events"}
                 fill
                 priority
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
@@ -101,7 +101,7 @@ export default async function EventsPage() {
             eyebrow="Browse The Calendar"
             title="Upcoming launches and event"
             goldWord="history"
-            subtitle="Move between the grid and calendar views to understand what is coming next, what already sold, and which room formats define the VibeUp standard."
+            subtitle="Move between the grid and calendar views to understand what is coming next, what already sold, and which room formats define the ZOYA standard."
           />
           <EventsShowcase upcoming={feed.upcoming} past={feed.past} />
         </div>

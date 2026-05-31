@@ -1,10 +1,10 @@
 export const SITE = {
-  name: "VibeUp Events & Services",
-  shortName: "VibeUp",
+  name: "ZOYA Events & Services",
+  shortName: "ZOYA",
   tagline: "Luxury event production, cultural experiences, and premium private celebrations.",
   description:
-    "VibeUp Events & Services designs, produces, and manages elevated cultural nights, private parties, gala dinners, and branded experiences for clients who expect precision, atmosphere, and impeccable execution.",
-  buyUrl: "https://vibesup.org/events/arab-nights",
+    "ZOYA Events & Services designs, produces, and manages elevated cultural nights, private parties, gala dinners, and branded experiences for clients who expect precision, atmosphere, and impeccable execution.",
+  buyUrl: "/checkout?event=arab-nights",
   email: "vibesup.event@gmail.com",
   phonePrimary: "+1 (949) 247-9309",
   phoneSecondary: "+1 (917) 818-7850",
@@ -168,7 +168,7 @@ export const UPCOMING_EVENTS = [
     status: "upcoming" as const,
     image: "/fireworks-1600.webp",
     summary:
-      "The signature VibeUp countdown experience with cinematic staging, formal dinner service, live entertainment, and a dramatic midnight reveal.",
+      "The signature ZOYA countdown experience with cinematic staging, formal dinner service, live entertainment, and a dramatic midnight reveal.",
   },
 ] as const;
 
@@ -198,7 +198,7 @@ export const PAST_EVENTS = [
     attendance: "300+ Guests",
     image: "/VIBEUP5.jpg",
     summary:
-      "A seasonal open-air activation built around premium energy, social storytelling, and a lighter but still polished VibeUp atmosphere.",
+      "A seasonal open-air activation built around premium energy, social storytelling, and a lighter but still polished ZOYA atmosphere.",
   },
 ] as const;
 
@@ -219,7 +219,7 @@ export const FEATURED_EVENT = {
   ],
 };
 
-export const WHY_VIBEUP = [
+export const WHY_ZOYA = [
   {
     title: "World-Class Entertainment",
     body:
@@ -432,7 +432,7 @@ export const TEAM = [
     name: "Rami Farid",
     role: "Founder & Executive Producer",
     bio:
-      "Rami leads the commercial vision, show direction, and guest-experience philosophy behind VibeUp’s premium event portfolio.",
+      "Rami leads the commercial vision, show direction, and guest-experience philosophy behind ZOYA’s premium event portfolio.",
   },
   {
     name: "Lina Haddad",
@@ -450,7 +450,7 @@ export const TEAM = [
     name: "Sara Nabil",
     role: "Marketing Lead",
     bio:
-      "Sara manages campaign strategy, community visibility, and launch momentum across VibeUp’s public and ticketed experiences.",
+      "Sara manages campaign strategy, community visibility, and launch momentum across ZOYA’s public and ticketed experiences.",
   },
 ] as const;
 
@@ -473,10 +473,10 @@ export const VALUES = [
 ] as const;
 
 export const MILESTONES = [
-  { year: "2018", title: "Founded In Los Angeles", body: "VibeUp launched with a mission to produce elevated Arab-American experiences with premium execution." },
+  { year: "2018", title: "Founded In Los Angeles", body: "ZOYA launched with a mission to produce elevated Arab-American experiences with premium execution." },
   { year: "2019", title: "First 500-Person Event", body: "Our production model scaled into larger guest counts without losing intimacy, service rhythm, or visual identity." },
   { year: "2021", title: "Expansion To Three Cities", body: "We extended operations and partnerships across multiple markets while keeping one luxury-standard production process." },
-  { year: "2023", title: "10,000 Guest Milestone", body: "A major signal that VibeUp had evolved from boutique organizer into a recognized premium event company." },
+  { year: "2023", title: "10,000 Guest Milestone", body: "A major signal that ZOYA had evolved from boutique organizer into a recognized premium event company." },
   { year: "2025", title: "International Momentum", body: "Our concepts, partnerships, and audience reach positioned the brand for broader luxury-cultural expansion." },
 ] as const;
 
@@ -490,7 +490,7 @@ export const PRESS_QUOTES = [
   {
     source: "LA Social Edit",
     quote:
-      "VibeUp has developed a recognisable signature: events that feel cinematic, culturally grounded, and far more polished than the market norm.",
+      "ZOYA has developed a recognisable signature: events that feel cinematic, culturally grounded, and far more polished than the market norm.",
   },
   {
     source: "California Nights Review",
@@ -510,7 +510,7 @@ export const TESTIMONIALS = [
   },
   {
     quote:
-      "VibeUp thinks like producers, not just organisers. The team saw details before we even knew they mattered, and the result felt effortless.",
+      "ZOYA thinks like producers, not just organisers. The team saw details before we even knew they mattered, and the result felt effortless.",
     name: "Khaled M.",
     role: "Brand Partner",
     event: "Arab Cultural Night",
@@ -552,7 +552,7 @@ export const GALLERY_VIDEOS = [
     title: "Voices Of Legends Highlights",
     src: "/VIBEUP1.mp4",
     description:
-      "A short look at atmosphere, performance, and room pacing from one of VibeUp’s signature cultural productions.",
+      "A short look at atmosphere, performance, and room pacing from one of ZOYA’s signature cultural productions.",
   },
   {
     title: "Arab Nights Energy Reel",
@@ -575,7 +575,7 @@ export const BLOG_POSTS = [
     title: "How to Plan the Perfect Arab Cultural Event",
     excerpt:
       "A strategic look at tone, timing, guest flow, entertainment, and hospitality for cultural events that feel modern and deeply resonant.",
-    author: "VibeUp Editorial",
+    author: "ZOYA Editorial",
     readTime: "6 min read",
     date: "March 10, 2026",
     image: "/arabnights-1200.webp",
@@ -599,7 +599,7 @@ export const BLOG_POSTS = [
     title: "5 Reasons to Hire a Professional Event Company",
     excerpt:
       "The difference between an event that simply happens and an experience that looks expensive, feels calm, and converts attention into reputation.",
-    author: "VibeUp Editorial",
+    author: "ZOYA Editorial",
     readTime: "4 min read",
     date: "January 28, 2026",
     image: "/production-1600.webp",
@@ -610,7 +610,7 @@ export const BLOG_POSTS = [
     category: "Artist Spotlights",
     title: "Abdel Karim: A Night to Remember",
     excerpt:
-      "A look at how artist programming, room energy, and cultural memory came together inside one of VibeUp’s most talked-about nights.",
+      "A look at how artist programming, room energy, and cultural memory came together inside one of ZOYA’s most talked-about nights.",
     author: "Guest Features",
     readTime: "5 min read",
     date: "January 12, 2026",
@@ -623,7 +623,7 @@ export const BLOG_POSTS = [
     title: "Building Community Through Celebration",
     excerpt:
       "Why the best luxury cultural events do more than entertain and how event design can create belonging without losing refinement.",
-    author: "VibeUp Editorial",
+    author: "ZOYA Editorial",
     readTime: "5 min read",
     date: "December 18, 2025",
     image: "/VIBEUP10.jpg",
@@ -632,9 +632,9 @@ export const BLOG_POSTS = [
   {
     slug: "vibeup-expands-to-new-york-and-chicago",
     category: "News",
-    title: "VibeUp Expands to New York and Chicago",
+    title: "ZOYA Expands to New York and Chicago",
     excerpt:
-      "A strategic move that marks the next chapter in VibeUp’s premium event growth across high-opportunity markets.",
+      "A strategic move that marks the next chapter in ZOYA’s premium event growth across high-opportunity markets.",
     author: "Press Desk",
     readTime: "3 min read",
     date: "November 29, 2025",
@@ -688,7 +688,7 @@ export const FAQ_GROUPS = [
     category: "Services",
     items: [
       {
-        question: "How can I book VibeUp for my private event?",
+        question: "How can I book ZOYA for my private event?",
         answer:
           "Start through the enquiry form with your audience size, date range, event type, and budget band. We respond with a tailored next-step consultation.",
       },
@@ -720,7 +720,7 @@ export const FAQ_GROUPS = [
       {
         question: "What should I wear to events?",
         answer:
-          "Dress guidance is set per event. Most VibeUp signature nights lean toward elevated evening attire, black tie, or refined cultural glamour.",
+          "Dress guidance is set per event. Most ZOYA signature nights lean toward elevated evening attire, black tie, or refined cultural glamour.",
       },
     ],
   },

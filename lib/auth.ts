@@ -50,7 +50,7 @@ export function buildFallbackProfile(input: {
 
   return {
     id: input.id,
-    full_name: input.fullName?.trim() || "VibeUp Admin",
+    full_name: input.fullName?.trim() || "ZOYA Admin",
     email: normalizeEmail(input.email),
     phone: null,
     avatar_url: null,

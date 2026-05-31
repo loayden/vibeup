@@ -186,11 +186,11 @@ function mapEvent(event: EventRow, ticketTypes: TicketTypeRow[]): PublicEvent {
     description:
       event.description ||
       event.short_description ||
-      "A premium VibeUp experience shaped around hospitality, entertainment, and room energy.",
+      "A premium ZOYA experience shaped around hospitality, entertainment, and room energy.",
     shortDescription:
       event.short_description ||
       event.description ||
-      "A premium VibeUp experience shaped around hospitality, entertainment, and room energy.",
+      "A premium ZOYA experience shaped around hospitality, entertainment, and room energy.",
     venueName: event.venue_name,
     venueAddress: event.venue_address,
     venueCity,
@@ -494,13 +494,13 @@ export function getTrustMessagingForEvent(
   if (!event || !event.ticketsAvailable || !event.id) {
     return [
       "Ticketing is temporarily unavailable until live event inventory is restored.",
-      "VibeUp only opens first-party Stripe checkout when the live event catalog is healthy and inventory is available.",
+      "ZOYA only opens first-party Stripe checkout when the live event catalog is healthy and inventory is available.",
       "If the event is currently unavailable, use the waitlist or support actions instead of pushing guests into a broken payment flow.",
     ];
   }
 
   return [
-    "Card payment is completed through Stripe Checkout while the order stays inside the VibeUp system.",
+    "Card payment is completed through Stripe Checkout while the order stays inside the ZOYA system.",
     "Confirmation email and QR tickets are issued only after Stripe confirms a successful payment.",
     "Ticket availability, sold-out states, and order totals are calculated from live event inventory.",
   ];

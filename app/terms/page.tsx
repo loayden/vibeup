@@ -4,7 +4,7 @@ import { GlassCard, PageHero } from "@/components/site/liquid";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "Review VibeUp ticketing, event rules, refund expectations, liability limits, and guest responsibilities.",
+    "Review ZOYA ticketing, event rules, refund expectations, liability limits, and guest responsibilities.",
 };
 
 const termsSections = [
@@ -21,17 +21,17 @@ const termsSections = [
   {
     title: "Event Rules",
     body:
-      "Guests are expected to follow venue guidance, event dress expectations, entry instructions, and conduct standards. VibeUp reserves the right to refuse entry or remove attendees whose behavior disrupts safety or guest experience.",
+      "Guests are expected to follow venue guidance, event dress expectations, entry instructions, and conduct standards. ZOYA reserves the right to refuse entry or remove attendees whose behavior disrupts safety or guest experience.",
   },
   {
     title: "Liability",
     body:
-      "VibeUp is not responsible for losses caused by venue changes, artist substitutions, force majeure, or conditions outside reasonable operational control. Where required, rescheduling or credit options may be offered.",
+      "ZOYA is not responsible for losses caused by venue changes, artist substitutions, force majeure, or conditions outside reasonable operational control. Where required, rescheduling or credit options may be offered.",
   },
   {
     title: "Contact",
     body:
-      "Questions about tickets, service agreements, payments, or event rules should be directed to VibeUp through the official contact channels listed on this site.",
+      "Questions about tickets, service agreements, payments, or event rules should be directed to ZOYA through the official contact channels listed on this site.",
   },
 ] as const;
 
@@ -42,7 +42,7 @@ export default function TermsPage() {
         eyebrow="Terms"
         title="The rules that support the guest"
         goldWord="experience"
-        description="These terms explain the basic rules for ticketing, attendance, event conduct, payments, and the operating limitations of the VibeUp platform."
+        description="These terms explain the basic rules for ticketing, attendance, event conduct, payments, and the operating limitations of the ZOYA platform."
         align="center"
       />
 

@@ -3,6 +3,7 @@ export function Orbs() {
     <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
       {/* ✅ Reduced blur for better performance on mobile */}
       <div
+        className="ambient-orb"
         style={{
           position: "absolute",
           width: 700,
@@ -18,6 +19,7 @@ export function Orbs() {
         }}
       />
       <div
+        className="ambient-orb"
         style={{
           position: "absolute",
           width: 550,
@@ -34,7 +36,15 @@ export function Orbs() {
       />
       <style>{`
         @media (prefers-reduced-motion: reduce) {
-          div[style*="animation"] {
+          .ambient-orb {
+            animation: none !important;
+          }
+        }
+        @media (max-width: 767px) {
+          .ambient-orb {
+            width: 360px !important;
+            height: 360px !important;
+            filter: blur(24px) !important;
             animation: none !important;
           }
         }

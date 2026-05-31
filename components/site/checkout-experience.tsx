@@ -36,6 +36,7 @@ type CheckoutExperienceProps = {
   event: PublicEvent | null;
   trustSignals: string[];
   unavailableMessage: string;
+  paymentReady?: boolean;
   wasCancelled?: boolean;
 };
 
@@ -47,11 +48,11 @@ const checkoutSteps = [
   },
   {
     label: "Add Details",
-    body: "Create the order inside VibeUp before card payment begins.",
+    body: "Add your name and delivery email before payment starts.",
   },
   {
-    label: "Pay In Stripe",
-    body: "Complete secure payment and receive QR tickets after confirmation.",
+    label: "Pay Securely",
+    body: "Complete card payment, then receive confirmed ticket access.",
   },
 ] as const;
 
@@ -102,6 +103,7 @@ export function CheckoutExperience({
   event,
   trustSignals,
   unavailableMessage,
+  paymentReady = true,
   wasCancelled = false,
 }: CheckoutExperienceProps) {
   const ticketTypes = event?.ticketTypes || emptyTicketTypes;
@@ -165,7 +167,12 @@ export function CheckoutExperience({
   const discountedSubtotal = Math.max(subtotal - discountAmount, 0);
   const fee = discountedSubtotal > 0 ? Number((discountedSubtotal * 0.03).toFixed(2)) : 0;
   const total = discountedSubtotal + fee;
-  const checkoutEnabled = Boolean(event?.id && event.ticketsAvailable && ticketTypes.length > 0);
+  const paymentUnavailableMessage =
+    "Secure card payment is temporarily unavailable. Contact the team for help while payment settings are restored.";
+  const checkoutUnavailableReason = paymentReady ? unavailableMessage : paymentUnavailableMessage;
+  const checkoutEnabled = Boolean(
+    paymentReady && event?.id && event.ticketsAvailable && ticketTypes.length > 0,
+  );
 
   function toggleTicketSelection(ticketId: string) {
     setQuantities((current) => ({
@@ -203,7 +210,7 @@ export function CheckoutExperience({
       });
       setBanner({
         type: "info",
-        message: "Add a promo code if you received one from the VibeUp team.",
+        message: "Add a promo code if you received one from the team.",
       });
       return;
     }
@@ -211,7 +218,7 @@ export function CheckoutExperience({
     if (!event?.id) {
       setBanner({
         type: "error",
-        message: unavailableMessage,
+        message: checkoutUnavailableReason,
       });
       return;
     }
@@ -297,7 +304,7 @@ export function CheckoutExperience({
     if (!checkoutEnabled || !event?.id) {
       setBanner({
         type: "error",
-        message: unavailableMessage,
+        message: checkoutUnavailableReason,
       });
       return;
     }
@@ -360,7 +367,7 @@ export function CheckoutExperience({
 
       setBanner({
         type: "success",
-        message: "Order created. Redirecting you to secure Stripe Checkout now.",
+        message: "Order created. Opening secure payment now.",
       });
       window.location.assign(payload.checkout_url);
     } catch (error) {
@@ -443,7 +450,7 @@ export function CheckoutExperience({
         </p>
       </div>
       <p className="body-copy mt-4 text-[0.78rem] text-white/52">
-        Final card payment is completed in Stripe after this VibeUp order is created.
+        Final card payment opens only after this ZOYA order and total are prepared.
       </p>
     </GlassCard>
   );
@@ -613,8 +620,8 @@ export function CheckoutExperience({
           </h2>
           <p className="body-copy mt-4">
             {checkoutEnabled
-              ? "Your order is created inside VibeUp first, then card payment continues securely in Stripe Checkout."
-              : unavailableMessage}
+              ? "Choose tickets, add your details, then continue to secure card payment."
+              : checkoutUnavailableReason}
           </p>
 
           <form id="checkout-order-form" className="mt-7 space-y-4" onSubmit={handleSubmit}>
@@ -666,7 +673,8 @@ export function CheckoutExperience({
                 <FieldLabel optional>Promo Code</FieldLabel>
                 <input
                   className="glass-input"
-                  placeholder="Add code if VibeUp sent one"
+                  placeholder="Add code if ZOYA sent one"
+                  aria-label="Promo code"
                   autoComplete="off"
                   style={{ fontSize: "16px" }}
                   value={form.promo}
@@ -746,7 +754,7 @@ export function CheckoutExperience({
                 {loading
                   ? "Preparing Checkout"
                   : checkoutEnabled
-                    ? "Continue To Stripe"
+                    ? "Continue To Secure Payment"
                     : "Ticketing Unavailable"}
                 <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
               </span>
@@ -813,7 +821,7 @@ export function CheckoutExperience({
               {loading
                 ? "Preparing"
                 : checkoutEnabled
-                  ? "Continue To Stripe"
+                  ? "Pay Securely"
                   : "Unavailable"}
             </span>
             <span className="font-serif text-[1.1rem] tracking-[0.03em]">${total.toFixed(2)}</span>

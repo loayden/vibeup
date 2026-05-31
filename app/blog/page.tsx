@@ -9,7 +9,7 @@ import { BLOG_POSTS } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "Journal",
   description:
-    "Read VibeUp articles on event strategy, production thinking, artist moments, and premium guest experience.",
+    "Read ZOYA articles on event strategy, production thinking, artist moments, and premium guest experience.",
 };
 
 export default function BlogPage() {
@@ -19,7 +19,7 @@ export default function BlogPage() {
         eyebrow="Journal"
         title="Insights, stories, and brand"
         goldWord="thinking"
-        description="The VibeUp journal covers event strategy, cultural programming, production thinking, artist moments, and the broader ideas behind premium guest experience."
+        description="The ZOYA journal covers event strategy, cultural programming, production thinking, artist moments, and the broader ideas behind premium guest experience."
         align="center"
       />
 
@@ -57,7 +57,7 @@ export default function BlogPage() {
             eyebrow="Editorial"
             title="Fresh writing from the"
             goldWord="team"
-            subtitle="Use the filters to move between practical advice, post-event thinking, artist stories, and VibeUp company news."
+            subtitle="Use the filters to move between practical advice, post-event thinking, artist stories, and ZOYA company news."
           />
           <BlogShowcase posts={BLOG_POSTS} />
         </div>
@@ -72,7 +72,7 @@ export default function BlogPage() {
             </h2>
             <p className="body-copy mx-auto mt-5 max-w-2xl">
               Stay close to new articles, ticket releases, cultural launches, and premium booking
-              opportunities from the VibeUp team.
+              opportunities from the ZOYA team.
             </p>
             <div className="mt-8 flex justify-center">
               <NewsletterForm source="blog-newsletter" />

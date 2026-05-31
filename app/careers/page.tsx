@@ -8,7 +8,7 @@ import { CAREER_BENEFITS, OPEN_POSITIONS } from "@/lib/site-data";
 export const metadata: Metadata = {
   title: "Careers",
   description:
-    "Explore open roles at VibeUp and apply to help build premium cultural events, productions, and guest experiences.",
+    "Explore open roles at ZOYA and apply to help build premium cultural events, productions, and guest experiences.",
 };
 
 export default function CareersPage() {
@@ -25,7 +25,7 @@ export default function CareersPage() {
             <LiquidLinkButton href="#open-roles" gold>
               View Open Roles <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
             </LiquidLinkButton>
-            <LiquidLinkButton href="/about">Learn About VibeUp</LiquidLinkButton>
+            <LiquidLinkButton href="/about">Learn About ZOYA</LiquidLinkButton>
           </>
         }
       />

@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const authUser = signInResult.data.user;
     const fullName = sanitizeText(
-      authUser.user_metadata?.full_name || authUser.email || "VibeUp Guest",
+      authUser.user_metadata?.full_name || authUser.email || "ZOYA Guest",
       100,
     );
     const supabase = tryCreateAdminClient();

@@ -35,7 +35,7 @@ const detailFallbacks: Record<
 > = {
   "arab-nights": {
     overview:
-      "Arab Nights is one of VibeUp's signature cultural productions: a premium social evening where ceremony, hospitality, music, and room energy are paced deliberately to create a strong emotional build throughout the night.",
+      "Arab Nights is one of ZOYA's signature cultural productions: a premium social evening where ceremony, hospitality, music, and room energy are paced deliberately to create a strong emotional build throughout the night.",
     flow: [
       {
         title: "Arrival",
@@ -80,7 +80,7 @@ const detailFallbacks: Record<
       {
         question: "What if I need help on the day of the event?",
         answer:
-          "Use the VibeUp support contacts on your confirmation email or reach the team directly through the contact page or WhatsApp.",
+          "Use the ZOYA support contacts on your confirmation email or reach the team directly through the contact page or WhatsApp.",
       },
     ],
   },
@@ -117,7 +117,7 @@ function buildDefaultDetail(event: NonNullable<Awaited<ReturnType<typeof getPubl
         ? `${event.ticketTypes.length} ticket tiers currently published for this event`
         : "Ticket tier information will appear when inventory is published",
       event.ticketsAvailable
-        ? "Live ticket inventory is currently available through VibeUp checkout"
+        ? "Live ticket inventory is currently available through ZOYA checkout"
         : "The team is holding or refreshing ticket inventory right now",
       event.venueAddress || `${event.shortVenue}, ${event.cityLine}`,
     ],
@@ -146,7 +146,7 @@ function buildDefaultDetail(event: NonNullable<Awaited<ReturnType<typeof getPubl
       {
         question: "How does payment work?",
         answer:
-          "Checkout creates the order inside VibeUp first, then moves into secure Stripe payment so totals, customer details, and ticket status remain consistent.",
+          "Checkout creates the order inside ZOYA first, then moves into secure Stripe payment so totals, customer details, and ticket status remain consistent.",
       },
       {
         question: "When do I receive my QR tickets?",
@@ -254,7 +254,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         description={detail.overview}
         media={
           <GlassCard className="overflow-hidden p-3">
-            <div className="relative min-h-[520px] overflow-hidden rounded-[18px]">
+            <div className="relative min-h-[340px] sm:min-h-[520px] overflow-hidden rounded-[18px]">
               <Image
                 src={event.coverImageUrl}
                 alt={event.title}
@@ -296,7 +296,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                     "This event page is running on fallback schedule data. Logistics remain visible, but checkout stays honest about live inventory availability."
                   : event.eventState === "past"
                     ? "This event is now part of the archive. Use the contact flow if you need private-event support or want updates about the next release."
-                    : "Ticket inventory is currently unavailable for this event, so VibeUp is keeping checkout closed instead of risking a broken purchase flow."}
+                    : "Ticket inventory is currently unavailable for this event, so ZOYA is keeping checkout closed instead of risking a broken purchase flow."}
               </p>
             </GlassCard>
           </div>
@@ -410,7 +410,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                       {(ticketType.includes.length
                         ? ticketType.includes
                         : [
-                            "Access synced to your paid VibeUp order",
+                            "Access synced to your paid ZOYA order",
                             "QR ticket delivery after payment confirmation",
                             ticketType.isSoldOut
                               ? "Waitlist support available through the team"
@@ -461,7 +461,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                 </div>
                 <p className="body-copy mt-4 text-white/68">
                   Your order confirmation is the source of truth for access. If live inventory is
-                  active, tickets are tied to your VibeUp order before card payment begins.
+                  active, tickets are tied to your ZOYA order before card payment begins.
                 </p>
               </GlassCard>
               <GlassCard dark className="px-5 py-5">
@@ -518,7 +518,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                 Stay close to the next release <em>window</em>
               </h2>
               <p className="body-copy mx-auto mt-5 max-w-2xl">
-                If tickets are paused or sold out, join the list and VibeUp can notify you before
+                If tickets are paused or sold out, join the list and ZOYA can notify you before
                 the next release or availability update.
               </p>
               <div className="mt-8 flex justify-center">

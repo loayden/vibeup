@@ -37,7 +37,7 @@ export function SiteFooter() {
         <GlassCard warm className="px-6 py-8 md:px-8 md:py-10">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr_1fr_1.15fr]">
             <div className="space-y-5">
-              <p className="eyebrow">VibeUp Events & Services</p>
+              <p className="eyebrow">ZOYA Events & Services</p>
               <h3 className="section-title text-[2rem]">
                 Elevated nights, refined <em>execution</em>
               </h3>

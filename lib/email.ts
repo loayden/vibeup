@@ -5,9 +5,9 @@ import { Resend } from "resend";
 
 import { chunk } from "@/lib/utils";
 
-const DEFAULT_FROM = "VibeUp Events <hello@vibesup.org>";
-const TICKETS_FROM = "VibeUp Events <tickets@vibesup.org>";
-const REMINDERS_FROM = "VibeUp Events <reminders@vibesup.org>";
+const DEFAULT_FROM = "ZOYA Events <hello@vibesup.org>";
+const TICKETS_FROM = "ZOYA Events <tickets@vibesup.org>";
+const REMINDERS_FROM = "ZOYA Events <reminders@vibesup.org>";
 
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -43,12 +43,12 @@ export async function sendWelcomeEmail(to: string, name: string) {
   await sendEmail({
     from: DEFAULT_FROM,
     to,
-    subject: "Welcome to VibeUp Events",
+    subject: "Welcome to ZOYA Events",
     html: `
       <body style="background:#080808;color:#ffffff;font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;">
         <h1 style="font-family:Georgia,serif;font-weight:300;color:#C6A962;margin:0 0 16px;">Welcome, ${escapeHtml(name)}</h1>
         <p style="color:rgba(255,255,255,0.68);line-height:1.7;margin:0;">
-          Your VibeUp account is ready. Explore upcoming events, manage your bookings, and discover new experiences at vibesup.org.
+          Your ZOYA account is ready. Explore upcoming events, manage your bookings, and discover new experiences at vibesup.org.
         </p>
       </body>
     `,
@@ -97,7 +97,7 @@ export async function sendTicketEmail(input: TicketEmailInput) {
     html: `
       <body style="background:#080808;color:#ffffff;font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:32px;">
         <div style="margin-bottom:24px;text-align:center;">
-          <h1 style="margin:0;color:#C6A962;font-family:Georgia,serif;font-weight:300;font-size:34px;">VibeUp</h1>
+          <h1 style="margin:0;color:#C6A962;font-family:Georgia,serif;font-weight:300;font-size:34px;">ZOYA</h1>
           <p style="margin:8px 0 0;color:rgba(255,255,255,0.34);font-size:10px;letter-spacing:0.4em;text-transform:uppercase;">Events and Services</p>
         </div>
         <div style="padding:28px;border-radius:24px;border:1px solid rgba(255,255,255,0.08);background:linear-gradient(135deg,rgba(255,255,255,0.09),rgba(255,255,255,0.02));">

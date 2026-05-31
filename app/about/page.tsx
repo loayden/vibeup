@@ -16,23 +16,23 @@ import {
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn how VibeUp approaches luxury event production, cultural programming, guest experience, and premium private celebrations.",
+    "Learn how ZOYA approaches luxury event production, cultural programming, guest experience, and premium private celebrations.",
 };
 
 export default function AboutPage() {
   return (
     <main className="overflow-x-hidden pb-20">
       <PageHero
-        eyebrow="About VibeUp"
+        eyebrow="About ZOYA"
         title="Building culture through premium"
         goldWord="experiences"
-        description="VibeUp Events & Services was founded in Los Angeles to produce nights that feel elegant, emotionally resonant, and operationally sharp. We work where cultural relevance, hospitality, and luxury presentation need to live in the same room without friction."
+        description="ZOYA Events & Services was founded in Los Angeles to produce nights that feel elegant, emotionally resonant, and operationally sharp. We work where cultural relevance, hospitality, and luxury presentation need to live in the same room without friction."
         media={
           <GlassCard className="overflow-hidden p-3">
-            <div className="relative min-h-[500px] overflow-hidden rounded-[18px]">
+            <div className="relative min-h-[320px] sm:min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
                 src="/gala-hero.jpg"
-                alt="VibeUp gala room"
+                alt="ZOYA gala room"
                 fill
                 priority
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
@@ -68,10 +68,10 @@ export default function AboutPage() {
       <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <GlassCard className="overflow-hidden p-3">
-            <div className="relative min-h-[540px] overflow-hidden rounded-[18px]">
+            <div className="relative min-h-[360px] sm:min-h-[540px] overflow-hidden rounded-[18px]">
               <Image
                 src="/VIBEUP22-1600.webp"
-                alt="VibeUp story"
+                alt="ZOYA story"
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 38vw"
                 className="object-cover"
@@ -84,7 +84,7 @@ export default function AboutPage() {
               eyebrow="Our Story"
               title="Founded in Los Angeles, built for a wider"
               goldWord="audience"
-              subtitle="Since 2018, VibeUp has grown from boutique cultural activations into a premium event company producing public nights, private celebrations, and branded experiences with the same luxury-standard operating model."
+              subtitle="Since 2018, ZOYA has grown from boutique cultural activations into a premium event company producing public nights, private celebrations, and branded experiences with the same luxury-standard operating model."
               centered={false}
             />
 
@@ -261,7 +261,7 @@ export default function AboutPage() {
       <section className="px-5 pt-8 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard warm className="px-6 py-8 text-center md:px-10 md:py-10">
-            <p className="eyebrow mb-4">Work With VibeUp</p>
+            <p className="eyebrow mb-4">Work With ZOYA</p>
             <h2 className="section-title">
               Ready to create something more <em>intentional</em>
             </h2>

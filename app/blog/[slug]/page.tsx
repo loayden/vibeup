@@ -100,7 +100,7 @@ export default async function BlogArticlePage({ params }: BlogPageProps) {
         description={post.excerpt}
         media={
           <GlassCard className="overflow-hidden p-3">
-            <div className="relative min-h-[520px] overflow-hidden rounded-[18px]">
+            <div className="relative min-h-[340px] sm:min-h-[520px] overflow-hidden rounded-[18px]">
               <Image
                 src={post.image}
                 alt={post.title}
@@ -117,7 +117,7 @@ export default async function BlogArticlePage({ params }: BlogPageProps) {
             <LiquidLinkButton href="/blog" gold>
               Back To Journal
             </LiquidLinkButton>
-            <LiquidLinkButton href="/contact-us">Work With VibeUp</LiquidLinkButton>
+            <LiquidLinkButton href="/contact-us">Work With ZOYA</LiquidLinkButton>
           </>
         }
       />

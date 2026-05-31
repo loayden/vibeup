@@ -12,7 +12,7 @@ export default function GalleryPage() {
         eyebrow="Gallery"
         title="A visual archive of atmosphere and"
         goldWord="craft"
-        description="These frames show more than pretty rooms. They capture guest movement, editorial styling, production texture, and the kind of visual control that makes VibeUp events feel distinct."
+        description="These frames show more than pretty rooms. They capture guest movement, editorial styling, production texture, and the kind of visual control that makes ZOYA events feel distinct."
         align="center"
       />
 
@@ -34,7 +34,7 @@ export default function GalleryPage() {
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Gallery Filters"
-            title="Moments from the VibeUp"
+            title="Moments from the ZOYA"
             goldWord="archive"
             subtitle="Filter by event type to explore headline rooms, behind-the-scenes builds, venue styling, and artist-focused moments."
           />
@@ -69,7 +69,7 @@ export default function GalleryPage() {
             </p>
             <div className="mt-8 flex justify-center">
               <LiquidLinkButton href={SITE.socials.instagram} gold external>
-                Follow @vibeupevent
+                Follow ZOYA on Instagram
               </LiquidLinkButton>
             </div>
           </GlassCard>

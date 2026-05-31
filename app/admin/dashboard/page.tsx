@@ -5,7 +5,7 @@ import { PageHero } from "@/components/site/liquid";
 export const metadata: Metadata = {
   title: "Admin Dashboard",
   description:
-    "Administrative dashboard for monitoring VibeUp users, orders, reservations, revenue, and operational signals.",
+    "Administrative dashboard for monitoring ZOYA users, orders, reservations, revenue, and operational signals.",
   robots: {
     index: false,
     follow: false,
@@ -19,7 +19,7 @@ export default function AdminDashboardPage() {
         eyebrow="Admin Dashboard"
         title="Monitor users, revenue, and operational"
         goldWord="signals"
-        description="This dashboard is designed for administrators who need a cleaner view of profiles, subscriptions, enquiries, order flow, and event performance inside the VibeUp system."
+        description="This dashboard is designed for administrators who need a cleaner view of profiles, subscriptions, enquiries, order flow, and event performance inside the ZOYA system."
         align="center"
       />
 

@@ -70,7 +70,7 @@ function getStatusCopy(status: OrderRecord["status"], success?: boolean) {
       eyebrow: success ? "Payment Confirmed" : "Order Confirmed",
       title: "Your tickets are ready",
       body:
-        "Stripe confirmed the payment, VibeUp recorded the order, and your QR tickets are now attached below.",
+        "Stripe confirmed the payment, ZOYA recorded the order, and your QR tickets are now attached below.",
       Icon: CheckCircle2,
     };
   }
@@ -80,7 +80,7 @@ function getStatusCopy(status: OrderRecord["status"], success?: boolean) {
       eyebrow: "Awaiting Payment",
       title: success ? "Payment is still settling" : "Order is still pending",
       body:
-        "The order exists in VibeUp, but payment confirmation has not finished yet. If you just completed checkout, refresh in a moment or open the confirmation email when it arrives.",
+        "The order exists in ZOYA, but payment confirmation has not finished yet. If you just completed checkout, refresh in a moment or open the confirmation email when it arrives.",
       Icon: Clock3,
     };
   }
@@ -324,7 +324,7 @@ export function OrderExperience({
           <GlassCard dark className="px-5 py-5">
             <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
             <p className="eyebrow mb-2">Venue</p>
-            <p className="body-copy text-white/68">{order.events?.venue_name || "VibeUp Event"}</p>
+            <p className="body-copy text-white/68">{order.events?.venue_name || "ZOYA Event"}</p>
           </GlassCard>
           <GlassCard dark className="px-5 py-5">
             <Mail className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />

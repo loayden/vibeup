@@ -13,7 +13,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
   text-size-adjust: 100%;
   scroll-padding-top: 96px;
@@ -22,10 +22,8 @@ html {
 html,
 body {
   width: 100%;
-  height: 100%;
-  /* Enable smooth scrolling on iOS Safari */
+  min-height: 100%;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
 }
 
 body {
@@ -34,11 +32,18 @@ body {
   font-family: var(--font-jost), sans-serif;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
-  /* Removed overflow-x: hidden to prevent scroll issues on mobile */
-  /* Enable smooth momentum scrolling on iOS */
-  -webkit-user-select: none;
+  overflow-x: clip;
+  overflow-y: auto;
+  -webkit-user-select: auto;
   -webkit-touch-callout: none;
-  overscroll-behavior: none;
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: auto;
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 * {
@@ -48,6 +53,13 @@ body {
 a,
 button {
   touch-action: manipulation;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none !important;
 }
 
 body::before {
@@ -518,7 +530,9 @@ select option:checked {
 .touch-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x pan-y;
 }
 
 .touch-scroll > * {
