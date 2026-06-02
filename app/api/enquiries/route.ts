@@ -4,6 +4,7 @@ import { z } from "zod";
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
 import { rateLimit, getRateLimitStatus } from "@/lib/rate-limit";
 import {
+  escapeHtml,
   sendAdminNotification,
   sendEnquiryConfirmation,
 } from "@/lib/email";
@@ -70,17 +71,17 @@ function buildEnquiryBackupHtml(input: EnquiryInput) {
       <p style="margin:0 0 8px;color:rgba(255,255,255,0.72);">
         Supabase was unavailable, so this enquiry was captured through the backup channel.
       </p>
-      <p style="margin:16px 0 4px;color:rgba(255,255,255,0.72);"><strong>Name:</strong> ${input.name}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Email:</strong> ${input.email}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Phone:</strong> ${input.phone || "Not provided"}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Company:</strong> ${input.company || "Not provided"}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Event type:</strong> ${input.eventType || "Not provided"}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Guest count:</strong> ${input.guestCount || "Not provided"}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Event date:</strong> ${input.eventDate || "Not provided"}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Budget:</strong> ${input.budget || "Not provided"}</p>
+      <p style="margin:16px 0 4px;color:rgba(255,255,255,0.72);"><strong>Name:</strong> ${escapeHtml(input.name)}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Email:</strong> ${escapeHtml(input.email)}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Phone:</strong> ${escapeHtml(input.phone || "Not provided")}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Company:</strong> ${escapeHtml(input.company || "Not provided")}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Event type:</strong> ${escapeHtml(input.eventType || "Not provided")}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Guest count:</strong> ${escapeHtml(input.guestCount || "Not provided")}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Event date:</strong> ${escapeHtml(input.eventDate || "Not provided")}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Budget:</strong> ${escapeHtml(input.budget || "Not provided")}</p>
       <div style="margin-top:18px;">
         <p style="margin:0 0 10px;color:#C6A962;"><strong>Message</strong></p>
-        <p style="margin:0;color:rgba(255,255,255,0.72);white-space:pre-wrap;">${input.message}</p>
+        <p style="margin:0;color:rgba(255,255,255,0.72);white-space:pre-wrap;">${escapeHtml(input.message)}</p>
       </div>
     </body>
   `;
@@ -137,19 +138,15 @@ export async function POST(request: NextRequest) {
   
   if (!rateLimit(clientIp, { maxRequests: 5, windowSeconds: 60 })) {
     const status = getRateLimitStatus(clientIp, 5);
-    return new Response(
-      JSON.stringify({
-        error: "Too many enquiries submitted. Please try again later.",
+    return errorResponse("Too many enquiries submitted. Please try again later.", 429, {
+      origin: request.headers.get("origin"),
+      headers: {
+        "Retry-After": String(status.reset),
+      },
+      details: {
         retryAfter: status.reset,
-      }),
-      {
-        status: 429,
-        headers: {
-          "Retry-After": String(status.reset),
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      },
+    });
   }
 
   let input: EnquiryInput | null = null;
@@ -213,7 +210,7 @@ export async function POST(request: NextRequest) {
           `
             <body style="background:#080808;color:#ffffff;font-family:Arial,sans-serif;padding:24px;">
               <h1 style="font-family:Georgia,serif;font-weight:300;color:#C6A962;">New enquiry received</h1>
-              <pre style="white-space:pre-wrap;color:rgba(255,255,255,0.72);font-size:14px;">${JSON.stringify(enquiry, null, 2)}</pre>
+              <pre style="white-space:pre-wrap;color:rgba(255,255,255,0.72);font-size:14px;">${escapeHtml(JSON.stringify(enquiry, null, 2))}</pre>
             </body>
           `,
         ),

@@ -104,7 +104,7 @@ export function isAllowedOrigin(origin?: string | null) {
 export function resolveCorsOrigin(origin?: string | null) {
   const normalized = normalizeOrigin(origin);
 
-  if (normalized) {
+  if (normalized && getAllowedOrigins().includes(normalized)) {
     return normalized;
   }
 

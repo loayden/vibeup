@@ -10,6 +10,10 @@ const eslintConfig = defineConfig([
     // Default ignores of eslint-config-next:
     ".next/**",
     ".vercel/**",
+    "artifacts/**",
+    "event-masterplan-video/**",
+    "output/**",
+    "party-video/**",
     "out/**",
     "build/**",
     "Build/**",

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { errorResponse, handleRouteError, jsonResponse } from "@/lib/api";
-import { sendAdminNotification } from "@/lib/email";
+import { escapeHtml, sendAdminNotification } from "@/lib/email";
 import {
   isBackupEligibleSupabaseError,
   isMissingSupabaseTableError,
@@ -104,7 +104,7 @@ function buildBackupReservationHtml(input: ReservationInput) {
   const itemLines = input.items
     .map(
       (item) =>
-        `<li style="margin:0 0 8px;">${item.quantity} x ${item.name}</li>`,
+        `<li style="margin:0 0 8px;">${item.quantity} x ${escapeHtml(item.name)}</li>`,
     )
     .join("");
 
@@ -116,10 +116,10 @@ function buildBackupReservationHtml(input: ReservationInput) {
       <p style="margin:0 0 8px;color:rgba(255,255,255,0.72);">
         Supabase was unavailable, so this reservation was captured through the backup channel.
       </p>
-      <p style="margin:16px 0 4px;color:rgba(255,255,255,0.72);"><strong>Name:</strong> ${input.fullName}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Email:</strong> ${input.email}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Phone:</strong> ${input.phone || "Not provided"}</p>
-      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Promo:</strong> ${input.promo || "None"}</p>
+      <p style="margin:16px 0 4px;color:rgba(255,255,255,0.72);"><strong>Name:</strong> ${escapeHtml(input.fullName)}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Email:</strong> ${escapeHtml(input.email)}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Phone:</strong> ${escapeHtml(input.phone || "Not provided")}</p>
+      <p style="margin:4px 0;color:rgba(255,255,255,0.72);"><strong>Promo:</strong> ${escapeHtml(input.promo || "None")}</p>
       <div style="margin-top:18px;">
         <p style="margin:0 0 10px;color:#C6A962;"><strong>Tickets</strong></p>
         <ul style="margin:0;padding-left:18px;color:rgba(255,255,255,0.72);">
