@@ -2,7 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+
+import { useDeviceProfile } from "@/components/site/use-device-profile";
+import { useScrollThreshold } from "@/components/site/use-scroll-threshold";
 
 type StickyBuyCTAProps = {
   href: string;
@@ -15,18 +17,9 @@ export function StickyBuyCTA({
   label = "Buy Tickets",
   price,
 }: StickyBuyCTAProps) {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setVisible(window.scrollY > 300);
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const visible = useScrollThreshold(300);
+  const { hasMounted, isMobile } = useDeviceProfile();
+  const liteSurface = hasMounted && isMobile;
 
   return (
     <AnimatePresence>
@@ -44,12 +37,12 @@ export function StickyBuyCTA({
           >
             <Link
               href={href}
-              className="flex min-h-[56px] w-full items-center justify-between px-5"
+              className="sticky-buy-cta-link flex min-h-[56px] w-full items-center justify-between px-5"
               style={{
                 background:
                   "linear-gradient(135deg, rgba(198,169,98,0.96), rgba(143,108,34,0.96))",
                 border: "1px solid rgba(125,95,29,0.36)",
-                backdropFilter: "blur(20px)",
+                ...(liteSurface ? {} : { backdropFilter: "blur(20px)" }),
               }}
             >
               <span

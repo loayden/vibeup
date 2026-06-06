@@ -10,6 +10,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
+import { useScrollThreshold } from "@/components/site/use-scroll-threshold";
+
 /* ─────────────────────────────────────────
    CONFIG
 ───────────────────────────────────────── */
@@ -297,15 +299,8 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
    MAIN NAVBAR
 ───────────────────────────────────────── */
 export function SiteNavbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrollThreshold(12);
   const [open,     setOpen]     = useState(false);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 12);
-    fn();
-    window.addEventListener("scroll", fn, { passive:true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
 
   return (
     <>

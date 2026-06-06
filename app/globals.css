@@ -45,12 +45,6 @@ body {
   overscroll-behavior-y: auto;
 }
 
-@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -768,5 +762,21 @@ select option:checked {
   .glass-card-warm {
     backdrop-filter: blur(8px) saturate(140%);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
+  }
+}
+
+@media (max-width: 767px) {
+  .glass-card,
+  .glass-card-dark,
+  .glass-card-warm,
+  .site-navbar-shell,
+  .mobile-nav-overlay,
+  .sticky-buy-cta-link {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .ambient-orb {
+    display: none !important;
   }
 }

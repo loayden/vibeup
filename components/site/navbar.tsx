@@ -15,8 +15,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
+import { useDeviceProfile } from "@/components/site/use-device-profile";
+import { useScrollThreshold } from "@/components/site/use-scroll-threshold";
 import { SITE } from "@/lib/site-data";
 
 const EASING = [0.22, 1, 0.36, 1] as const;
@@ -97,8 +99,10 @@ function DesktopNavLink({
 
 function MobileOverlay({
   onClose,
+  liteSurface,
 }: {
   onClose: () => void;
+  liteSurface: boolean;
 }) {
   const pathname = usePathname();
   const supportActions = useMemo(
@@ -131,13 +135,13 @@ function MobileOverlay({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.35, ease: EASING }}
-      className="safe-top safe-bottom fixed inset-0 z-[100] flex flex-col overflow-y-auto"
+      className="mobile-nav-overlay safe-top safe-bottom fixed inset-0 z-[100] flex flex-col overflow-y-auto"
       style={{
         height: "100dvh",
         WebkitOverflowScrolling: "touch",
         background:
           "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,247,239,0.98))",
-        backdropFilter: "blur(40px)",
+        ...(liteSurface ? {} : { backdropFilter: "blur(40px)" }),
         paddingLeft: "max(env(safe-area-inset-left), 20px)",
         paddingRight: "max(env(safe-area-inset-right), 20px)",
       }}
@@ -279,15 +283,10 @@ function MobileOverlay({
 }
 
 export function SiteNavbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrollThreshold(12);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 12);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const { hasMounted, isMobile } = useDeviceProfile();
+  const liteSurface = hasMounted && isMobile;
 
   return (
     <>
@@ -295,21 +294,33 @@ export function SiteNavbar() {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: open ? 0 : 1, y: open ? -16 : 0 }}
         transition={{ duration: 0.35, ease: EASING }}
-        className="safe-top fixed inset-x-0 top-0 z-50 transition-all duration-500"
+        className="site-navbar-shell safe-top fixed inset-x-0 top-0 z-50 transition-all duration-500"
         style={
           scrolled
             ? {
                 background:
-                  "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,253,248,0.88) 100%)",
-                backdropFilter: "blur(32px) saturate(180%)",
-                WebkitBackdropFilter: "blur(32px) saturate(180%)",
+                  liteSurface
+                    ? "rgba(255,255,255,0.97)"
+                    : "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,253,248,0.88) 100%)",
+                ...(liteSurface
+                  ? {}
+                  : {
+                      backdropFilter: "blur(32px) saturate(180%)",
+                      WebkitBackdropFilter: "blur(32px) saturate(180%)",
+                    }),
                 borderBottom: "1px solid rgba(164,127,43,0.14)",
                 boxShadow: "0 8px 32px rgba(69,52,18,0.08)",
               }
             : {
-                background: "linear-gradient(180deg, rgba(255,255,255,0.78) 0%, transparent 100%)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
+                background: liteSurface
+                  ? "rgba(255,255,255,0.94)"
+                  : "linear-gradient(180deg, rgba(255,255,255,0.78) 0%, transparent 100%)",
+                ...(liteSurface
+                  ? {}
+                  : {
+                      backdropFilter: "blur(12px)",
+                      WebkitBackdropFilter: "blur(12px)",
+                    }),
               }
         }
       >
@@ -407,7 +418,9 @@ export function SiteNavbar() {
         </div>
       </motion.header>
 
-      <AnimatePresence>{open ? <MobileOverlay onClose={() => setOpen(false)} /> : null}</AnimatePresence>
+      <AnimatePresence>
+        {open ? <MobileOverlay liteSurface={liteSurface} onClose={() => setOpen(false)} /> : null}
+      </AnimatePresence>
     </>
   );
 }
