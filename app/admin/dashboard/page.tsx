@@ -17,9 +17,9 @@ export default function AdminDashboardPage() {
     <main className="overflow-x-hidden pb-20">
       <PageHero
         eyebrow="Admin Dashboard"
-        title="Monitor users, revenue, and operational"
-        goldWord="signals"
-        description="This dashboard is designed for administrators who need a cleaner view of profiles, subscriptions, enquiries, order flow, and event performance inside the ZOYA system."
+        title="Manage orders, guests, and"
+        goldWord="operations"
+        description="Review orders, users, reservations, enquiries, tickets, and revenue from one focused admin view."
         align="center"
       />
 

@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { CountdownTimer } from "@/components/site/countdown";
 import { GlassCard, LiquidButton } from "@/components/site/liquid";
 import type { PublicEvent, PublicTicketType } from "@/lib/public-events";
 import { SITE } from "@/lib/site-data";
@@ -43,29 +42,33 @@ type CheckoutExperienceProps = {
 const emptyTicketTypes: PublicTicketType[] = [];
 const checkoutSteps = [
   {
-    label: "Choose Tickets",
-    body: "Select the right tier and quantity for your group.",
+    label: "Choose tickets",
+    body: "Pick the tier and quantity.",
   },
   {
-    label: "Add Details",
-    body: "Add your name and delivery email before payment starts.",
+    label: "Add details",
+    body: "Use the email for delivery.",
   },
   {
-    label: "Pay Securely",
-    body: "Complete card payment, then receive confirmed ticket access.",
+    label: "Pay securely",
+    body: "Receive QR tickets after payment.",
   },
 ] as const;
 
 function FieldLabel({
   children,
+  htmlFor,
   optional = false,
 }: {
   children: string;
+  htmlFor: string;
   optional?: boolean;
 }) {
   return (
     <div className="mb-2 flex items-center justify-between gap-3">
-      <p className="eyebrow">{children}</p>
+      <label htmlFor={htmlFor} className="eyebrow">
+        {children}
+      </label>
       {optional ? <span className="eyebrow text-white/18">Optional</span> : null}
     </div>
   );
@@ -459,7 +462,7 @@ export function CheckoutExperience({
     <div className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
       <div className="space-y-8">
         <GlassCard className="px-5 py-5">
-          <p className="eyebrow mb-4">Mobile Purchase Flow</p>
+          <p className="eyebrow mb-4">Checkout Steps</p>
           <div className="grid gap-3 md:grid-cols-3">
             {checkoutSteps.map((step, index) => (
               <div
@@ -474,14 +477,6 @@ export function CheckoutExperience({
           </div>
         </GlassCard>
 
-        <GlassCard warm className="px-6 py-6 md:px-8">
-          <p className="eyebrow mb-4">Signature Countdown</p>
-          <CountdownTimer
-            targetDate={new Date(event?.countdownIso || new Date().toISOString())}
-            label={event ? `Until ${event.title}` : "Live inventory unavailable"}
-          />
-        </GlassCard>
-
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2">
           {ticketTypes.length ? (
             ticketTypes.map((ticketType) => {
@@ -493,7 +488,7 @@ export function CheckoutExperience({
                 <GlassCard
                   key={ticketType.id}
                   hover={!soldOut}
-                  className={`px-5 py-5 ${selected ? "border-[rgba(198,169,98,0.32)] shadow-[0_24px_64px_rgba(0,0,0,0.55),0_0_28px_rgba(198,169,98,0.10),inset_0_1px_0_rgba(255,255,255,0.14)]" : ""} ${soldOut ? "opacity-65" : ""}`}
+                  className={`px-5 py-5 ${selected ? "border-[rgba(164,127,43,0.32)] shadow-[0_24px_64px_rgba(69,52,18,0.14),0_0_28px_rgba(198,169,98,0.16),inset_0_1px_0_rgba(255,255,255,0.9)]" : ""} ${soldOut ? "opacity-65" : ""}`}
                 >
                   <button
                     type="button"
@@ -626,8 +621,9 @@ export function CheckoutExperience({
 
           <form id="checkout-order-form" className="mt-7 space-y-4" onSubmit={handleSubmit}>
             <div>
-              <FieldLabel>Full Name</FieldLabel>
+              <FieldLabel htmlFor="checkout-name">Full Name</FieldLabel>
               <input
+                id="checkout-name"
                 className="glass-input"
                 placeholder="Name on the order"
                 autoComplete="name"
@@ -639,8 +635,9 @@ export function CheckoutExperience({
               />
             </div>
             <div>
-              <FieldLabel>Email Address</FieldLabel>
+              <FieldLabel htmlFor="checkout-email">Email Address</FieldLabel>
               <input
+                id="checkout-email"
                 className="glass-input"
                 placeholder="Where should we deliver tickets?"
                 type="email"
@@ -654,8 +651,9 @@ export function CheckoutExperience({
               />
             </div>
             <div>
-              <FieldLabel optional>Phone Number</FieldLabel>
+              <FieldLabel htmlFor="checkout-phone" optional>Phone Number</FieldLabel>
               <input
+                id="checkout-phone"
                 className="glass-input"
                 placeholder="Useful for guest support and urgent updates"
                 inputMode="tel"
@@ -670,8 +668,9 @@ export function CheckoutExperience({
 
             <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
               <div className="sm:col-span-1">
-                <FieldLabel optional>Promo Code</FieldLabel>
+                <FieldLabel htmlFor="checkout-promo" optional>Promo Code</FieldLabel>
                 <input
+                  id="checkout-promo"
                   className="glass-input"
                   placeholder="Add code if ZOYA sent one"
                   aria-label="Promo code"
@@ -752,10 +751,10 @@ export function CheckoutExperience({
             >
               <span className="inline-flex items-center gap-2">
                 {loading
-                  ? "Preparing Checkout"
+                  ? "Preparing checkout"
                   : checkoutEnabled
-                    ? "Continue To Secure Payment"
-                    : "Ticketing Unavailable"}
+                    ? "Continue to payment"
+                    : "Ticketing unavailable"}
                 <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
               </span>
             </LiquidButton>

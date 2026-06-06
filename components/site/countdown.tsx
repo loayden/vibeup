@@ -17,7 +17,7 @@ const CountdownBlock = memo(function CountdownBlock({
   value,
   label,
 }: {
-  value: number;
+  value: string;
   label: string;
 }) {
   return (
@@ -39,7 +39,7 @@ const CountdownBlock = memo(function CountdownBlock({
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif text-[clamp(1.45rem,6vw,2.5rem)] font-light tracking-[0.04em] text-[var(--gold)]"
           >
-            {String(value).padStart(2, "0")}
+            {value}
           </motion.span>
         </AnimatePresence>
       </div>
@@ -52,9 +52,13 @@ export const CountdownTimer = memo(function CountdownTimer({
   targetDate,
   label,
 }: CountdownTimerProps) {
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
+    const updateNow = () => setNow(Date.now());
+
+    updateNow();
+
     // ✅ Detect low-end devices and adjust update frequency
     const deviceMemory = (navigator as DeviceNavigator).deviceMemory;
     const isLowEndDevice = deviceMemory !== undefined && deviceMemory <= 2;
@@ -62,18 +66,27 @@ export const CountdownTimer = memo(function CountdownTimer({
     // ✅ Use longer interval on low-end devices (5s instead of 1s) to reduce re-renders
     const updateInterval = isLowEndDevice ? 5000 : 1000;
 
-    const intervalId = window.setInterval(() => setNow(Date.now()), updateInterval);
+    const intervalId = window.setInterval(updateNow, updateInterval);
     return () => window.clearInterval(intervalId);
   }, []);
 
   // ✅ Use useMemo to prevent recalculation on every render
   const { days, hours, minutes, seconds } = useMemo(() => {
+    if (now === null) {
+      return {
+        days: "--",
+        hours: "--",
+        minutes: "--",
+        seconds: "--",
+      };
+    }
+
     const difference = Math.max(targetDate.getTime() - now, 0);
     return {
-      days: Math.floor(difference / 86_400_000),
-      hours: Math.floor((difference / 3_600_000) % 24),
-      minutes: Math.floor((difference / 60_000) % 60),
-      seconds: Math.floor((difference / 1_000) % 60),
+      days: String(Math.floor(difference / 86_400_000)).padStart(2, "0"),
+      hours: String(Math.floor((difference / 3_600_000) % 24)).padStart(2, "0"),
+      minutes: String(Math.floor((difference / 60_000) % 60)).padStart(2, "0"),
+      seconds: String(Math.floor((difference / 1_000) % 60)).padStart(2, "0"),
     };
   }, [now, targetDate]);
 

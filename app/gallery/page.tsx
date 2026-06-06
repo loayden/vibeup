@@ -10,18 +10,18 @@ export default function GalleryPage() {
     <main className="overflow-x-hidden pb-20">
       <PageHero
         eyebrow="Gallery"
-        title="A visual archive of atmosphere and"
+        title="See the rooms, guests, and"
         goldWord="craft"
-        description="These frames show more than pretty rooms. They capture guest movement, editorial styling, production texture, and the kind of visual control that makes ZOYA events feel distinct."
+        description="Browse real event moments, venue styling, performances, and behind-the-scenes production details."
         align="center"
       />
 
       <section className="px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
           {[
-            "Arrival moments, stage pacing, and guest-energy transitions are documented with the same care as the event itself.",
-            "The gallery balances editorial beauty with operational reality so clients can see how premium atmosphere is actually built.",
-            "Every image here is part of a broader production language: lighting, styling, performance, hospitality, and movement.",
+            "Arrival, staging, and guest energy captured from real ZOYA productions.",
+            "Venue styling, lighting, performance, and hospitality shown in one visual archive.",
+            "Use the filters to compare event types, artists, venues, and production moments.",
           ].map((item, index) => (
             <GlassCard key={item} gold={index === 1} className="px-5 py-5">
               <p className="body-copy text-white/68">{item}</p>
@@ -34,9 +34,9 @@ export default function GalleryPage() {
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Gallery Filters"
-            title="Moments from the ZOYA"
+            title="Filter the ZOYA"
             goldWord="archive"
-            subtitle="Filter by event type to explore headline rooms, behind-the-scenes builds, venue styling, and artist-focused moments."
+            subtitle="Browse by event type to find the kind of atmosphere, styling, and production quality you want."
           />
           <GalleryShowcase items={GALLERY_ITEMS} />
         </div>

@@ -276,7 +276,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
               }
               gold
             >
-              {event.ticketsAvailable && event.eventState !== "past" ? "Start Checkout" : "Contact Team"}
+              {event.ticketsAvailable && event.eventState !== "past" ? "Buy Tickets" : "Contact Support"}
             </LiquidLinkButton>
             <LiquidLinkButton href="/events">Back To Events</LiquidLinkButton>
           </>
@@ -532,7 +532,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
       <StickyBuyCTA
         href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
         price={event.priceFrom || undefined}
-        label={event.ticketsAvailable ? "Book Seats" : "Contact Team"}
+        label={event.ticketsAvailable ? "Buy Tickets" : "Contact Support"}
       />
     </main>
   );

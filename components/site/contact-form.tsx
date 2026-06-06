@@ -40,14 +40,18 @@ const budgetOptions = budgetRanges.map((option) => ({
 
 function FieldLabel({
   children,
+  htmlFor,
   optional = false,
 }: {
   children: string;
+  htmlFor: string;
   optional?: boolean;
 }) {
   return (
     <div className="mb-2 flex items-center justify-between gap-3">
-      <p className="eyebrow">{children}</p>
+      <label htmlFor={htmlFor} className="eyebrow">
+        {children}
+      </label>
       {optional ? <span className="eyebrow text-white/18">Optional</span> : null}
     </div>
   );
@@ -245,8 +249,9 @@ export function ContactForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <FieldLabel>Full Name</FieldLabel>
+          <FieldLabel htmlFor="contact-name">Full Name</FieldLabel>
           <input
+            id="contact-name"
             className="glass-input"
             placeholder="Name used for the reply"
             autoComplete="name"
@@ -258,8 +263,9 @@ export function ContactForm() {
           <FieldError message={errors.name} />
         </div>
         <div>
-          <FieldLabel>Email Address</FieldLabel>
+          <FieldLabel htmlFor="contact-email">Email Address</FieldLabel>
           <input
+            id="contact-email"
             className="glass-input"
             placeholder="Where should we send the next step?"
             type="email"
@@ -276,8 +282,9 @@ export function ContactForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <FieldLabel optional>Phone Number</FieldLabel>
+          <FieldLabel htmlFor="contact-phone" optional>Phone Number</FieldLabel>
           <input
+            id="contact-phone"
             className="glass-input"
             placeholder="Best number for urgent follow-up"
             inputMode="tel"
@@ -288,8 +295,9 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <FieldLabel optional>Company / Brand</FieldLabel>
+          <FieldLabel htmlFor="contact-company" optional>Company / Brand</FieldLabel>
           <input
+            id="contact-company"
             className="glass-input"
             placeholder="Brand, couple, or host name"
             autoComplete="organization"
@@ -302,8 +310,9 @@ export function ContactForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <FieldLabel>Event Type</FieldLabel>
+          <FieldLabel htmlFor="contact-event-type">Event Type</FieldLabel>
           <LiquidSelect
+            id="contact-event-type"
             options={eventTypeOptions}
             value={form.event_type}
             onChange={(value) =>
@@ -316,8 +325,9 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <FieldLabel>Expected Guest Count</FieldLabel>
+          <FieldLabel htmlFor="contact-guest-count">Expected Guest Count</FieldLabel>
           <LiquidSelect
+            id="contact-guest-count"
             options={guestCountOptions}
             value={form.guest_count}
             onChange={(value) => setForm((current) => ({ ...current, guest_count: value }))}
@@ -328,8 +338,9 @@ export function ContactForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <FieldLabel optional>Preferred Event Date</FieldLabel>
+          <FieldLabel htmlFor="contact-event-date" optional>Preferred Event Date</FieldLabel>
           <input
+            id="contact-event-date"
             className="glass-input"
             type="date"
             style={{ fontSize: "16px" }}
@@ -338,8 +349,9 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <FieldLabel>Budget Range</FieldLabel>
+          <FieldLabel htmlFor="contact-budget">Budget Range</FieldLabel>
           <LiquidSelect
+            id="contact-budget"
             options={budgetOptions}
             value={form.budget}
             onChange={(value) => setForm((current) => ({ ...current, budget: value }))}
@@ -349,8 +361,9 @@ export function ContactForm() {
       </div>
 
       <div>
-        <FieldLabel>Project Brief</FieldLabel>
+        <FieldLabel htmlFor="contact-message">Project Brief</FieldLabel>
         <textarea
+          id="contact-message"
           className="glass-input min-h-[160px] resize-none"
           placeholder="Tell us the date window, guest profile, atmosphere, venue direction, and anything that must feel exceptional."
           autoComplete="off"

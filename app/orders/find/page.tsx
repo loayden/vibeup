@@ -18,12 +18,12 @@ export default function FindOrderPage() {
     <main className="overflow-x-hidden pb-20">
       <PageHero
         eyebrow="Order Support"
-        title="Find your order or resend"
+        title="Find your order and resend"
         goldWord="tickets"
-        description="Use the checkout email and order number to retrieve the current order state, open QR tickets, or trigger a fresh ticket email if payment has already been confirmed."
+        description="Enter your order number and checkout email to open your order, view ticket status, or resend confirmed QR tickets."
       />
 
-      <section className="px-5 pb-20 sm:px-10 lg:px-16">
+      <section className="px-5 pb-20 pt-2 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <OrderLookupForm />
         </div>

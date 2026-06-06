@@ -10,8 +10,12 @@ type BannerState = {
   message: string;
 };
 
-function FieldLabel({ children }: { children: string }) {
-  return <p className="eyebrow mb-2">{children}</p>;
+function FieldLabel({ children, htmlFor }: { children: string; htmlFor: string }) {
+  return (
+    <label htmlFor={htmlFor} className="eyebrow mb-2 block">
+      {children}
+    </label>
+  );
 }
 
 function bannerStyles(type: BannerState["type"]) {
@@ -148,8 +152,8 @@ export function OrderLookupForm() {
           Find your confirmed <em>order</em>
         </h2>
         <p className="body-copy mt-5 max-w-2xl text-white/68">
-          Use the order number and checkout email to open the ticket page, verify payment state,
-          and retrieve any QR passes already issued.
+          Use the same email from checkout. Paid orders can open QR tickets or resend the ticket
+          email.
         </p>
 
         {banner ? (
@@ -164,8 +168,9 @@ export function OrderLookupForm() {
         <form className="mt-7 space-y-4" onSubmit={handleLookup}>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <FieldLabel>Order Number</FieldLabel>
+              <FieldLabel htmlFor="order-number">Order Number</FieldLabel>
               <input
+                id="order-number"
                 className="glass-input"
                 value={form.orderNumber}
                 onChange={(event) =>
@@ -177,8 +182,9 @@ export function OrderLookupForm() {
               />
             </div>
             <div>
-              <FieldLabel>Checkout Email</FieldLabel>
+              <FieldLabel htmlFor="order-email">Checkout Email</FieldLabel>
               <input
+                id="order-email"
                 className="glass-input"
                 type="email"
                 inputMode="email"
@@ -208,7 +214,7 @@ export function OrderLookupForm() {
             >
               <span className="inline-flex items-center gap-2">
                 <Mail className="h-3.5 w-3.5" strokeWidth={1.2} />
-                {resending ? "Sending Email" : "Resend Tickets"}
+                {resending ? "Sending" : "Resend Email"}
               </span>
             </LiquidButton>
           </div>
@@ -216,13 +222,13 @@ export function OrderLookupForm() {
       </GlassCard>
 
       <GlassCard className="px-6 py-7">
-        <p className="eyebrow mb-4">What You Can Do</p>
+        <p className="eyebrow mb-4">Order Help</p>
         <div className="space-y-4">
           {[
-            "Verify whether payment completed successfully.",
-            "Open QR tickets already attached to a paid order.",
-            "Resend the confirmation email if you cannot find it.",
-            "Move into support quickly if the order still shows as pending.",
+            "Check whether payment completed.",
+            "Open QR tickets for a paid order.",
+            "Resend the confirmation email.",
+            "Contact support if the order is still pending.",
           ].map((item) => (
             <div
               key={item}

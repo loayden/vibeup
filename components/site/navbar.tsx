@@ -34,16 +34,16 @@ const DESKTOP_RIGHT = [
 ] as const;
 
 const MOBILE_PRIMARY = [
-  { label: "Events", href: "/events", icon: CalendarDays },
   { label: "Buy Tickets", href: "/checkout", icon: Ticket },
-  { label: "Services", href: "/services", icon: Briefcase },
+  { label: "Events", href: "/events", icon: CalendarDays },
+  { label: "Find Order", href: "/orders/find", icon: Ticket },
   { label: "Contact", href: "/contact-us", icon: Mail },
 ] as const;
 
 const MOBILE_SECONDARY = [
+  { label: "Services", href: "/services", icon: Briefcase },
   { label: "Gallery", href: "/gallery", icon: ImageIcon },
   { label: "About", href: "/about", icon: UserRound },
-  { label: "Find Order", href: "/orders/find", icon: Ticket },
   { label: "Journal", href: "/blog", icon: ArrowRight },
   { label: "Careers", href: "/careers", icon: Briefcase },
   { label: "FAQ", href: "/faq", icon: HelpCircle },
@@ -67,13 +67,14 @@ function DesktopNavLink({
     <Link
       href={href}
       className="group relative flex min-h-[44px] items-center px-3 py-2"
+      aria-current={active ? "page" : undefined}
       style={{
         fontFamily: "'Jost',sans-serif",
         fontSize: "9px",
         letterSpacing: "0.30em",
         fontWeight: 300,
         textTransform: "uppercase",
-        color: active ? "rgba(198,169,98,0.84)" : "rgba(255,255,255,0.45)",
+        color: active ? "rgba(164,127,43,0.92)" : "rgba(48,42,31,0.56)",
       }}
     >
       {label}
@@ -81,13 +82,13 @@ function DesktopNavLink({
         className="absolute bottom-1 left-3 h-px transition-all duration-300"
         style={{
           width: active ? "calc(100% - 24px)" : "0%",
-          background: "linear-gradient(90deg, rgba(198,169,98,0.68), transparent)",
+          background: "linear-gradient(90deg, rgba(164,127,43,0.72), transparent)",
         }}
       />
       <span
         className="absolute bottom-1 left-3 h-px w-0 transition-all duration-300 group-hover:w-[calc(100%-24px)]"
         style={{
-          background: "linear-gradient(90deg, rgba(255,255,255,0.22), transparent)",
+          background: "linear-gradient(90deg, rgba(164,127,43,0.28), transparent)",
         }}
       />
     </Link>
@@ -133,7 +134,7 @@ function MobileOverlay({
       className="safe-top safe-bottom fixed inset-0 z-[100] flex flex-col overflow-y-auto"
       style={{
         background:
-          "linear-gradient(160deg, rgba(14,10,6,0.97), rgba(9,6,3,0.99))",
+          "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,247,239,0.98))",
         backdropFilter: "blur(40px)",
         paddingLeft: "max(env(safe-area-inset-left), 20px)",
         paddingRight: "max(env(safe-area-inset-right), 20px)",
@@ -181,6 +182,7 @@ function MobileOverlay({
                 key={item.href}
                 href={item.href}
                 onClick={onClose}
+                aria-current={active ? "page" : undefined}
                 className="glass-card glass-card-warm flex min-h-[76px] items-center gap-3 rounded-[18px] px-4 py-4"
                 style={{
                   borderColor: active
@@ -216,6 +218,7 @@ function MobileOverlay({
                   key={item.href}
                   href={item.href}
                   onClick={onClose}
+                  aria-current={active ? "page" : undefined}
                   className="flex min-h-[52px] items-center gap-3 rounded-[16px] border px-4 py-3"
                   style={{
                     borderColor: active
@@ -238,7 +241,7 @@ function MobileOverlay({
           <div className="spec-line" />
           <p className="eyebrow mb-3">Need A Fast Answer</p>
           <p className="body-copy text-[0.82rem] text-white/58">
-            Mobile guests usually need one thing quickly: ticket help, timing, or access support.
+            Get ticket help, event timing, or order support quickly.
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {supportActions.map((item) => (
@@ -322,14 +325,14 @@ export function SiteNavbar() {
           scrolled
             ? {
                 background:
-                  "linear-gradient(180deg, rgba(8,6,4,0.84) 0%, rgba(6,4,2,0.9) 100%)",
+                  "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,253,248,0.88) 100%)",
                 backdropFilter: "blur(32px) saturate(180%)",
                 WebkitBackdropFilter: "blur(32px) saturate(180%)",
-                borderBottom: "1px solid rgba(198,169,98,0.12)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.42)",
+                borderBottom: "1px solid rgba(164,127,43,0.14)",
+                boxShadow: "0 8px 32px rgba(69,52,18,0.08)",
               }
             : {
-                background: "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%)",
+                background: "linear-gradient(180deg, rgba(255,255,255,0.78) 0%, transparent 100%)",
                 backdropFilter: "blur(12px)",
                 WebkitBackdropFilter: "blur(12px)",
               }
@@ -358,7 +361,7 @@ export function SiteNavbar() {
             onClick={() => setOpen(false)}
           >
             <span
-              className="font-light uppercase tracking-[0.38em] text-white/88 transition-all duration-300 group-hover:text-white"
+              className="font-light uppercase tracking-[0.38em] text-[var(--foreground)] transition-all duration-300 group-hover:text-[var(--gold)]"
               style={{
                 fontFamily: "'Cormorant Garamond',serif",
                 fontSize: "clamp(0.8rem,3vw,0.98rem)",

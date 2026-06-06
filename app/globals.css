@@ -1,15 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #080808;
-  --section: #060606;
-  --foreground: rgba(255, 255, 255, 0.85);
-  --text-secondary: rgba(255, 255, 255, 0.55);
-  --text-tertiary: rgba(255, 255, 255, 0.35);
-  --text-ghost: rgba(255, 255, 255, 0.2);
-  --gold: #c6a962;
-  --gold-dim: rgba(198, 169, 98, 0.55);
-  --gold-glow: rgba(198, 169, 98, 0.12);
+  --background: #ffffff;
+  --section: #f8f7f2;
+  --surface: #ffffff;
+  --surface-raised: #fffdf8;
+  --foreground: rgba(28, 24, 18, 0.9);
+  --text-secondary: rgba(48, 42, 31, 0.68);
+  --text-tertiary: rgba(48, 42, 31, 0.48);
+  --text-ghost: rgba(48, 42, 31, 0.28);
+  --border-subtle: rgba(59, 47, 25, 0.12);
+  --gold: #a47f2b;
+  --gold-dark: #7d5f1d;
+  --gold-dim: rgba(164, 127, 43, 0.58);
+  --gold-glow: rgba(198, 169, 98, 0.16);
 }
 
 html {
@@ -69,8 +73,8 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(circle at top center, rgba(255, 255, 255, 0.03), transparent 45%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%);
+    radial-gradient(circle at top center, rgba(198, 169, 98, 0.11), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), transparent 30%);
 }
 
 h1,
@@ -84,7 +88,7 @@ h5 {
 
 ::selection {
   background: var(--gold);
-  color: var(--background);
+  color: #ffffff;
 }
 
 ::-webkit-scrollbar {
@@ -123,7 +127,7 @@ h5 {
     height 0.3s,
     border-color 0.3s,
     background 0.3s;
-  mix-blend-mode: difference;
+  mix-blend-mode: normal;
 }
 
 .luxury-cursor.hover-active {
@@ -137,35 +141,35 @@ h5 {
   position: relative;
   overflow: hidden;
   border-radius: clamp(14px, 3vw, 20px);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.025) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 253, 248, 0.72) 100%);
   backdrop-filter: blur(16px) saturate(145%);
   -webkit-backdrop-filter: blur(16px) saturate(145%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 56px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 20px 54px rgba(69, 52, 18, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 .glass-card-gold {
-  background: linear-gradient(135deg, rgba(198, 169, 98, 0.16) 0%, rgba(198, 169, 98, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(198, 169, 98, 0.2) 0%, rgba(255, 250, 236, 0.86) 100%);
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
-  border: 1px solid rgba(198, 169, 98, 0.26);
-  box-shadow: 0 8px 32px rgba(198, 169, 98, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(164, 127, 43, 0.26);
+  box-shadow: 0 12px 36px rgba(164, 127, 43, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .glass-card-dark {
-  background: linear-gradient(160deg, rgba(18, 18, 20, 0.94) 0%, rgba(10, 10, 12, 0.97) 100%);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 246, 239, 0.9) 100%);
   backdrop-filter: blur(20px) saturate(170%);
   -webkit-backdrop-filter: blur(20px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 24px 60px rgba(69, 52, 18, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.88);
 }
 
 .glass-card-warm {
-  background: linear-gradient(170deg, rgba(18, 16, 12, 0.82) 0%, rgba(10, 9, 8, 0.94) 100%);
+  background: linear-gradient(170deg, rgba(255, 253, 248, 0.96) 0%, rgba(250, 247, 239, 0.9) 100%);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(164, 127, 43, 0.14);
+  box-shadow: 0 24px 60px rgba(69, 52, 18, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .glass-card-hover {
@@ -177,7 +181,7 @@ h5 {
 
 .glass-card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.5), 0 0 24px rgba(198, 169, 98, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  box-shadow: 0 28px 72px rgba(69, 52, 18, 0.12), 0 0 24px rgba(198, 169, 98, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .spec-line {
@@ -186,7 +190,7 @@ h5 {
   top: 0;
   height: 1px;
   pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(164, 127, 43, 0.24), transparent);
 }
 
 .eyebrow {
@@ -194,7 +198,7 @@ h5 {
   font-size: clamp(8px, 2vw, 10px);
   letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--gold-dim);
 }
 
 .display-title {
@@ -203,7 +207,7 @@ h5 {
   font-weight: 300;
   letter-spacing: 0.04em;
   line-height: 0.94;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--foreground);
 }
 
 .display-title em,
@@ -217,16 +221,16 @@ h5 {
   font-size: clamp(1.6rem, 5vw, 3.5rem);
   font-weight: 300;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--foreground);
 }
 
 .body-copy {
   font-family: var(--font-jost), sans-serif;
   font-size: clamp(0.82rem, 2.5vw, 0.95rem);
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.035em;
+  color: var(--text-secondary);
   font-weight: 300;
-  line-height: 1.8;
+  line-height: 1.72;
 }
 
 .gold-divider-left {
@@ -238,7 +242,7 @@ h5 {
 }
 
 .subtle-divider {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+  background: linear-gradient(90deg, transparent, rgba(164, 127, 43, 0.14), transparent);
 }
 
 /* ─── Dark Luxury Input / Textarea / Select ─────────────────────────────── */
@@ -250,7 +254,6 @@ h5 {
 input,
 textarea,
 select,
-button,
 [role="button"] {
   -webkit-appearance: none !important;
   appearance: none !important;
@@ -259,6 +262,12 @@ button,
   color: inherit;
   -webkit-user-select: text;
   user-select: text;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  color: inherit;
 }
 
 /* Ensure NO system styles on input/select focus or active states */
@@ -293,18 +302,15 @@ select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus,
 select:-webkit-autofill:active {
-  /* MAXIMUM STRENGTH: Paint over autofill with dark background (1000px inset covers entire field) */
-  -webkit-box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.98) inset !important;
-  box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.98) inset !important;
-  /* Force text color to white */
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.82) !important;
-  color: rgba(255, 255, 255, 0.82) !important;
-  /* Cursor color */
-  caret-color: rgba(255, 255, 255, 0.82) !important;
+  -webkit-box-shadow: 0 0 0 1000px #fffdf8 inset !important;
+  box-shadow: 0 0 0 1000px #fffdf8 inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  color: var(--foreground) !important;
+  caret-color: var(--foreground) !important;
   /* Prevent yellow background transition */
   transition: background-color 9999s ease-in-out 0s !important;
   /* Ensure border remains intact */
-  border-color: rgba(255, 255, 255, 0.09) !important;
+  border-color: var(--border-subtle) !important;
 }
 
 /* Date input calendar icon colour on WebKit */
@@ -337,28 +343,28 @@ select {
 
 /* Select option dropdown (non-WebKit browsers) */
 select option {
-  background-color: #0d0c0b !important;
-  color: rgba(255, 255, 255, 0.85) !important;
+  background-color: #ffffff !important;
+  color: var(--foreground) !important;
 }
 
 /* iOS Safari native select fix */
 select option:checked {
-  background: linear-gradient(#0d0c0b, #0d0c0b) !important;
-  background-color: #0d0c0b !important;
-  color: rgba(255, 255, 255, 0.85) !important;
+  background: linear-gradient(#fff7df, #fff7df) !important;
+  background-color: #fff7df !important;
+  color: var(--foreground) !important;
 }
 
 .glass-input {
   width: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
-  background-color: rgba(10, 9, 8, 0.5) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 251, 241, 0.74) 100%) !important;
+  background-color: rgba(255, 255, 255, 0.82) !important;
   backdrop-filter: blur(12px) saturate(140%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border: 1px solid var(--border-subtle) !important;
   border-radius: 14px;
   padding: 14px 18px;
   min-height: 52px;
-  color: rgba(255, 255, 255, 0.82) !important;
+  color: var(--foreground) !important;
   font-family: var(--font-jost), sans-serif;
   font-size: 16px;
   letter-spacing: 0.05em;
@@ -376,22 +382,22 @@ select option:checked {
 }
 
 .glass-input::placeholder {
-  color: rgba(255, 255, 255, 0.22) !important;
+  color: var(--text-ghost) !important;
   font-weight: 300;
 }
 
 .glass-input:focus {
   border-color: rgba(198, 169, 98, 0.45) !important;
   box-shadow:
-    0 0 0 3px rgba(198, 169, 98, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
+    0 0 0 3px rgba(198, 169, 98, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 250, 236, 0.86) 100%) !important;
   backdrop-filter: blur(12px) saturate(140%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
 }
 
 .glass-input:hover {
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(164, 127, 43, 0.22) !important;
 }
 
 /* CRITICAL: Autofill override for .glass-input with absolute specificity */
@@ -400,16 +406,13 @@ select option:checked {
 .glass-input:-webkit-autofill:focus,
 .glass-input:-webkit-autofill:active,
 .glass-input:-webkit-autofill:visited {
-  /* ABSOLUTE OVERRIDE: 1000px inset shadow covers entire field */
-  -webkit-box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.98) inset !important;
-  box-shadow: 0 0 0 1000px rgba(10, 9, 8, 0.98) inset !important;
-  /* Force white text */
-  -webkit-text-fill-color: rgba(255, 255, 255, 0.82) !important;
-  color: rgba(255, 255, 255, 0.82) !important;
-  /* Force cursor color */
-  caret-color: rgba(255, 255, 255, 0.82) !important;
+  -webkit-box-shadow: 0 0 0 1000px #fffdf8 inset !important;
+  box-shadow: 0 0 0 1000px #fffdf8 inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  color: var(--foreground) !important;
+  caret-color: var(--foreground) !important;
   /* Ensure border is preserved */
-  border-color: rgba(255, 255, 255, 0.09) !important;
+  border-color: var(--border-subtle) !important;
   /* Prevent yellow background animation */
   transition: background-color 9999s ease-in-out 0s !important;
   /* Preserve backdrop effect with optimized blur */
@@ -435,33 +438,49 @@ select option:checked {
 }
 
 .liquid-button-gold {
-  background: linear-gradient(135deg, rgba(198, 169, 98, 0.22), rgba(198, 169, 98, 0.08));
+  background: linear-gradient(135deg, #b9923a 0%, #8a661f 100%) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(198, 169, 98, 0.35);
+  border: 1px solid rgba(125, 95, 29, 0.38);
   border-radius: 9999px;
   padding: 14px 24px;
-  color: var(--gold);
+  color: #ffffff !important;
   font-family: var(--font-jost), sans-serif;
   font-size: clamp(9px, 2.2vw, 11px);
   letter-spacing: 0.32em;
-  font-weight: 300;
+  font-weight: 400;
   text-transform: uppercase;
-  box-shadow: 0 0 28px rgba(198, 169, 98, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  text-shadow: 0 1px 1px rgba(45, 31, 8, 0.35);
+  box-shadow: 0 16px 32px rgba(125, 95, 29, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .liquid-button-ghost {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 251, 241, 0.86)) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(164, 127, 43, 0.18);
   border-radius: 9999px;
   padding: 12px 22px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--gold-dark) !important;
   font-family: var(--font-jost), sans-serif;
   font-size: clamp(9px, 2.2vw, 11px);
   letter-spacing: 0.28em;
   text-transform: uppercase;
+}
+
+.liquid-button-gold:disabled,
+.liquid-button-gold[aria-disabled="true"] {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(143, 108, 34, 0.78), rgba(125, 95, 29, 0.72)) !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 1px 1px rgba(45, 31, 8, 0.36);
+}
+
+.liquid-button-ghost:disabled,
+.liquid-button-ghost[aria-disabled="true"] {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.86) !important;
+  color: rgba(125, 95, 29, 0.72) !important;
 }
 
 .liquid-button-gold:hover,
@@ -475,7 +494,7 @@ select option:checked {
   gap: 8px;
   border-radius: 9999px;
   padding: 0 16px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-tertiary);
   font-family: var(--font-jost), sans-serif;
   font-size: 9.5px;
   letter-spacing: 0.28em;
@@ -494,7 +513,7 @@ select option:checked {
   display: block;
   border-radius: 16px;
   padding: 12px 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-secondary);
   font-family: var(--font-jost), sans-serif;
   font-size: 10px;
   letter-spacing: 0.28em;
@@ -514,8 +533,120 @@ select option:checked {
   width: 44px;
   height: 44px;
   border-radius: 9999px;
-  background: linear-gradient(135deg, rgba(198, 169, 98, 0.18), rgba(198, 169, 98, 0.06));
+  background: linear-gradient(135deg, rgba(198, 169, 98, 0.2), rgba(255, 251, 241, 0.78));
   border: 1px solid rgba(198, 169, 98, 0.28);
+}
+
+/* Light-theme bridge for legacy dark-theme Tailwind utilities still used in components. */
+.text-white,
+.text-white\/88,
+.text-white\/80,
+.text-white\/74,
+.text-white\/72,
+.text-white\/70,
+.text-white\/68,
+.text-white\/66,
+.text-white\/65,
+.text-white\/64,
+.text-white\/62,
+.text-white\/60 {
+  color: var(--foreground) !important;
+}
+
+.text-white\/58,
+.text-white\/56,
+.text-white\/55,
+.text-white\/54,
+.text-white\/52,
+.text-white\/50,
+.text-white\/45,
+.text-white\/40,
+.text-white\/35 {
+  color: var(--text-secondary) !important;
+}
+
+.text-white\/30,
+.text-white\/28,
+.text-white\/24,
+.text-white\/22,
+.text-white\/20,
+.text-white\/18 {
+  color: var(--text-tertiary) !important;
+}
+
+.text-white\/34 {
+  color: var(--text-secondary) !important;
+}
+
+.group:hover .group-hover\:text-white,
+.hover\:text-white\/72:hover,
+.hover\:text-white:hover {
+  color: var(--foreground) !important;
+}
+
+.border-white\/5,
+.border-white\/6,
+.border-white\/8,
+.border-white\/10,
+.border-white\/12,
+.border-white\/15,
+.border-white\/20 {
+  border-color: var(--border-subtle) !important;
+}
+
+.bg-white\/\[0\.02\],
+.bg-white\/\[0\.03\],
+.bg-white\/\[0\.04\],
+.bg-white\/\[0\.05\],
+.bg-white\/\[0\.06\],
+.bg-white\/\[0\.08\] {
+  background-color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.bg-black\/10 {
+  background-color: rgba(164, 127, 43, 0.06) !important;
+}
+
+.bg-black\/25 {
+  background-color: rgba(8, 8, 8, 0.25) !important;
+}
+
+.bg-black\/55 {
+  background-color: rgba(8, 8, 8, 0.55) !important;
+}
+
+.bg-black\/78 {
+  background-color: rgba(8, 8, 8, 0.78) !important;
+}
+
+.on-image-text,
+.on-image-text .eyebrow,
+.on-image-text .body-copy,
+.on-image-text .text-white,
+.on-image-text .text-white\/70,
+.on-image-text .text-white\/68,
+.on-image-text .text-white\/65,
+.on-image-text .text-white\/60,
+.on-image-text .text-white\/50,
+.on-image-text .text-white\/45,
+.on-image-text .text-white\/35,
+.on-image-text .text-white\/28 {
+  color: #ffffff !important;
+}
+
+@media (max-width: 640px) {
+  .eyebrow {
+    letter-spacing: 0.34em;
+  }
+
+  .display-title {
+    letter-spacing: 0.025em;
+    line-height: 1;
+  }
+
+  .section-title {
+    letter-spacing: 0.035em;
+  }
 }
 
 .scrollbar-none {

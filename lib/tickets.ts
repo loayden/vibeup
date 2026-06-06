@@ -52,8 +52,8 @@ export async function generateTickets(order: OrderForTickets) {
         width: 320,
         margin: 2,
         color: {
-          dark: "#C6A962",
-          light: "#080808",
+          dark: "#7D5F1D",
+          light: "#FFFFFF",
         },
       });
 

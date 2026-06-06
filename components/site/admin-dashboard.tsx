@@ -707,8 +707,8 @@ export function AdminDashboardClient() {
               Live business <em>signals</em>
             </h2>
             <p className="body-copy mt-5 max-w-2xl">
-              Monitor recent revenue, ticket movement, subscribers, incoming enquiries, and the
-              latest user profiles without leaving the main ZOYA experience.
+              Search across orders, users, reservations, subscribers, and enquiries from one
+              operational view.
             </p>
           </div>
 
@@ -720,7 +720,7 @@ export function AdminDashboardClient() {
               />
               <input
                 className="glass-input pl-11"
-                placeholder="Search users, orders, reservations, subscribers, or enquiries"
+                placeholder="Search orders, users, reservations, enquiries"
                 value={dashboardSearch}
                 onChange={(event) => setDashboardSearch(event.target.value)}
               />

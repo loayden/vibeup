@@ -19,15 +19,15 @@ export default async function EventsPage() {
   const featuredCheckoutHref =
     featuredEvent?.ticketsAvailable && featuredEvent.eventState !== "past"
       ? `/checkout?event=${featuredEvent.slug}`
-      : "/contact-us";
+      : "#events-calendar";
 
   return (
     <main className="overflow-x-hidden pb-20">
       <PageHero
         eyebrow="Events Calendar"
-        title="Signature nights and curated"
+        title="Find your next ZOYA"
         goldWord="experiences"
-        description="Explore the public side of ZOYA through the live event catalog: premium cultural evenings, gala formats, rooftop experiences, and milestone celebrations with real ticket visibility."
+        description="Browse upcoming events, compare dates and venues, and buy tickets when live checkout is open."
         media={
           <GlassCard className="overflow-hidden p-3">
             <div className="relative min-h-[320px] sm:min-h-[500px] overflow-hidden rounded-[18px]">
@@ -45,10 +45,10 @@ export default async function EventsPage() {
         actions={
           <>
             <LiquidLinkButton href={featuredCheckoutHref} gold>
-              {featuredEvent?.ticketsAvailable ? "Reserve Tickets" : "Contact Team"}{" "}
+              {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}{" "}
               <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
             </LiquidLinkButton>
-            <LiquidLinkButton href="/contact-us">Book A Private Event</LiquidLinkButton>
+            <LiquidLinkButton href="/contact-us">Plan Private Event</LiquidLinkButton>
           </>
         }
       />
@@ -95,13 +95,13 @@ export default async function EventsPage() {
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section id="events-calendar" className="px-5 py-12 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Browse The Calendar"
-            title="Upcoming launches and event"
+            title="Compare dates, venues, and"
             goldWord="history"
-            subtitle="Move between the grid and calendar views to understand what is coming next, what already sold, and which room formats define the ZOYA standard."
+            subtitle="Use the filters to find upcoming ticketed nights, review past events, and open checkout only when inventory is available."
           />
           <EventsShowcase upcoming={feed.upcoming} past={feed.past} />
         </div>
@@ -152,12 +152,12 @@ export default async function EventsPage() {
 
                 <div className="mt-8 flex flex-wrap gap-4">
                   <LiquidLinkButton href={`/events/${featuredEvent.slug}`} gold>
-                    View Event Detail
+                    View Details
                   </LiquidLinkButton>
                   <LiquidLinkButton
                     href={featuredEvent.ticketsAvailable ? `/checkout?event=${featuredEvent.slug}` : "/contact-us"}
                   >
-                    {featuredEvent.ticketsAvailable ? "Start Checkout" : "Contact Team"}
+                    {featuredEvent.ticketsAvailable ? "Buy Tickets" : "Contact Support"}
                   </LiquidLinkButton>
                 </div>
               </div>

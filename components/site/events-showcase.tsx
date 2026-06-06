@@ -125,14 +125,14 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
             onClick={() => setView("grid")}
             data-cursor="hover"
           >
-            Grid View
+            Cards
           </button>
           <button
             className={`${view === "calendar" ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
             onClick={() => setView("calendar")}
             data-cursor="hover"
           >
-            Calendar View
+            Calendar
           </button>
         </div>
       </div>
@@ -160,7 +160,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                           className="object-cover transition duration-500 hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
-                        <div className="absolute left-4 top-4">
+                        <div className="absolute left-4 top-4 on-image-text">
                           <div className={`${statusClass(event)} rounded-full px-4 py-2`}>
                             <div className="spec-line" />
                             <p className="eyebrow text-white/50">{getStatusLabel(event)}</p>
@@ -208,13 +208,13 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                             gold
                             className="w-full justify-center sm:w-auto"
                           >
-                            View Event <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                            Details <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                           </LiquidLinkButton>
                           <LiquidLinkButton
                             href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
                             className="w-full justify-center sm:w-auto"
                           >
-                            {event.ticketsAvailable ? "Get Tickets" : "Contact Team"}{" "}
+                            {event.ticketsAvailable ? "Buy Tickets" : "Contact"}{" "}
                             <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                           </LiquidLinkButton>
                         </div>
@@ -257,7 +257,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                           className="object-cover transition duration-500 hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
-                        <div className="absolute left-4 top-4 rounded-full bg-[rgba(8,8,8,0.55)] px-4 py-2 backdrop-blur-md">
+                        <div className="absolute left-4 top-4 rounded-full bg-[rgba(8,8,8,0.55)] px-4 py-2 backdrop-blur-md on-image-text">
                           <p className="eyebrow text-white/45">Memories</p>
                         </div>
                       </div>
@@ -278,7 +278,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                           href={`/events/${event.slug}`}
                           className="liquid-button-ghost mt-6 inline-flex w-full justify-center sm:w-auto"
                         >
-                          View Event Detail
+                          View Details
                         </Link>
                       </div>
                     </GlassCard>
@@ -335,7 +335,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                             {item.venue}
                           </p>
                         </div>
-                        <span className="eyebrow text-[var(--gold)]">Open Page</span>
+                        <span className="eyebrow text-[var(--gold)]">Open</span>
                       </div>
                     </Link>
                   ))}

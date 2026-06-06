@@ -64,18 +64,28 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         `For urgent support, contact ${SITE.email}.`,
       ];
   const eventPickerEvents = availableEvents.length ? availableEvents : feed.upcoming;
+  const checkoutPrimaryHref = !hasExplicitSelection
+    ? "#choose-event"
+    : checkoutReady
+      ? "#ticket-selection"
+      : "/contact-us";
+  const checkoutPrimaryLabel = !hasExplicitSelection
+    ? "Choose Event"
+    : checkoutReady
+      ? "Select Tickets"
+      : "Contact Support";
 
   return (
     <main className="overflow-x-hidden pb-20">
       <PageHero
         eyebrow="Checkout"
-        title="Build your order with more"
-        goldWord="control"
+        title="Buy tickets in a few"
+        goldWord="clear steps"
         description={
           !hasExplicitSelection
-            ? "Choose the event first so the mobile checkout can stay explicit about date, venue, inventory, and ticket tiers before any guest details are entered."
+            ? "Choose an event first. Then select tickets, add your details, and continue to secure payment."
             : checkoutReady
-            ? "Choose tickets, add your details, and continue to secure card payment with a clear total before you pay."
+            ? "Select your tickets, confirm the total, and pay securely through Stripe."
             : checkoutBlockedMessage
         }
         media={
@@ -94,15 +104,12 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         }
         actions={
           <>
-            <LiquidLinkButton href={event ? `/events/${event.slug}` : "/events"} gold>
-              {event ? "View Event Detail" : "Browse Events"}{" "}
+            <LiquidLinkButton href={checkoutPrimaryHref} gold>
+              {checkoutPrimaryLabel}{" "}
               <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
             </LiquidLinkButton>
             <LiquidLinkButton href="/orders/find">
               Find My Order
-            </LiquidLinkButton>
-            <LiquidLinkButton href="/contact-us">
-              Need Group Support?
             </LiquidLinkButton>
           </>
         }
@@ -123,13 +130,13 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
       ) : null}
 
       {!hasExplicitSelection || selectionMissing ? (
-        <section className="px-5 py-8 sm:px-10 lg:px-16">
+        <section id="choose-event" className="px-5 py-8 sm:px-10 lg:px-16">
           <div className="mx-auto max-w-7xl">
             <SectionHeader
               eyebrow="Choose Event First"
-              title="Select the night before you"
+              title="Choose the event before"
               goldWord="checkout"
-              subtitle="Mobile checkout works best when the event context is explicit. Pick the live event first so date, venue, availability, and ticket tiers all stay consistent."
+              subtitle="Pick the live event so date, venue, availability, and ticket tiers stay clear before payment."
             />
 
             <div className="grid gap-4 lg:grid-cols-2">
@@ -156,11 +163,15 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                     <p className="body-copy mt-5">{candidate.shortDescription}</p>
                     <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                       <LiquidLinkButton
-                        href={`/checkout?event=${candidate.slug}`}
+                        href={
+                          candidate.ticketsAvailable
+                            ? `/checkout?event=${candidate.slug}`
+                            : `/events/${candidate.slug}`
+                        }
                         gold={candidate.ticketsAvailable}
                         className="w-full justify-center sm:w-auto"
                       >
-                        {candidate.ticketsAvailable ? "Use This Event" : "Review Status"}
+                        {candidate.ticketsAvailable ? "Select Event" : "View Details"}
                       </LiquidLinkButton>
                       <LiquidLinkButton
                         href={`/events/${candidate.slug}`}
@@ -218,37 +229,16 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
         </div>
       </section>
 
-      <section className="px-5 pt-2 sm:px-10 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <GlassCard warm className="px-5 py-5 md:px-6">
-            <div className="grid gap-4 md:grid-cols-3">
-              {[
-                "Step 1: choose quantity by live ticket tier.",
-                "Step 2: add your contact details for ticket delivery.",
-                "Step 3: pay securely and receive QR delivery after confirmation.",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
-                >
-                  <p className="body-copy text-[0.8rem] text-white/62">{item}</p>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section id="ticket-selection" className="px-5 py-12 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Ticket Selection"
-            title="Select tiers with live"
-            goldWord="pricing"
+            title="Choose tickets, then"
+            goldWord="pay securely"
             subtitle={
               hasExplicitSelection
-                ? "Choose quantity by access tier, validate any promo code, and continue to secure card payment with a real ZOYA order already prepared."
-                : "Checkout opens after you explicitly choose the event. That keeps mobile buyers oriented and prevents cross-event confusion."
+                ? "Select quantity, add delivery details, apply a promo if you have one, and continue to payment."
+                : "Checkout opens after you choose one event."
             }
           />
           {hasExplicitSelection ? (
@@ -266,7 +256,7 @@ export default async function CheckoutPage({ searchParams }: CheckoutPageProps) 
                 Choose the event before entering guest <em>details</em>
               </h3>
               <p className="body-copy mx-auto mt-5 max-w-2xl text-white/68">
-                This keeps the mobile order flow explicit: one event, one live inventory source, one clear payment path.
+                Choose one event to see live ticket tiers and payment options.
               </p>
             </GlassCard>
           )}

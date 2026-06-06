@@ -85,7 +85,7 @@ export default function HomePage() {
   const featuredCheckoutHref =
     featuredEvent?.ticketsAvailable && featuredEvent.slug
       ? `/checkout?event=${featuredEvent.slug}`
-      : "/contact-us";
+      : "/events";
   const featuredDetailHref = featuredEvent?.slug ? `/events/${featuredEvent.slug}` : "/events";
   const testimonialCards = TESTIMONIALS.map((testimonial) => (
     <GlassCard key={testimonial.name} hover className="h-full px-6 py-6">
@@ -104,16 +104,16 @@ export default function HomePage() {
       <section className="relative min-h-[85vh] overflow-hidden sm:min-h-screen">
         <HomeHeroVisual />
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.62)_82%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(180deg,transparent,#080808)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.48)_0%,rgba(255,255,255,0.92)_78%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(180deg,transparent,#ffffff)]" />
 
-        <div className="relative z-10 flex min-h-[85vh] items-center px-5 pt-28 sm:min-h-screen sm:px-10 sm:pt-32 lg:px-16">
+        <div className="relative z-10 flex min-h-[85vh] items-start px-5 pt-16 sm:min-h-screen sm:items-center sm:px-10 sm:pt-32 lg:px-16">
           <div className="mx-auto w-full max-w-7xl">
             <PageHero
               eyebrow="ZOYA Events & Services"
               title="Creating unforgettable"
               goldWord="experiences"
-              description="A premium event company shaping cultural nights, private parties, gala dinners, and luxury celebrations with clear creative direction, disciplined production, and the kind of room energy guests remember long after the last song."
+              description="Discover upcoming ZOYA events, buy tickets securely, or plan a private celebration with a team built for polished, memorable nights."
               media={
                 <GlassCard className="p-4 md:p-5">
                   <div className="overflow-hidden rounded-[18px]">
@@ -158,11 +158,11 @@ export default function HomePage() {
               actions={
                 <>
                   <LiquidLinkButton href={featuredCheckoutHref} gold>
-                    {featuredEvent?.ticketsAvailable ? "Book Tickets" : "Contact Team"}{" "}
+                    {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}{" "}
                     <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                   </LiquidLinkButton>
-                  <LiquidLinkButton href="/events">
-                    Explore Events <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                  <LiquidLinkButton href="/contact-us">
+                    Plan Private Event <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                   </LiquidLinkButton>
                 </>
               }
@@ -222,7 +222,7 @@ export default function HomePage() {
                 </p>
               </div>
               <LiquidLinkButton href={featuredCheckoutHref} gold className="w-full justify-center lg:w-auto">
-                {featuredEvent?.ticketsAvailable ? "Start Checkout" : "Talk To The Team"}
+                {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}
               </LiquidLinkButton>
             </div>
 
@@ -362,13 +362,13 @@ export default function HomePage() {
                     gold
                     className="w-full justify-center sm:w-auto"
                   >
-                    {featuredEvent?.ticketsAvailable ? "Reserve Seats" : "Contact Team"}
+                    {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}
                   </LiquidLinkButton>
                   <LiquidLinkButton
                     href={featuredDetailHref}
                     className="w-full justify-center sm:w-auto"
                   >
-                    View Event Detail
+                    View Details
                   </LiquidLinkButton>
                 </div>
               </div>
@@ -453,8 +453,8 @@ export default function HomePage() {
                     className="mt-7 w-full justify-center"
                   >
                     {liveCatalogHealthy && featuredEvent?.ticketsAvailable
-                      ? "Reserve Seat"
-                      : "Request Access"}
+                      ? "Buy Ticket"
+                      : "Browse Events"}
                   </LiquidLinkButton>
                 </GlassCard>
               </motion.div>
@@ -589,7 +589,7 @@ export default function HomePage() {
       <StickyBuyCTA
         href={featuredCheckoutHref}
         price={featuredEvent?.ticketsAvailable ? featuredEvent.priceFrom : undefined}
-        label={featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Contact Team"}
+        label={featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}
       />
     </main>
   );

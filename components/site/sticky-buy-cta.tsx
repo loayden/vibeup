@@ -40,15 +40,15 @@ export function StickyBuyCTA({
         >
           <div
             className="overflow-hidden rounded-[20px]"
-            style={{ boxShadow: "0 -8px 32px rgba(0,0,0,0.5)" }}
+            style={{ boxShadow: "0 -8px 32px rgba(69,52,18,0.14)" }}
           >
             <Link
               href={href}
               className="flex min-h-[56px] w-full items-center justify-between px-5"
               style={{
                 background:
-                  "linear-gradient(135deg, rgba(198,169,98,0.22), rgba(198,169,98,0.10))",
-                border: "1px solid rgba(198,169,98,0.35)",
+                  "linear-gradient(135deg, rgba(198,169,98,0.96), rgba(143,108,34,0.96))",
+                border: "1px solid rgba(125,95,29,0.36)",
                 backdropFilter: "blur(20px)",
               }}
             >
@@ -57,7 +57,7 @@ export function StickyBuyCTA({
                   fontFamily: "'Jost', sans-serif",
                   fontSize: "10px",
                   letterSpacing: "0.28em",
-                  color: "rgba(198,169,98,0.85)",
+                  color: "#ffffff",
                   textTransform: "uppercase",
                 }}
               >
@@ -68,7 +68,7 @@ export function StickyBuyCTA({
                   style={{
                     fontFamily: "'Cormorant Garamond', serif",
                     fontSize: "1.2rem",
-                    color: "rgba(198,169,98,0.85)",
+                    color: "#ffffff",
                     fontWeight: 300,
                   }}
                 >

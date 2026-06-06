@@ -139,7 +139,7 @@ export function PageHero({
   media,
 }: PageHeroProps) {
   return (
-    <section className="relative px-5 pb-16 pt-28 sm:px-10 sm:pb-20 sm:pt-32 lg:px-16 lg:pt-36">
+    <section className="relative px-5 pb-10 pt-24 sm:px-10 sm:pb-20 sm:pt-32 lg:px-16 lg:pt-36">
       <div
         className={`mx-auto grid max-w-7xl gap-8 sm:gap-10 ${media ? "items-center lg:grid-cols-[1.05fr_0.95fr]" : ""}`}
       >
@@ -150,7 +150,7 @@ export function PageHero({
           </h1>
           <div className={`mt-6 h-px w-24 ${align === "center" ? "mx-auto gold-divider-centered" : "gold-divider-left"}`} />
           <p
-            className={`body-copy mt-6 max-w-2xl text-[0.88rem] leading-7 sm:mt-7 sm:text-[0.92rem] sm:leading-8 ${
+            className={`body-copy mt-5 max-w-2xl text-[0.88rem] leading-7 sm:mt-7 sm:text-[0.92rem] sm:leading-8 ${
               align === "center" ? "mx-auto text-center" : ""
             }`}
           >

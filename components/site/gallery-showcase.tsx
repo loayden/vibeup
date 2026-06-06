@@ -64,7 +64,7 @@ export function GalleryShowcase({ items }: GalleryShowcaseProps) {
                       className="object-cover transition duration-500 hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
-                    <div className="absolute inset-x-0 bottom-0 p-5">
+                    <div className="absolute inset-x-0 bottom-0 p-5 on-image-text">
                       <p className="eyebrow mb-2">{item.date}</p>
                       <h3 className="font-serif text-[1.9rem] font-light tracking-[0.05em] text-white">
                         {item.title}

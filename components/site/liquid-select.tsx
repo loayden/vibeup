@@ -10,6 +10,7 @@ type LiquidSelectOption = {
 };
 
 type LiquidSelectProps = {
+  id?: string;
   label?: string;
   options: readonly LiquidSelectOption[];
   value: string;
@@ -18,6 +19,7 @@ type LiquidSelectProps = {
 };
 
 export function LiquidSelect({
+  id,
   label,
   options,
   value,
@@ -53,9 +55,11 @@ export function LiquidSelect({
     <div ref={rootRef} className="relative">
       {label ? <p className="eyebrow mb-3">{label}</p> : null}
       <button
+        id={id}
         type="button"
         className="glass-input flex w-full items-center justify-between gap-4 text-left"
         aria-expanded={open}
+        aria-haspopup="listbox"
         onClick={() => setOpen((current) => !current)}
       >
         <span className={activeOption ? "text-white/80" : "text-white/28"}>
@@ -79,7 +83,7 @@ export function LiquidSelect({
             className="glass-card glass-card-dark absolute left-0 right-0 top-[calc(100%+10px)] z-45 overflow-visible p-2"
           >
             <div className="spec-line" />
-            <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-rgba">
+            <div className="max-h-64 overflow-y-auto scrollbar-thin scrollbar-rgba" role="listbox">
               {options.map((option) => {
                 const selected = option.value === value;
 
@@ -87,10 +91,12 @@ export function LiquidSelect({
                   <button
                     key={option.value}
                     type="button"
+                    role="option"
+                    aria-selected={selected}
                     className="flex min-h-[52px] w-full items-center rounded-[16px] px-4 text-left transition-colors"
                     style={{
                       background: selected ? "rgba(198,169,98,0.08)" : "transparent",
-                      color: selected ? "#C6A962" : "rgba(255,255,255,0.74)",
+                      color: selected ? "var(--gold)" : "var(--foreground)",
                     }}
                     onClick={() => {
                       onChange(option.value);

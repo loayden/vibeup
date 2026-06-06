@@ -31,12 +31,12 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="flex items-center justify-center min-h-screen bg-[#080808]">
+          <div className="flex min-h-screen items-center justify-center bg-white">
             <div className="text-center">
-              <p className="text-white/70 mb-4">Something went wrong</p>
+              <p className="mb-4 text-[var(--foreground)]">Something went wrong</p>
               <button
                 onClick={() => this.setState({ hasError: false, error: null })}
-                className="px-4 py-2 text-white/50 hover:text-white border border-white/20 rounded"
+                className="rounded border border-[rgba(164,127,43,0.22)] px-4 py-2 text-[var(--gold-dark)] hover:text-[var(--gold)]"
               >
                 Try Again
               </button>

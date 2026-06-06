@@ -438,7 +438,7 @@ export function OrderExperience({
                   <p className="eyebrow mb-2">{ticket.ticket_type_name}</p>
                   <p className="body-copy text-white/68">{ticket.ticket_number}</p>
                   {ticket.qr_code_url ? (
-                    <div className="mt-4 overflow-hidden rounded-[18px] border border-white/8 bg-[#080808] p-3">
+                    <div className="mt-4 overflow-hidden rounded-[18px] border border-white/8 bg-white p-3">
                       <Image
                         src={ticket.qr_code_url}
                         alt={`QR code for ${ticket.ticket_number}`}

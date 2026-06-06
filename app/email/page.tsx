@@ -9,9 +9,9 @@ export default function EmailPage() {
       min-h-screen 
       flex items-center justify-center 
       bg-gradient-to-br 
-      from-black/80 
-      via-[#1a0730]/70 
-      to-[#2d1b09]/80 
+      from-white 
+      via-[#fffaf0] 
+      to-[#f8f3e6] 
       py-16 
       px-6
     ">
