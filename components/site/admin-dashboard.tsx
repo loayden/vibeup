@@ -1062,7 +1062,7 @@ export function AdminDashboardClient() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[120] flex justify-end bg-black/55 px-4 py-4 backdrop-blur-md"
+            className="fixed inset-0 z-[120] flex justify-end overflow-y-auto bg-black/55 px-4 py-4 backdrop-blur-md"
             onClick={closeReservationDetails}
           >
             <motion.div
@@ -1070,7 +1070,7 @@ export function AdminDashboardClient() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 48 }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="h-full w-full max-w-2xl"
+              className="h-[calc(100dvh-2rem)] min-h-0 w-full max-w-2xl"
               onClick={(event) => event.stopPropagation()}
             >
               <GlassCard dark className="flex h-full flex-col overflow-hidden px-6 py-6">

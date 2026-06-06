@@ -59,14 +59,19 @@ export function Lightbox({
     <AnimatePresence>
       {item ? (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/78 px-0 py-0 backdrop-blur-md sm:px-4 sm:py-10"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/78 px-0 py-0 backdrop-blur-md sm:px-4 sm:py-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
         >
           <motion.div
-            className="glass-card glass-card-dark relative flex h-full w-full flex-col rounded-none p-4 sm:h-auto sm:max-w-5xl sm:rounded-[26px] sm:p-6"
+            className="glass-card glass-card-dark relative flex h-[100dvh] min-h-0 w-full flex-col rounded-none p-4 sm:h-auto sm:max-h-[calc(100dvh-5rem)] sm:max-w-5xl sm:rounded-[26px] sm:p-6"
+            style={{
+              overflowY: "auto",
+              overscrollBehavior: "contain",
+              WebkitOverflowScrolling: "touch",
+            }}
             initial={{ opacity: 0, scale: 0.98, y: 18 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.98, y: 18 }}

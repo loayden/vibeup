@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { SITE } from "@/lib/site-data";
 
@@ -133,6 +133,8 @@ function MobileOverlay({
       transition={{ duration: 0.35, ease: EASING }}
       className="safe-top safe-bottom fixed inset-0 z-[100] flex flex-col overflow-y-auto"
       style={{
+        height: "100dvh",
+        WebkitOverflowScrolling: "touch",
         background:
           "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,247,239,0.98))",
         backdropFilter: "blur(40px)",
@@ -279,7 +281,6 @@ function MobileOverlay({
 export function SiteNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const lockedScrollYRef = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -287,32 +288,6 @@ export function SiteNavbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    const { body } = document;
-    const previousPosition = body.style.position;
-    const previousTop = body.style.top;
-    const previousWidth = body.style.width;
-    const previousOverflow = body.style.overflow;
-
-    lockedScrollYRef.current = window.scrollY;
-    body.style.position = "fixed";
-    body.style.top = `-${lockedScrollYRef.current}px`;
-    body.style.width = "100%";
-    body.style.overflow = "hidden";
-
-    return () => {
-      body.style.position = previousPosition;
-      body.style.top = previousTop;
-      body.style.width = previousWidth;
-      body.style.overflow = previousOverflow;
-      window.scrollTo(0, lockedScrollYRef.current);
-    };
-  }, [open]);
 
   return (
     <>

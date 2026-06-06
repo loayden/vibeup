@@ -787,7 +787,7 @@ export function CheckoutExperience({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 24 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-3"
+              className="mb-3 max-h-[62dvh] overflow-y-auto overscroll-contain pr-1"
             >
               {orderSummaryContent}
             </motion.div>

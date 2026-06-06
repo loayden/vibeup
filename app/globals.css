@@ -26,6 +26,7 @@ html {
 html,
 body {
   width: 100%;
+  height: auto;
   min-height: 100%;
   -webkit-overflow-scrolling: touch;
 }
@@ -36,11 +37,11 @@ body {
   font-family: var(--font-jost), sans-serif;
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
+  overflow-x: hidden;
   overflow-y: auto;
   -webkit-user-select: auto;
-  -webkit-touch-callout: none;
-  overscroll-behavior-x: none;
+  -webkit-touch-callout: default;
+  overscroll-behavior-x: auto;
   overscroll-behavior-y: auto;
 }
 
