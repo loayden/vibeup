@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import Image from "next/image";
@@ -141,13 +140,9 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
         <div className="space-y-12">
           {visibleUpcoming.length ? (
             <div className="grid gap-4 xl:grid-cols-2">
-              {visibleUpcoming.map((event, index) => (
-                <motion.div
+              {visibleUpcoming.map((event) => (
+                <div
                   key={event.slug}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <GlassCard hover className="h-full overflow-hidden p-3">
                     <div className="flex gap-3 sm:block">
@@ -221,7 +216,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                       </div>
                     </div>
                   </GlassCard>
-                </motion.div>
+                </div>
               ))}
             </div>
           ) : null}
@@ -239,13 +234,9 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {visiblePast.map((event, index) => (
-                  <motion.div
+                {visiblePast.map((event) => (
+                  <div
                     key={event.slug}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <GlassCard hover className="h-full overflow-hidden p-3">
                       <div className="relative aspect-[4/5] overflow-hidden rounded-[18px]">
@@ -282,7 +273,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                         </Link>
                       </div>
                     </GlassCard>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>

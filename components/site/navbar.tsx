@@ -18,7 +18,6 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { useDeviceProfile } from "@/components/site/use-device-profile";
-import { useScrollThreshold } from "@/components/site/use-scroll-threshold";
 import { SITE } from "@/lib/site-data";
 
 const EASING = [0.22, 1, 0.36, 1] as const;
@@ -99,10 +98,8 @@ function DesktopNavLink({
 
 function MobileOverlay({
   onClose,
-  liteSurface,
 }: {
   onClose: () => void;
-  liteSurface: boolean;
 }) {
   const pathname = usePathname();
   const supportActions = useMemo(
@@ -141,7 +138,6 @@ function MobileOverlay({
         WebkitOverflowScrolling: "touch",
         background:
           "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,247,239,0.98))",
-        ...(liteSurface ? {} : { backdropFilter: "blur(40px)" }),
         paddingLeft: "max(env(safe-area-inset-left), 20px)",
         paddingRight: "max(env(safe-area-inset-right), 20px)",
       }}
@@ -283,7 +279,6 @@ function MobileOverlay({
 }
 
 export function SiteNavbar() {
-  const scrolled = useScrollThreshold(12);
   const [open, setOpen] = useState(false);
   const { hasMounted, isMobile } = useDeviceProfile();
   const liteSurface = hasMounted && isMobile;
@@ -295,44 +290,20 @@ export function SiteNavbar() {
         animate={{ opacity: open ? 0 : 1, y: open ? -16 : 0 }}
         transition={{ duration: 0.35, ease: EASING }}
         className="site-navbar-shell safe-top fixed inset-x-0 top-0 z-50 transition-all duration-500"
-        style={
-          scrolled
-            ? {
-                background:
-                  liteSurface
-                    ? "rgba(255,255,255,0.97)"
-                    : "linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,253,248,0.88) 100%)",
-                ...(liteSurface
-                  ? {}
-                  : {
-                      backdropFilter: "blur(32px) saturate(180%)",
-                      WebkitBackdropFilter: "blur(32px) saturate(180%)",
-                    }),
-                borderBottom: "1px solid rgba(164,127,43,0.14)",
-                boxShadow: "0 8px 32px rgba(69,52,18,0.08)",
-              }
-            : {
-                background: liteSurface
-                  ? "rgba(255,255,255,0.94)"
-                  : "linear-gradient(180deg, rgba(255,255,255,0.78) 0%, transparent 100%)",
-                ...(liteSurface
-                  ? {}
-                  : {
-                      backdropFilter: "blur(12px)",
-                      WebkitBackdropFilter: "blur(12px)",
-                    }),
-              }
-        }
+        style={{
+          background: liteSurface
+            ? "rgba(255,255,255,0.97)"
+            : "linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,253,248,0.92) 100%)",
+          borderBottom: "1px solid rgba(164,127,43,0.14)",
+          boxShadow: "0 8px 28px rgba(69,52,18,0.06)",
+        }}
       >
-        {scrolled ? (
-          <div className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(198,169,98,0.18),transparent)]" />
-        ) : null}
+        <div className="absolute inset-x-0 bottom-0 h-px bg-[linear-gradient(90deg,transparent,rgba(198,169,98,0.18),transparent)]" />
 
         <div
           className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10"
           style={{
-            height: scrolled ? 56 : 64,
-            transition: "height 0.4s cubic-bezier(0.22,1,0.36,1)",
+            height: 60,
           }}
         >
           <nav className="hidden flex-1 items-center gap-1 lg:flex">
@@ -419,7 +390,7 @@ export function SiteNavbar() {
       </motion.header>
 
       <AnimatePresence>
-        {open ? <MobileOverlay liteSurface={liteSurface} onClose={() => setOpen(false)} /> : null}
+        {open ? <MobileOverlay onClose={() => setOpen(false)} /> : null}
       </AnimatePresence>
     </>
   );

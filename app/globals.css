@@ -62,14 +62,7 @@ button:disabled,
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(circle at top center, rgba(198, 169, 98, 0.11), transparent 42%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), transparent 30%);
+  content: none;
 }
 
 h1,
@@ -137,32 +130,24 @@ h5 {
   overflow: hidden;
   border-radius: clamp(14px, 3vw, 20px);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 253, 248, 0.72) 100%);
-  backdrop-filter: blur(16px) saturate(145%);
-  -webkit-backdrop-filter: blur(16px) saturate(145%);
   border: 1px solid var(--border-subtle);
   box-shadow: 0 20px 54px rgba(69, 52, 18, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 .glass-card-gold {
   background: linear-gradient(135deg, rgba(198, 169, 98, 0.2) 0%, rgba(255, 250, 236, 0.86) 100%);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
   border: 1px solid rgba(164, 127, 43, 0.26);
   box-shadow: 0 12px 36px rgba(164, 127, 43, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .glass-card-dark {
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 246, 239, 0.9) 100%);
-  backdrop-filter: blur(20px) saturate(170%);
-  -webkit-backdrop-filter: blur(20px) saturate(170%);
   border: 1px solid var(--border-subtle);
   box-shadow: 0 24px 60px rgba(69, 52, 18, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.88);
 }
 
 .glass-card-warm {
   background: linear-gradient(170deg, rgba(255, 253, 248, 0.96) 0%, rgba(250, 247, 239, 0.9) 100%);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid rgba(164, 127, 43, 0.14);
   box-shadow: 0 24px 60px rgba(69, 52, 18, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
@@ -353,8 +338,6 @@ select option:checked {
   width: 100%;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 251, 241, 0.74) 100%) !important;
   background-color: rgba(255, 255, 255, 0.82) !important;
-  backdrop-filter: blur(12px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
   border: 1px solid var(--border-subtle) !important;
   border-radius: 14px;
   padding: 14px 18px;
@@ -387,8 +370,6 @@ select option:checked {
     0 0 0 3px rgba(198, 169, 98, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
   background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 250, 236, 0.86) 100%) !important;
-  backdrop-filter: blur(12px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
 }
 
 .glass-input:hover {
@@ -410,9 +391,6 @@ select option:checked {
   border-color: var(--border-subtle) !important;
   /* Prevent yellow background animation */
   transition: background-color 9999s ease-in-out 0s !important;
-  /* Preserve backdrop effect with optimized blur */
-  backdrop-filter: blur(12px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
 }
 
 .liquid-button-gold,
@@ -434,8 +412,6 @@ select option:checked {
 
 .liquid-button-gold {
   background: linear-gradient(135deg, #b9923a 0%, #8a661f 100%) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(125, 95, 29, 0.38);
   border-radius: 9999px;
   padding: 14px 24px;
@@ -451,8 +427,6 @@ select option:checked {
 
 .liquid-button-ghost {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 251, 241, 0.86)) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(164, 127, 43, 0.18);
   border-radius: 9999px;
   padding: 12px 22px;
@@ -714,21 +688,6 @@ select option:checked {
 }
 
 @media (min-width: 768px) {
-  .glass-card {
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-  }
-
-  .glass-card-dark {
-    backdrop-filter: blur(32px) saturate(180%);
-    -webkit-backdrop-filter: blur(32px) saturate(180%);
-  }
-
-  .glass-card-warm {
-    backdrop-filter: blur(36px) saturate(140%);
-    -webkit-backdrop-filter: blur(36px) saturate(140%);
-  }
-
   .liquid-button-gold {
     padding-inline: 32px;
   }
@@ -755,28 +714,25 @@ select option:checked {
   .shimmer::after {
     animation: none;
   }
-
-  /* Reduce blur on mobile for better performance */
-  .glass-card,
-  .glass-card-dark,
-  .glass-card-warm {
-    backdrop-filter: blur(8px) saturate(140%);
-    -webkit-backdrop-filter: blur(8px) saturate(140%);
-  }
 }
 
-@media (max-width: 767px) {
-  .glass-card,
-  .glass-card-dark,
-  .glass-card-warm,
-  .site-navbar-shell,
-  .mobile-nav-overlay,
-  .sticky-buy-cta-link {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
+.glass-card,
+.glass-card-gold,
+.glass-card-dark,
+.glass-card-warm,
+.glass-input,
+.liquid-button-gold,
+.liquid-button-ghost,
+.nav-pill,
+.nav-mobile-button,
+.site-navbar-shell,
+.mobile-nav-overlay,
+.sticky-buy-cta-link,
+.backdrop-blur-md {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
 
-  .ambient-orb {
-    display: none !important;
-  }
+.ambient-orb {
+  display: none !important;
 }

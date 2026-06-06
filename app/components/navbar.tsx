@@ -10,8 +10,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-import { useScrollThreshold } from "@/components/site/use-scroll-threshold";
-
 /* ─────────────────────────────────────────
    CONFIG
 ───────────────────────────────────────── */
@@ -115,7 +113,6 @@ function MoreMenu() {
             style={{
               borderRadius: 16,
               background: "linear-gradient(160deg, rgba(10,8,5,0.96) 0%, rgba(7,5,3,0.98) 100%)",
-              backdropFilter: "blur(40px) saturate(180%)",
               border: "1px solid rgba(198,169,98,0.20)",
               boxShadow: [
                 "0 0 0 1px rgba(198,169,98,0.06)",
@@ -178,7 +175,6 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
       className="fixed inset-0 z-40"
       style={{ 
         background:"rgba(0,0,0,0.75)", 
-        backdropFilter:"blur(8px)",
         touchAction: "manipulation",
         WebkitTapHighlightColor: "transparent",
       }}
@@ -203,7 +199,6 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
         style={{
           borderRadius:24,
           background:"linear-gradient(160deg, rgba(14,10,6,0.97) 0%, rgba(9,6,3,0.99) 100%)",
-          backdropFilter:"blur(40px) saturate(180%)",
           border:"1px solid rgba(198,169,98,0.22)",
           boxShadow:[
             "0 0 0 1px rgba(198,169,98,0.06)",
@@ -299,7 +294,7 @@ function MobileOverlay({ onClose }: { onClose: () => void }) {
    MAIN NAVBAR
 ───────────────────────────────────────── */
 export function SiteNavbar() {
-  const scrolled = useScrollThreshold(12);
+  const scrolled = true;
   const [open,     setOpen]     = useState(false);
 
   return (
@@ -315,14 +310,10 @@ export function SiteNavbar() {
         className="fixed inset-x-0 top-0 z-50 transition-all duration-500"
         style={scrolled ? {
           background:"linear-gradient(180deg, rgba(8,6,4,0.82) 0%, rgba(6,4,2,0.88) 100%)",
-          backdropFilter:"blur(32px) saturate(180%)",
-          WebkitBackdropFilter:"blur(32px) saturate(180%)",
           borderBottom:"1px solid rgba(198,169,98,0.12)",
           boxShadow:"0 1px 0 rgba(198,169,98,0.06), 0 8px 32px rgba(0,0,0,0.40)",
         } : {
           background:"linear-gradient(180deg, rgba(0,0,0,0.28) 0%, transparent 100%)",
-          backdropFilter:"blur(12px)",
-          WebkitBackdropFilter:"blur(12px)",
           borderBottom:"1px solid transparent",
         }}
       >
@@ -378,7 +369,6 @@ export function SiteNavbar() {
                 style={{
                   background:"linear-gradient(135deg, rgba(198,169,98,0.16), rgba(198,169,98,0.06))",
                   border:"1px solid rgba(198,169,98,0.32)",
-                  backdropFilter:"blur(16px)",
                   boxShadow:"0 0 18px rgba(198,169,98,0.10), inset 0 1px 0 rgba(255,255,255,0.08)",
                   color:"rgba(198,169,98,0.80)",
                   fontFamily:"'Jost',sans-serif", fontSize:"9px",

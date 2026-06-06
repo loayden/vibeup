@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -46,13 +45,9 @@ export function ServiceCatalog({ services }: ServiceCatalogProps) {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {filteredServices.map((service, index) => (
-          <motion.div
+        {filteredServices.map((service) => (
+          <div
             key={service.title}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           >
             <GlassCard hover className="h-full overflow-hidden p-3">
               <div className="grid gap-0 xl:grid-cols-[0.42fr_0.58fr]">
@@ -102,7 +97,7 @@ export function ServiceCatalog({ services }: ServiceCatalogProps) {
                 </div>
               </div>
             </GlassCard>
-          </motion.div>
+          </div>
         ))}
       </div>
     </div>

@@ -234,14 +234,8 @@ export function CareersBoard({ positions }: CareersBoardProps) {
   return (
     <div className="space-y-10">
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {positions.map((position, index) => (
-          <motion.div
-            key={position.role}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-          >
+        {positions.map((position) => (
+          <div key={position.role}>
             <GlassCard hover className="h-full px-6 py-6">
               <button
                 type="button"
@@ -283,7 +277,7 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 </button>
               </div>
             </GlassCard>
-          </motion.div>
+          </div>
         ))}
       </div>
 

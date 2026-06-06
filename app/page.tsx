@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   ArrowRight,
   CalendarDays,
@@ -36,13 +35,6 @@ import {
   TICKET_TYPES,
   WHY_ZOYA,
 } from "@/lib/site-data";
-
-const revealProps = {
-  initial: { opacity: 0, y: 28 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-60px" },
-  transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] as const },
-};
 
 const serviceHighlights = SERVICES.slice(0, 4);
 const galleryHighlights = GALLERY_ITEMS.slice(0, 6);
@@ -185,15 +177,11 @@ export default function HomePage() {
         </section>
       ) : null}
 
-      <motion.section {...revealProps} className="px-5 py-8 sm:px-10 lg:px-16">
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 lg:grid-cols-4">
-          {HERO_STATS.map((item, index) => (
-            <motion.div
+          {HERO_STATS.map((item) => (
+            <div
               key={item.label}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
             >
               <GlassCard gold className="h-full px-5 py-6">
                 <p className="eyebrow mb-3">{item.label}</p>
@@ -201,12 +189,12 @@ export default function HomePage() {
                   {item.value}
                 </p>
               </GlassCard>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-6 sm:px-10 sm:py-8 lg:px-16">
+      <section className="px-5 py-6 sm:px-10 sm:py-8 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <GlassCard warm className="px-5 py-6 md:px-6">
             <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
@@ -256,9 +244,9 @@ export default function HomePage() {
             </div>
           </GlassCard>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Count Down"
@@ -298,9 +286,9 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Featured Event"
@@ -374,9 +362,9 @@ export default function HomePage() {
               </div>
             </GlassCard>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Why ZOYA"
@@ -404,9 +392,9 @@ export default function HomePage() {
             })}
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Access Options"
@@ -419,13 +407,9 @@ export default function HomePage() {
             }
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredTicketTypes.map((ticket, index) => (
-              <motion.div
+            {featuredTicketTypes.map((ticket) => (
+              <div
                 key={ticket.id}
-                initial={{ opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               >
                 <GlassCard hover className="h-full px-6 py-6">
                   <div
@@ -457,13 +441,13 @@ export default function HomePage() {
                       : "Browse Events"}
                   </LiquidLinkButton>
                 </GlassCard>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Services"
@@ -489,9 +473,9 @@ export default function HomePage() {
             </LiquidLinkButton>
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="px-6 py-20 md:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Past Moments"
@@ -500,13 +484,9 @@ export default function HomePage() {
             subtitle="A selection of frames from previous productions, capturing the visual texture, room energy, and production finish that define the ZOYA signature."
           />
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {galleryHighlights.map((item, index) => (
-              <motion.div
+            {galleryHighlights.map((item) => (
+              <div
                 key={`${item.title}-${item.image}`}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
               >
                 <GlassCard hover className="overflow-hidden p-3">
                   <div className="relative aspect-[4/5] overflow-hidden rounded-[18px]">
@@ -526,16 +506,16 @@ export default function HomePage() {
                     </div>
                   </div>
                 </GlassCard>
-              </motion.div>
+              </div>
             ))}
           </div>
           <div className="mt-8 flex justify-center">
             <LiquidLinkButton href="/gallery">Open Gallery</LiquidLinkButton>
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Client Voices"
@@ -548,9 +528,9 @@ export default function HomePage() {
             <SwipeCarousel items={testimonialCards} />
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Partners"
@@ -566,9 +546,9 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section {...revealProps} className="px-5 pb-20 pt-12 sm:px-10 lg:px-16">
+      <section className="px-5 pb-20 pt-12 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-5xl">
           <GlassCard gold className="px-6 py-8 text-center md:px-10 md:py-10">
             <p className="eyebrow mb-4">Private Access</p>
@@ -584,7 +564,7 @@ export default function HomePage() {
             </div>
           </GlassCard>
         </div>
-      </motion.section>
+      </section>
 
       <StickyBuyCTA
         href={featuredCheckoutHref}
