@@ -320,14 +320,10 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         actions={
           <>
             <LiquidLinkButton
-              href={
-                event.ticketsAvailable && event.eventState !== "past"
-                  ? `/checkout?event=${event.slug}`
-                  : "/contact-us"
-              }
+              href="/contact-us"
               gold
             >
-              {event.ticketsAvailable && event.eventState !== "past" ? "Buy Tickets" : "Contact Support"}
+              Contact Support
             </LiquidLinkButton>
             <LiquidLinkButton href="/events">Back To Events</LiquidLinkButton>
           </>
@@ -365,20 +361,14 @@ export default async function EventDetailPage({ params }: EventPageProps) {
             { icon: CalendarDays, label: "Date", value: event.formattedDate },
             { icon: MapPin, label: "Venue", value: `${event.shortVenue}, ${event.cityLine}` },
             {
-              icon: Clock3,
-              label: "Pricing",
-              value: event.priceFrom > 0 ? `From $${event.priceFrom}` : "Available on request",
-            },
-            {
               icon: Ticket,
-              label: "Status",
+              label: "Access",
               value:
                 event.eventState === "sold_out"
                   ? "Sold out"
-                  : event.ticketsAvailable
-                    ? "Live checkout"
-                    : "Inventory offline",
+                  : "Contact team",
             },
+            { icon: Clock3, label: "Support", value: "Fast concierge help" },
           ].map((item) => (
             <GlassCard key={item.label} gold className="px-5 py-5">
               <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
@@ -433,7 +423,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
           </GlassCard>
 
           <GlassCard className="px-6 py-6">
-            <p className="eyebrow mb-4">Ticket Access</p>
+            <p className="eyebrow mb-4">Guest Access</p>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {event.ticketTypes.length ? (
                 event.ticketTypes.map((ticketType) => (
@@ -453,16 +443,13 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                             : `Max ${ticketType.maxPerOrder}`}
                       </span>
                     </div>
-                    <p className="mt-3 font-serif text-[1.8rem] font-light tracking-[0.05em] text-[var(--gold)]">
-                      ${ticketType.price}
-                    </p>
                     <p className="body-copy mt-4">{ticketType.description}</p>
                     <div className="mt-4 space-y-2">
                       {(ticketType.includes.length
                         ? ticketType.includes
                         : [
-                            "Access synced to your paid ZOYA order",
-                            "QR ticket delivery after payment confirmation",
+                            "Access coordinated by the ZOYA team",
+                            "Guest details confirmed before the event",
                             ticketType.isSoldOut
                               ? "Waitlist support available through the team"
                               : `Up to ${ticketType.maxPerOrder} per order`,
@@ -481,8 +468,8 @@ export default async function EventDetailPage({ params }: EventPageProps) {
               ) : (
                 <GlassCard dark className="px-5 py-5 md:col-span-2 xl:col-span-3">
                   <p className="body-copy text-white/68">
-                    Ticket tiers are not published for this event yet. Contact the team if you
-                    need access.
+                    Access details are not published for this event yet. Contact the team if you
+                    want help joining.
                   </p>
                 </GlassCard>
               )}
@@ -529,10 +516,10 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
             <div className="mt-8 flex flex-wrap gap-4">
               <LiquidLinkButton
-                href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
+                href="/contact-us"
                 gold
               >
-                {event.ticketsAvailable ? "Book Your Seats" : "Contact The Team"}
+                Contact The Team
               </LiquidLinkButton>
               <LiquidLinkButton href="/events">View More Events</LiquidLinkButton>
             </div>
@@ -581,9 +568,8 @@ export default async function EventDetailPage({ params }: EventPageProps) {
       ) : null}
 
       <StickyBuyCTA
-        href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
-        price={event.priceFrom || undefined}
-        label={event.ticketsAvailable ? "Buy Tickets" : "Contact Support"}
+        href="/contact-us"
+        label="Contact Support"
       />
     </main>
   );

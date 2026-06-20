@@ -93,12 +93,12 @@ export default function HomePage() {
   const featuredEvent = UPCOMING_EVENTS[0];
 
   return (
-    <main className="relative overflow-x-hidden bg-[url('/bedouin/carpet.jpeg')] bg-cover bg-fixed bg-center bg-no-repeat">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,8,0.78)_0%,rgba(11,6,6,0.84)_38%,rgba(9,5,5,0.92)_100%)]" />
+    <main className="relative overflow-x-hidden bg-[url('/bedouin/carpet.jpeg')] bg-cover bg-center bg-no-repeat sm:bg-fixed">
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,8,0.34)_0%,rgba(11,6,6,0.42)_42%,rgba(9,5,5,0.58)_100%)]" />
 
       <section className="relative z-10 min-h-[92vh] overflow-hidden bg-transparent">
         <HomeHeroVisual />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.5)_42%,rgba(0,0,0,0.88)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.30)_0%,rgba(0,0,0,0.22)_45%,rgba(0,0,0,0.52)_100%)]" />
         <div className="relative z-10 flex min-h-[92vh] items-end px-5 pb-10 pt-20 sm:px-10 sm:pb-14 lg:px-16">
           <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
             <div className="max-w-3xl on-image-text">
@@ -145,17 +145,17 @@ export default function HomePage() {
                 <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
                   <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                   <p className="eyebrow mb-2">Annual Edition</p>
-                  <p className="body-copy text-[#241b10]">September 19-20, 2026</p>
+                  <p className="body-copy text-white/86">September 19-20, 2026</p>
                 </div>
                 <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
                   <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                   <p className="eyebrow mb-2">Location</p>
-                  <p className="body-copy text-[#241b10]">California Coast</p>
+                  <p className="body-copy text-white/86">California Coast</p>
                 </div>
                 <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
                   <Globe2 className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                   <p className="eyebrow mb-2">Guests In 2025</p>
-                  <p className="body-copy text-[#241b10]">1,500+ from diverse backgrounds</p>
+                  <p className="body-copy text-white/86">1,500+ from diverse backgrounds</p>
                 </div>
               </div>
             </GlassCard>
@@ -168,7 +168,7 @@ export default function HomePage() {
           {HERO_STATS.map((item) => (
             <GlassCard key={item.label} gold className="h-full px-5 py-6">
               <p className="eyebrow mb-3">{item.label}</p>
-              <p className="font-serif text-[2.1rem] font-light tracking-[0.05em] text-[var(--gold)]">
+              <p className="font-serif text-[2.1rem] font-light tracking-[0.05em] text-white">
                 {item.value}
               </p>
             </GlassCard>
@@ -179,11 +179,11 @@ export default function HomePage() {
       <section className="relative z-10 px-5 py-12 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
           <div className="mb-8 max-w-3xl">
-            <p className="eyebrow mb-4">WORLD CUP FAN FESTIVAL</p>
-            <h2 className="section-title">
+            <p className="eyebrow mb-4 text-white/78">WORLD CUP FAN FESTIVAL</p>
+            <h2 className="section-title text-white">
               Experience the stadium atmosphere inside <em>Grand Theater Anaheim</em>
             </h2>
-            <p className="body-copy mt-5 max-w-2xl text-white/82">
+            <p className="body-copy mt-5 max-w-2xl text-white/90">
               Massive LED match viewing, thousands of football fans, DJ sets before and after each
               match, premium indoor venue comfort, and a stronger focus on Arab national teams.
             </p>
@@ -208,7 +208,7 @@ export default function HomePage() {
                   {arabNations.map((nation) => (
                     <span
                       key={nation}
-                      className="rounded-full border border-[#b9912f]/30 bg-white px-3 py-2 text-[0.78rem] font-medium tracking-[0.08em] text-[#1f1a13]"
+                      className="rounded-full border border-white/20 bg-black/28 px-3 py-2 text-[0.78rem] font-medium tracking-[0.08em] text-white"
                     >
                       {nation}
                     </span>
@@ -222,12 +222,12 @@ export default function HomePage() {
               <div className="grid gap-3">
                 {worldCupMatches.map((item) => (
                   <div key={item.day} className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
-                    <p className="eyebrow mb-2 text-[#33291a]">{item.day}</p>
+                    <p className="eyebrow mb-2 text-white/78">{item.day}</p>
                     <div className="flex flex-wrap gap-2">
                       {item.matches.map((match) => (
                         <span
                           key={match}
-                          className="rounded-full border border-[#b9912f]/28 bg-white px-3 py-2 text-[0.78rem] font-medium tracking-[0.03em] text-[#1c1c1c]"
+                          className="rounded-full border border-white/20 bg-black/28 px-3 py-2 text-[0.78rem] font-medium tracking-[0.03em] text-white"
                         >
                           {match}
                         </span>
@@ -238,12 +238,12 @@ export default function HomePage() {
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
-                  <p className="eyebrow mb-2 text-[#33291a]">Venue</p>
-                  <p className="body-copy text-[#241b10]">Grand Theater Anaheim</p>
+                  <p className="eyebrow mb-2 text-white/78">Venue</p>
+                  <p className="body-copy text-white/86">Grand Theater Anaheim</p>
                 </div>
                 <div className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
-                  <p className="eyebrow mb-2 text-[#33291a]">Contact</p>
-                  <p className="body-copy text-[#241b10]">754-262-0884</p>
+                  <p className="eyebrow mb-2 text-white/78">Contact</p>
+                  <p className="body-copy text-white/86">754-262-0884</p>
                 </div>
               </div>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -251,7 +251,7 @@ export default function HomePage() {
                   View Events <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                 </LiquidLinkButton>
                 <LiquidLinkButton href="/contact-us" className="w-full justify-center sm:w-auto">
-                  Buy Tickets <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                  Contact Team <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
                 </LiquidLinkButton>
               </div>
             </GlassCard>

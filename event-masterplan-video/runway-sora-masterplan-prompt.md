@@ -1,0 +1,9 @@
+# Cinematic Drone Video Prompt
+
+Ultra realistic cinematic 3D masterplan visualization of a luxury beachfront music festival in Egypt. The site is a long rectangular beach plot with the sea at the front edge, a normal guest zone behind the shoreline, a security buffer, a VIP Bedouin tent zone, and a massive main stage at the far back facing the sea.
+
+Camera movement: smooth 35 to 45 degree cinematic drone orbit around the full site, then a controlled zoom-in sequence from full masterplan to the VIP zone, central VIP dance floor, and sea-facing main stage. Use slow parallax, golden-hour sunset, long shadows, warm sand reflections, realistic ocean waves, and high-end Dubai / Ibiza festival production quality.
+
+Zoning details: foreground sea with moving waves and gold reflections. Normal people zone for 2,000 guests: 200 Turkish-style floor carpets in a perfect grid, 10 seated guests per carpet, cushions, low central tables, wide walking aisles, central illuminated LED dance floor, left and right food courts, four restroom blocks, warm festival poles. Security buffer with elegant semi-transparent metal fence, controlled gates, and security checkpoints. VIP zone for 700 guests: 70 luxury Bedouin tents arranged symmetrically, 35 left and 35 right, 10 guests per tent, majlis seating, low Arabic wooden tables, lantern lighting, carpet paths, large central premium LED dance floor, left and right VIP bars, luxury buffet stations, four premium restroom trailers. Main stage at the back with huge LED walls, truss lighting, lasers, moving heads, fog, backstage rooms, and technical control units.
+
+Style: architectural event masterplan, ultra realistic 8K look, cinematic production design, detailed crowd simulation, sand and fabric texture, high-end Arabic luxury, Dubai luxury festival meets Ibiza beach club, polished commercial drone film. No distorted faces. No unreadable random text. No website UI.

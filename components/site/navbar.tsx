@@ -9,7 +9,6 @@ import {
   Image as ImageIcon,
   Mail,
   Menu,
-  Ticket,
   UserRound,
   X,
 } from "lucide-react";
@@ -35,15 +34,13 @@ const DESKTOP_RIGHT = [
 ] as const;
 
 const MOBILE_PRIMARY = [
-  { label: "Buy Tickets", href: "/checkout", icon: Ticket },
   { label: "Events", href: "/events", icon: CalendarDays },
-  { label: "Find Order", href: "/orders/find", icon: Ticket },
   { label: "Contact", href: "/contact-us", icon: Mail },
+  { label: "Services", href: "/services", icon: Briefcase },
+  { label: "Gallery", href: "/gallery", icon: ImageIcon },
 ] as const;
 
 const MOBILE_SECONDARY = [
-  { label: "Services", href: "/services", icon: Briefcase },
-  { label: "Gallery", href: "/gallery", icon: ImageIcon },
   { label: "About", href: "/about", icon: UserRound },
   { label: "Journal", href: "/blog", icon: ArrowRight },
   { label: "Careers", href: "/careers", icon: Briefcase },
@@ -114,12 +111,6 @@ function MobileOverlay({
         label: "Email",
         href: `mailto:${SITE.email}`,
         note: SITE.email,
-        external: false,
-      },
-      {
-        label: "Find Order",
-        href: "/orders/find",
-        note: "Open or resend paid tickets",
         external: false,
       },
     ],
@@ -264,13 +255,13 @@ function MobileOverlay({
 
       <div className="mt-auto pt-5">
         <Link
-          href="/checkout"
+          href="/contact-us"
           onClick={onClose}
           className="liquid-button-gold flex w-full justify-center"
         >
           <span className="inline-flex items-center gap-2">
-            Buy Tickets
-            <Ticket className="h-3.5 w-3.5" strokeWidth={1.2} />
+            Contact The Team
+            <Mail className="h-3.5 w-3.5" strokeWidth={1.2} />
           </span>
         </Link>
       </div>
@@ -336,22 +327,22 @@ export function SiteNavbar() {
             {DESKTOP_RIGHT.map((item) => (
               <DesktopNavLink key={item.href} href={item.href} label={item.label} />
             ))}
-            <Link href="/checkout" className="liquid-button-gold ml-2">
+            <Link href="/contact-us" className="liquid-button-gold ml-2">
               <span className="inline-flex items-center gap-2">
-                Buy Tickets
-                <Ticket className="h-3.5 w-3.5" strokeWidth={1.2} />
+                Contact
+                <Mail className="h-3.5 w-3.5" strokeWidth={1.2} />
               </span>
             </Link>
           </nav>
 
           <div className="ml-auto flex items-center gap-2 lg:hidden">
             <Link
-              href="/checkout"
+              href="/contact-us"
               className="liquid-button-gold min-h-[44px] !px-4"
             >
               <span className="inline-flex items-center gap-1.5">
-                <Ticket className="h-3 w-3" strokeWidth={1.2} />
-                Tickets
+                <Mail className="h-3 w-3" strokeWidth={1.2} />
+                Contact
               </span>
             </Link>
 

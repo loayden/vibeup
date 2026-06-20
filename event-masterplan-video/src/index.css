@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #08070a;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.composition {
+  background: #08070a;
+  overflow: hidden;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 42%, transparent 38%, rgba(0, 0, 0, 0.42) 100%),
+    linear-gradient(180deg, rgba(5, 3, 4, 0.46), transparent 26%, rgba(5, 3, 4, 0.66));
+  pointer-events: none;
+}
+
+.title-block {
+  position: absolute;
+  left: 62px;
+  top: 48px;
+  color: #fff5db;
+  text-shadow: 0 8px 34px rgba(0, 0, 0, 0.58);
+}
+
+.eyebrow {
+  color: #e6b95d;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 5px;
+}
+
+.headline {
+  margin-top: 10px;
+  max-width: 920px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 70px;
+  font-weight: 700;
+  line-height: 0.98;
+}
+
+.phase-panel {
+  position: absolute;
+  right: 58px;
+  top: 54px;
+  width: 390px;
+  padding: 18px 20px;
+  border: 1px solid rgba(230, 185, 93, 0.45);
+  background: rgba(6, 5, 8, 0.42);
+  color: #fff5db;
+  backdrop-filter: blur(9px);
+}
+
+.phase-label {
+  color: #e6b95d;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.phase-value {
+  margin-top: 8px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.zoning-bar {
+  position: absolute;
+  left: 62px;
+  right: 62px;
+  bottom: 54px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.zone-item {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 224, 162, 0.32);
+  background: rgba(10, 8, 9, 0.44);
+  color: #ffe4a4;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.progress-track {
+  position: absolute;
+  left: 62px;
+  right: 62px;
+  bottom: 34px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #16c8ff, #e6b95d, #ffb342);
+}

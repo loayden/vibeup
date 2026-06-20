@@ -4,7 +4,6 @@ import Image from "next/image";
 
 import { EventsShowcase } from "@/components/site/events-showcase";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
-import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
 import { getPublicEventsFeed } from "@/lib/public-events";
 
 const worldCupSchedule = [
@@ -26,10 +25,7 @@ export const metadata: Metadata = {
 export default async function EventsPage() {
   const feed = await getPublicEventsFeed();
   const featuredEvent = feed.featured;
-  const featuredCheckoutHref =
-    featuredEvent?.ticketsAvailable && featuredEvent.eventState !== "past"
-      ? `/checkout?event=${featuredEvent.slug}`
-      : "#events-calendar";
+  const featuredActionHref = featuredEvent ? `/events/${featuredEvent.slug}` : "#events-calendar";
 
   return (
     <main className="overflow-x-hidden pb-20">
@@ -54,8 +50,8 @@ export default async function EventsPage() {
         }
         actions={
           <>
-            <LiquidLinkButton href={featuredCheckoutHref} gold>
-              {featuredEvent?.ticketsAvailable ? "Reserve Access" : "Browse Events"}{" "}
+            <LiquidLinkButton href={featuredActionHref} gold>
+              View Event Details{" "}
               <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
             </LiquidLinkButton>
             <LiquidLinkButton href="/contact-us">Join The List</LiquidLinkButton>
@@ -120,7 +116,7 @@ export default async function EventsPage() {
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {featuredNations.map((nation) => (
-                    <span key={nation} className="rounded-full border border-[#b9912f]/30 bg-white px-3 py-2 text-[0.78rem] font-medium tracking-[0.08em] text-[#1f1a13]">
+                    <span key={nation} className="rounded-full border border-white/20 bg-black/20 px-3 py-2 text-[0.78rem] font-medium tracking-[0.08em] text-white">
                       {nation}
                     </span>
                   ))}
@@ -129,12 +125,12 @@ export default async function EventsPage() {
               <div className="grid gap-3">
                 {worldCupSchedule.map((item) => (
                   <div key={item.day} className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
-                    <p className="eyebrow mb-2 text-[#33291a]">{item.day}</p>
+                    <p className="eyebrow mb-2 text-white/78">{item.day}</p>
                     <div className="flex flex-wrap gap-2">
                       {item.matches.map((match) => (
                         <span
                           key={match}
-                          className="rounded-full border border-[#b9912f]/28 bg-white px-3 py-2 text-[0.78rem] font-medium tracking-[0.03em] text-[#1c1c1c]"
+                          className="rounded-full border border-white/20 bg-black/20 px-3 py-2 text-[0.78rem] font-medium tracking-[0.03em] text-white"
                         >
                           {match}
                         </span>
@@ -187,12 +183,8 @@ export default async function EventsPage() {
                   {[
                     `Event date: ${featuredEvent.formattedDate}`,
                     `Venue: ${featuredEvent.shortVenue}`,
-                    featuredEvent.priceFrom > 0
-                      ? `Pricing starts at $${featuredEvent.priceFrom}`
-                      : "Pricing available on request",
-                    featuredEvent.ticketsAvailable
-                      ? "Live ticket inventory is currently available."
-                      : "Ticket inventory is temporarily unavailable.",
+                    "Access details available through the ZOYA team",
+                    "Simple guest support by contact form, WhatsApp, or email",
                   ].map((detail) => (
                   <div
                       key={detail}
@@ -207,10 +199,8 @@ export default async function EventsPage() {
                   <LiquidLinkButton href={`/events/${featuredEvent.slug}`} gold>
                     View Details
                   </LiquidLinkButton>
-                  <LiquidLinkButton
-                    href={featuredEvent.ticketsAvailable ? `/checkout?event=${featuredEvent.slug}` : "/contact-us"}
-                  >
-                    {featuredEvent.ticketsAvailable ? "Buy Tickets" : "Contact Support"}
+                  <LiquidLinkButton href="/contact-us">
+                    Contact Support
                   </LiquidLinkButton>
                 </div>
               </div>
@@ -218,11 +208,6 @@ export default async function EventsPage() {
           </div>
         </section>
       ) : null}
-
-      <StickyBuyCTA
-        href={featuredCheckoutHref}
-        price={featuredEvent?.priceFrom || undefined}
-      />
     </main>
   );
 }

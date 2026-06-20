@@ -6,13 +6,11 @@ import Link from "next/link";
 type StickyBuyCTAProps = {
   href: string;
   label?: string;
-  price?: number;
 };
 
 export function StickyBuyCTA({
   href,
-  label = "Buy Tickets",
-  price,
+  label = "Contact Support",
 }: StickyBuyCTAProps) {
   return (
     <AnimatePresence>
@@ -46,18 +44,6 @@ export function StickyBuyCTA({
             >
               {label}
             </span>
-            {typeof price === "number" ? (
-              <span
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: "1.2rem",
-                  color: "#ffffff",
-                  fontWeight: 300,
-                }}
-              >
-                From ${price}
-              </span>
-            ) : null}
           </Link>
         </div>
       </motion.div>
