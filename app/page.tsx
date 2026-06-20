@@ -79,6 +79,16 @@ const flow = [
   },
 ];
 
+const worldCupMatches = [
+  { day: "Friday", matches: ["Canada vs Qatar", "Mexico vs Korea", "USA vs Australia"] },
+  { day: "Saturday", matches: ["Scotland vs Morocco"] },
+  { day: "Sunday", matches: ["Tunisia vs Japan", "Spain vs Saudi Arabia"] },
+  { day: "Monday", matches: ["New Zealand vs Egypt"] },
+  { day: "Tuesday", matches: ["France vs Iraq", "Jordan vs Algeria"] },
+];
+
+const arabNations = ["Egypt", "Tunisia", "Algeria", "Morocco", "Canada", "USA", "Mexico", "Jordan", "Iraq", "Saudi Arabia", "Qatar"];
+
 export default function HomePage() {
   const featuredEvent = UPCOMING_EVENTS[0];
 
@@ -163,6 +173,76 @@ export default function HomePage() {
               </p>
             </GlassCard>
           ))}
+        </div>
+      </section>
+
+      <section className="relative z-10 px-5 py-12 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 max-w-3xl">
+            <p className="eyebrow mb-4">WORLD CUP FAN FESTIVAL</p>
+            <h2 className="section-title">
+              Experience the stadium atmosphere inside <em>Grand Theater Anaheim</em>
+            </h2>
+            <p className="body-copy mt-5 text-white/66">
+              Massive LED match viewing, thousands of football fans, DJ sets before and after each
+              match, premium indoor venue comfort, and a stronger focus on Arab national teams.
+            </p>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-[0.92fr_1.08fr]">
+            <GlassCard dark className="px-5 py-6">
+              <p className="eyebrow mb-4">Featured Nations</p>
+              <div className="flex flex-wrap gap-2">
+                {arabNations.map((nation) => (
+                  <span
+                    key={nation}
+                    className="rounded-full border border-white/12 bg-white/[0.04] px-3 py-2 text-[0.78rem] text-white/78"
+                  >
+                    {nation}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                  <p className="eyebrow mb-2">Venue</p>
+                  <p className="body-copy text-white/68">Grand Theater Anaheim</p>
+                </div>
+                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                  <p className="eyebrow mb-2">Contact</p>
+                  <p className="body-copy text-white/68">754-262-0884</p>
+                </div>
+              </div>
+            </GlassCard>
+
+            <GlassCard className="px-5 py-6">
+              <p className="eyebrow mb-4">Match Schedule</p>
+              <div className="grid gap-3">
+                {worldCupMatches.map((item) => (
+                  <div key={item.day} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                    <p className="eyebrow mb-2">{item.day}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {item.matches.map((match) => (
+                        <span
+                          key={match}
+                          className="rounded-full border border-[rgba(198,169,98,0.28)] bg-[rgba(198,169,98,0.08)] px-3 py-2 text-[0.78rem] text-white/84"
+                        >
+                          {match}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <LiquidLinkButton href="/events" gold className="w-full justify-center sm:w-auto">
+                  View Events <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                </LiquidLinkButton>
+                <LiquidLinkButton href="/contact-us" className="w-full justify-center sm:w-auto">
+                  Buy Tickets <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                </LiquidLinkButton>
+              </div>
+            </GlassCard>
+          </div>
         </div>
       </section>
 

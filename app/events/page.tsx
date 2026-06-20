@@ -7,6 +7,16 @@ import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/componen
 import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
 import { getPublicEventsFeed } from "@/lib/public-events";
 
+const worldCupSchedule = [
+  { day: "Friday", matches: ["Canada vs Qatar", "Mexico vs Korea", "USA vs Australia"] },
+  { day: "Saturday", matches: ["Scotland vs Morocco"] },
+  { day: "Sunday", matches: ["Tunisia vs Japan", "Spain vs Saudi Arabia"] },
+  { day: "Monday", matches: ["New Zealand vs Egypt"] },
+  { day: "Tuesday", matches: ["France vs Iraq", "Jordan vs Algeria"] },
+];
+
+const featuredNations = ["Egypt", "Tunisia", "Algeria", "Morocco", "Canada", "USA", "Mexico", "Jordan", "Iraq", "Saudi Arabia", "Qatar"];
+
 export const metadata: Metadata = {
   title: "Events",
   description:
@@ -92,6 +102,49 @@ export default async function EventsPage() {
               <p className="body-copy text-white/68">{item.body}</p>
             </GlassCard>
           ))}
+        </div>
+      </section>
+
+      <section className="px-5 py-8 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <GlassCard className="overflow-hidden px-5 py-6 md:px-6">
+            <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+              <div>
+                <p className="eyebrow mb-3">World Cup Fan Festival</p>
+                <h2 className="section-title text-[2rem]">
+                  Stadium atmosphere inside <em>Grand Theater Anaheim</em>
+                </h2>
+                <p className="body-copy mt-4 text-white/66">
+                  Massive LED match viewing, DJ entertainment, premium indoor comfort, food and
+                  beverage access, and a focused spotlight on Arab national teams.
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {featuredNations.map((nation) => (
+                    <span key={nation} className="rounded-full border border-white/12 bg-white/[0.04] px-3 py-2 text-[0.78rem] text-white/78">
+                      {nation}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="grid gap-3">
+                {worldCupSchedule.map((item) => (
+                  <div key={item.day} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                    <p className="eyebrow mb-2">{item.day}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {item.matches.map((match) => (
+                        <span
+                          key={match}
+                          className="rounded-full border border-[rgba(198,169,98,0.28)] bg-[rgba(198,169,98,0.08)] px-3 py-2 text-[0.78rem] text-white/84"
+                        >
+                          {match}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </GlassCard>
         </div>
       </section>
 
