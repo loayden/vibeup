@@ -98,16 +98,16 @@ export default function HomePage() {
 
       <section className="relative z-10 min-h-[92vh] overflow-hidden bg-transparent">
         <HomeHeroVisual />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.62)_0%,rgba(0,0,0,0.42)_42%,rgba(0,0,0,0.82)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.5)_42%,rgba(0,0,0,0.88)_100%)]" />
         <div className="relative z-10 flex min-h-[92vh] items-end px-5 pb-10 pt-20 sm:px-10 sm:pb-14 lg:px-16">
           <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-            <div className="max-w-3xl">
-              <p className="eyebrow mb-4">WHITE PARTY EXPERIENCE</p>
-              <h1 className="display-title">
-                BEDOUIN <em>WHITE PARTIES</em>
+            <div className="max-w-3xl on-image-text">
+              <p className="eyebrow mb-4 text-white/70">WHITE PARTY EXPERIENCE</p>
+              <h1 className="display-title text-white">
+                BEDOUIN <em className="text-white">WHITE PARTIES</em>
               </h1>
               <div className="mt-6 h-px w-24 bg-[linear-gradient(90deg,var(--gold),rgba(255,255,255,0.1))]" />
-              <p className="body-copy mt-6 max-w-2xl text-[0.92rem] leading-8 text-white/78 sm:text-[1rem]">
+              <p className="body-copy mt-6 max-w-2xl text-[0.92rem] leading-8 text-white/88 sm:text-[1rem]">
                 Not just parties, a lifestyle in white. Premium beach and desert-style gatherings
                 with white dress code, majlis lounges, live music, elevated food, and a community
                 that comes ready to celebrate.
@@ -135,7 +135,7 @@ export default function HomePage() {
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.84))]" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
-                  <p className="eyebrow mb-2 text-white/55">A CULTURAL BRIDGE ON THE SAND</p>
+                  <p className="eyebrow mb-2 text-white/70">A CULTURAL BRIDGE ON THE SAND</p>
                   <p className="font-serif text-[1.9rem] font-light leading-tight text-white">
                     Every September, we bring the world together on California’s coast.
                   </p>
@@ -145,17 +145,17 @@ export default function HomePage() {
                 <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
                   <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                   <p className="eyebrow mb-2">Annual Edition</p>
-                  <p className="body-copy text-white/68">September 19-20, 2026</p>
+                  <p className="body-copy text-[#241b10]">September 19-20, 2026</p>
                 </div>
                 <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
                   <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                   <p className="eyebrow mb-2">Location</p>
-                  <p className="body-copy text-white/68">California Coast</p>
+                  <p className="body-copy text-[#241b10]">California Coast</p>
                 </div>
                 <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
                   <Globe2 className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
                   <p className="eyebrow mb-2">Guests In 2025</p>
-                  <p className="body-copy text-white/68">1,500+ from diverse backgrounds</p>
+                  <p className="body-copy text-[#241b10]">1,500+ from diverse backgrounds</p>
                 </div>
               </div>
             </GlassCard>
