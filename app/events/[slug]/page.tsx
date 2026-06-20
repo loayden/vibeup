@@ -33,6 +33,57 @@ const detailFallbacks: Record<
     faqs: Array<{ question: string; answer: string }>;
   }
 > = {
+  "bedouin-white-party": {
+    overview:
+      "BEDOUIN White Party is a cultural beach festival built around white attire, majlis hospitality, live music, elevated food, and an immersive social atmosphere that bridges communities through celebration.",
+    flow: [
+      {
+        title: "Sunset Arrival",
+        body: "Guests arrive into a white-dress-code world with guided check-in, portraits, and warm hospitality.",
+      },
+      {
+        title: "Majlis Social",
+        body: "Low seating, carpets, lanterns, and lounge pockets create a relaxed hospitality rhythm during the first half of the night.",
+      },
+      {
+        title: "Peak Energy",
+        body: "DJs, percussion, live musicians, and crowd interaction lift the room into the main celebration.",
+      },
+      {
+        title: "Night Lounge",
+        body: "Premium service, quieter conversation zones, and moonlit seating close the experience with a luxury finish.",
+      },
+    ],
+    highlights: [
+      "White attire and refined coastal styling",
+      "Majlis lounges and hospitality-driven seating",
+      "Live music, DJ energy, and performance moments",
+      "Premium food service and community-centered production",
+    ],
+    venueNotes: [
+      { label: "Dress Code", value: "White attire" },
+      { label: "Venue", value: "California Coast" },
+      { label: "Season", value: "September annual edition" },
+      { label: "Experience", value: "Beach and desert-style gathering" },
+    ],
+    faqs: [
+      {
+        question: "What should I wear?",
+        answer:
+          "The event follows a white dress code. Guests typically arrive in all-white looks that match the visual standard of the party.",
+      },
+      {
+        question: "Is this a family or nightlife event?",
+        answer:
+          "BEDOUIN is a premium social celebration. The experience is designed around hospitality, music, and a community atmosphere.",
+      },
+      {
+        question: "How do I stay updated?",
+        answer:
+          "Use the notifications flow on the homepage or the events page to stay connected to the annual September edition.",
+      },
+    ],
+  },
   "arab-nights": {
     overview:
       "Arab Nights is one of ZOYA's signature cultural productions: a premium social evening where ceremony, hospitality, music, and room energy are paced deliberately to create a strong emotional build throughout the night.",

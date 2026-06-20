@@ -6,571 +6,433 @@ import {
   Globe2,
   MapPin,
   Music4,
-  ShieldCheck,
   Sparkles,
+  Users2,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
-import { CountdownTimer } from "@/components/site/countdown";
 import { HomeHeroVisual } from "@/components/site/home-hero-visual";
-import {
-  GlassCard,
-  LiquidLinkButton,
-  PageHero,
-  SectionHeader,
-} from "@/components/site/liquid";
-import { NewsletterForm } from "@/components/site/newsletter-form";
-import { StickyBuyCTA } from "@/components/site/sticky-buy-cta";
+import { GlassCard, LiquidLinkButton } from "@/components/site/liquid";
 import { SwipeCarousel } from "@/components/site/swipe-carousel";
-import type { PublicEventsFeed, PublicTicketType } from "@/lib/public-events";
-import {
-  FEATURED_EVENT,
-  GALLERY_ITEMS,
-  HERO_STATS,
-  PARTNERS,
-  SERVICES,
-  SITE,
-  TESTIMONIALS,
-  TICKET_TYPES,
-  WHY_ZOYA,
-} from "@/lib/site-data";
+import { SITE, GALLERY_ITEMS, HERO_STATS, UPCOMING_EVENTS } from "@/lib/site-data";
 
-const serviceHighlights = SERVICES.slice(0, 4);
-const galleryHighlights = GALLERY_ITEMS.slice(0, 6);
+const bedouinPhotos = [
+  "/bedouin/vibeup-384.jpg",
+  "/bedouin/vibeup-36.jpg",
+  "/bedouin/vibeup-31.jpg",
+  "/bedouin/vibeup-50.jpg",
+  "/bedouin/vibeup-381.jpg",
+  "/bedouin/vibeup-64.jpg",
+  "/bedouin/vibeup-70.jpg",
+  "/bedouin/vibeup-51.jpg",
+  "/bedouin/vibeup-16.jpg",
+  "/bedouin/vibeup-204.jpg",
+  "/bedouin/vibeup-113.jpg",
+  "/bedouin/vibeup-348.jpg",
+  "/bedouin/vibeup-349.jpg",
+  "/bedouin/vibeup-114.jpg",
+  "/bedouin/vibeup-117.jpg",
+  "/bedouin/vibeup-199.jpg",
+  "/bedouin/vibeup-288.jpg",
+  "/bedouin/vibeup-192.jpg",
+  "/bedouin/vibeup-106.jpg",
+];
+
+const experiencePoints = [
+  {
+    icon: Users2,
+    title: "Arrival That Feels Hosted",
+    body: "Guests step into a white-dress-code world with wristbands, portraits, and warm hospitality from the first minute.",
+  },
+  {
+    icon: Music4,
+    title: "Music With Cultural Texture",
+    body: "Deep house, live violin, percussion, and performance moments move the night from sunset elegance into high-energy celebration.",
+  },
+  {
+    icon: Sparkles,
+    title: "Food, Lounge, And Service",
+    body: "Majlis seating, grilled stations, shawarma service, mobile bartending, and relaxed table moments keep the experience premium.",
+  },
+];
+
+const flow = [
+  {
+    step: "01",
+    title: "Sunset Arrival",
+    body: "White styling, beach atmosphere, wristbands, portraits, and welcome drinks.",
+  },
+  {
+    step: "02",
+    title: "Majlis Social",
+    body: "Low seating, carpets, lanterns, food vendors, and easy conversation zones.",
+  },
+  {
+    step: "03",
+    title: "Peak Energy",
+    body: "DJ sets, live musicians, dance circles, stage moments, and crowd interaction.",
+  },
+  {
+    step: "04",
+    title: "Night Lounge",
+    body: "Moonlit seating, private groups, premium service, and a slower luxury close.",
+  },
+];
 
 export default function HomePage() {
-  const [eventsFeed, setEventsFeed] = useState<PublicEventsFeed | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch("/api/public/events-feed", {
-      signal: controller.signal,
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch live event feed");
-        }
-
-        const payload = (await response.json()) as PublicEventsFeed;
-        setEventsFeed(payload);
-      })
-      .catch((error) => {
-        if (error instanceof Error && error.name === "AbortError") {
-          return;
-        }
-
-        console.error("Unable to refresh home event feed", error);
-      });
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  const featuredEvent = eventsFeed?.featured;
-  const nextEvent = eventsFeed?.nextEvent;
-  const liveCatalogHealthy = Boolean(eventsFeed && !eventsFeed.degraded);
-  const featuredTicketTypes: Array<PublicTicketType | (typeof TICKET_TYPES)[number]> =
-    featuredEvent?.ticketTypes.length ? featuredEvent.ticketTypes : [...TICKET_TYPES];
-  const featuredCheckoutHref =
-    featuredEvent?.ticketsAvailable && featuredEvent.slug
-      ? `/checkout?event=${featuredEvent.slug}`
-      : "/events";
-  const featuredDetailHref = featuredEvent?.slug ? `/events/${featuredEvent.slug}` : "/events";
-  const testimonialCards = TESTIMONIALS.map((testimonial) => (
-    <GlassCard key={testimonial.name} hover className="h-full px-6 py-6">
-      <p className="font-serif text-[2rem] font-light leading-snug text-white">
-        “{testimonial.quote}”
-      </p>
-      <div className="gold-divider-left mt-6 h-px w-20" />
-      <p className="eyebrow mt-5">{testimonial.event}</p>
-      <p className="body-copy mt-2 text-white/68">{testimonial.name}</p>
-      <p className="body-copy text-[0.78rem]">{testimonial.role}</p>
-    </GlassCard>
-  ));
+  const featuredEvent = UPCOMING_EVENTS[0];
 
   return (
-    <main className="overflow-x-hidden">
-      <section className="relative min-h-[85vh] overflow-hidden sm:min-h-screen">
+    <main className="relative overflow-x-hidden bg-[url('/bedouin/carpet.jpeg')] bg-cover bg-fixed bg-center bg-no-repeat">
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,8,0.78)_0%,rgba(11,6,6,0.84)_38%,rgba(9,5,5,0.92)_100%)]" />
+
+      <section className="relative z-10 min-h-[92vh] overflow-hidden bg-transparent">
         <HomeHeroVisual />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.62)_0%,rgba(0,0,0,0.42)_42%,rgba(0,0,0,0.82)_100%)]" />
+        <div className="relative z-10 flex min-h-[92vh] items-end px-5 pb-10 pt-20 sm:px-10 sm:pb-14 lg:px-16">
+          <div className="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+            <div className="max-w-3xl">
+              <p className="eyebrow mb-4">WHITE PARTY EXPERIENCE</p>
+              <h1 className="display-title">
+                BEDOUIN <em>WHITE PARTIES</em>
+              </h1>
+              <div className="mt-6 h-px w-24 bg-[linear-gradient(90deg,var(--gold),rgba(255,255,255,0.1))]" />
+              <p className="body-copy mt-6 max-w-2xl text-[0.92rem] leading-8 text-white/78 sm:text-[1rem]">
+                Not just parties, a lifestyle in white. Premium beach and desert-style gatherings
+                with white dress code, majlis lounges, live music, elevated food, and a community
+                that comes ready to celebrate.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+                <LiquidLinkButton href="#experience" gold className="w-full justify-center sm:w-auto">
+                  Explore the Party <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                </LiquidLinkButton>
+                <LiquidLinkButton href="/events" className="w-full justify-center sm:w-auto">
+                  See This September <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                </LiquidLinkButton>
+              </div>
+            </div>
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.48)_0%,rgba(255,255,255,0.92)_78%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(180deg,transparent,#ffffff)]" />
-
-        <div className="relative z-10 flex min-h-[85vh] items-start px-5 pt-16 sm:min-h-screen sm:items-center sm:px-10 sm:pt-32 lg:px-16">
-          <div className="mx-auto w-full max-w-7xl">
-            <PageHero
-              eyebrow="ZOYA Events & Services"
-              title="Creating unforgettable"
-              goldWord="experiences"
-              description="Discover upcoming ZOYA events, buy tickets securely, or plan a private celebration with a team built for polished, memorable nights."
-              media={
-                <GlassCard className="p-4 md:p-5">
-                  <div className="overflow-hidden rounded-[18px]">
-                    <Image
-                      src={featuredEvent?.coverImageUrl || "/arabnights-1200.webp"}
-                      alt={featuredEvent?.title || "Arab Nights featured event"}
-                      width={1100}
-                      height={1300}
-                      className="h-[300px] w-full object-cover sm:h-[420px] md:h-[460px]"
-                      priority
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 38vw"
-                    />
-                  </div>
-                  <div className="grid gap-3 px-1 pb-2 pt-5 sm:grid-cols-3">
-                    {[
-                      {
-                        icon: CalendarDays,
-                        label: "Next Signature Night",
-                        value: nextEvent?.formattedDate || "Live schedule pending",
-                      },
-                      {
-                        icon: MapPin,
-                        label: "Venue",
-                        value: nextEvent?.shortVenue || SITE.venue,
-                      },
-                      {
-                        icon: Music4,
-                        label: "Headline Moment",
-                        value: featuredEvent?.title || "Marquee cultural production",
-                      },
-                    ].map((item) => (
-                      <div key={item.label} className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
-                        <div className="spec-line" />
-                        <item.icon className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                        <p className="eyebrow mb-2">{item.label}</p>
-                        <p className="body-copy text-white/68">{item.value}</p>
-                      </div>
-                    ))}
-                  </div>
-                </GlassCard>
-              }
-              actions={
-                <>
-                  <LiquidLinkButton href={featuredCheckoutHref} gold>
-                    {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}{" "}
-                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
-                  </LiquidLinkButton>
-                  <LiquidLinkButton href="/contact-us">
-                    Plan Private Event <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
-                  </LiquidLinkButton>
-                </>
-              }
-            />
+            <GlassCard dark className="overflow-hidden p-3">
+              <div className="relative overflow-hidden rounded-[18px]">
+                <Image
+                  src="/bedouin/vibeup-31.jpg"
+                  alt="BEDOUIN White Party lounge on the sand"
+                  width={1100}
+                  height={1300}
+                  priority
+                  className="h-[320px] w-full object-cover sm:h-[460px]"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 52vw, 42vw"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.84))]" />
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <p className="eyebrow mb-2 text-white/55">A CULTURAL BRIDGE ON THE SAND</p>
+                  <p className="font-serif text-[1.9rem] font-light leading-tight text-white">
+                    Every September, we bring the world together on California’s coast.
+                  </p>
+                </div>
+              </div>
+              <div className="grid gap-3 px-1 pb-2 pt-4 sm:grid-cols-3">
+                <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
+                  <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="eyebrow mb-2">Annual Edition</p>
+                  <p className="body-copy text-white/68">September 19-20, 2026</p>
+                </div>
+                <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
+                  <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="eyebrow mb-2">Location</p>
+                  <p className="body-copy text-white/68">California Coast</p>
+                </div>
+                <div className="glass-card glass-card-dark rounded-[18px] px-4 py-4">
+                  <Globe2 className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <p className="eyebrow mb-2">Guests In 2025</p>
+                  <p className="body-copy text-white/68">1,500+ from diverse backgrounds</p>
+                </div>
+              </div>
+            </GlassCard>
           </div>
         </div>
       </section>
 
-      {eventsFeed?.degraded ? (
-        <section className="px-5 py-4 sm:px-10 lg:px-16">
-          <div className="mx-auto max-w-7xl">
-            <GlassCard warm className="px-5 py-5">
-              <p className="eyebrow mb-3">Live Catalog Status</p>
-              <p className="body-copy text-white/68">
-                {eventsFeed.degraded_message ||
-                  "The live event database is unavailable. This page is showing a curated fallback schedule, and ticket purchase stays closed until the real catalog is healthy again."}
-              </p>
-            </GlassCard>
-          </div>
-        </section>
-      ) : null}
-
-      <section className="px-5 py-8 sm:px-10 lg:px-16">
+      <section className="relative z-10 px-5 py-8 sm:px-10 lg:px-16">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 lg:grid-cols-4">
           {HERO_STATS.map((item) => (
-            <div
-              key={item.label}
-            >
-              <GlassCard gold className="h-full px-5 py-6">
-                <p className="eyebrow mb-3">{item.label}</p>
-                <p className="font-serif text-[2.3rem] font-light tracking-[0.05em] text-[var(--gold)]">
-                  {item.value}
-                </p>
-              </GlassCard>
-            </div>
+            <GlassCard key={item.label} gold className="h-full px-5 py-6">
+              <p className="eyebrow mb-3">{item.label}</p>
+              <p className="font-serif text-[2.1rem] font-light tracking-[0.05em] text-[var(--gold)]">
+                {item.value}
+              </p>
+            </GlassCard>
           ))}
         </div>
       </section>
 
-      <section className="px-5 py-6 sm:px-10 sm:py-8 lg:px-16">
+      <section id="experience" className="relative z-10 px-5 py-12 sm:px-10 sm:py-16 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          <GlassCard warm className="px-5 py-6 md:px-6">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-              <div className="max-w-2xl">
-                <p className="eyebrow mb-3">How Mobile Booking Works</p>
-                <h2 className="section-title text-[2rem]">
-                  From social click to confirmed <em>entry</em>
-                </h2>
-                <p className="body-copy mt-4 text-white/58">
-                  {liveCatalogHealthy
-                    ? "The mobile flow is built for speed: choose the event, build the order, and move into secure payment without losing context."
-                    : "The mobile flow stays honest when live ticket inventory is offline: review the event, contact the team, or join the list instead of being pushed into a broken purchase path."}
+          <div className="mb-12 max-w-3xl">
+            <p className="eyebrow mb-4">THE EXPERIENCE</p>
+            <h2 className="section-title">
+              Parties designed like a full cultural <em>escape</em>
+            </h2>
+            <p className="body-copy mt-5 text-white/66">
+              BEDOUIN White Parties blend the clean visual impact of all-white styling with
+              Arabian-inspired hospitality, beach energy, curated music, food stations, and lounge
+              moments that make every guest feel part of the scene.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {experiencePoints.map((item) => (
+              <GlassCard key={item.title} hover className="h-full px-5 py-6">
+                <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                <h3 className="section-subtitle text-[1.35rem]">{item.title}</h3>
+                <p className="body-copy mt-4 text-white/64">{item.body}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 px-5 py-12 sm:px-10 lg:px-16">
+        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
+          <GlassCard dark className="px-6 py-6">
+            <p className="eyebrow mb-3">ABOUT BEDOUIN</p>
+            <h2 className="section-title text-[2rem]">
+              A cultural bridge on the <em>sand</em>
+            </h2>
+            <p className="body-copy mt-5 text-white/66">
+              Every September, we bring the world together for an extraordinary celebration on
+              California’s most breathtaking coasts. Launching its inaugural edition in 2025, the
+              BEDOUIN White Party made a massive wave, welcoming over 1,500 guests from diverse
+              backgrounds and nationalities to celebrate unity and community.
+            </p>
+            <p className="body-copy mt-4 text-white/66">
+              This is more than just a beach party. It is a vibrant, immersive cultural bridge
+              where global diversity meets the rich tapestry of Middle Eastern heritage through
+              music, art, shared experience, and hospitality.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <LiquidLinkButton href="#recap" gold>
+                Join Us This September <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+              </LiquidLinkButton>
+              <LiquidLinkButton href="/events">Get Notified</LiquidLinkButton>
+            </div>
+          </GlassCard>
+
+          <GlassCard className="px-6 py-6">
+            <p className="eyebrow mb-3">VISION &amp; MISSION</p>
+            <h2 className="section-title text-[2rem]">
+              Where heritage meets the <em>world</em>
+            </h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-5">
+                <p className="eyebrow mb-2">Our Vision</p>
+                <p className="body-copy text-white/64">
+                  To become the premier cultural beach festival in the United States and a leading
+                  global destination that seamlessly blends diverse communities while celebrating
+                  Arabic heritage in a modern, inclusive, and upscale setting.
                 </p>
               </div>
-              <LiquidLinkButton href={featuredCheckoutHref} gold className="w-full justify-center lg:w-auto">
-                {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}
-              </LiquidLinkButton>
-            </div>
-
-            <div className="mt-6 grid gap-3 md:grid-cols-3">
-              {[
-                {
-                  icon: CalendarDays,
-                  title: "Choose The Night",
-                  body: "Open the live event page, confirm the date, venue, and current access tiers.",
-                },
-                {
-                  icon: ShieldCheck,
-                  title: "Build The Order",
-                  body: "Ticket quantities, fees, and promo checks happen inside the ZOYA checkout flow.",
-                },
-                {
-                  icon: Sparkles,
-                  title: "Receive Confirmation",
-                  body: "Paid orders trigger QR delivery and clear arrival instructions before the event.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
-                >
-                  <item.icon className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                  <p className="eyebrow mb-2">{item.title}</p>
-                  <p className="body-copy text-[0.8rem] text-white/60">{item.body}</p>
-                </div>
-              ))}
+              <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-5">
+                <p className="eyebrow mb-2">Our Mission</p>
+                <p className="body-copy text-white/64">
+                  To create an inspiring annual gathering that unites people of all backgrounds
+                  through the universal languages of art and music while presenting the true
+                  essence, joy, and hospitality of Arabic culture.
+                </p>
+              </div>
             </div>
           </GlassCard>
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
+      <section id="recap" className="relative z-10 px-5 py-12 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Count Down"
-            title="The room is almost"
-            goldWord="ready"
-            subtitle="The next headline ZOYA night is already on the calendar. Tickets, guest flow, and hospitality tiers are structured for an elegant, high-energy evening from first arrival to final close."
-          />
-          <CountdownTimer
-            targetDate={new Date(nextEvent?.countdownIso || SITE.countdownIso)}
-            label={nextEvent ? `Until ${nextEvent.title}` : "Next marquee countdown"}
-          />
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                icon: CalendarDays,
-                label: "Event",
-                value: nextEvent?.title || "ZOYA signature night",
-              },
-              {
-                icon: MapPin,
-                label: "Venue",
-                value: nextEvent?.shortVenue || SITE.venue,
-              },
-              {
-                icon: Sparkles,
-                label: "Experience",
-                value:
-                  nextEvent?.shortDescription ||
-                  "Black-tie atmosphere with live performance",
-              },
-            ].map((item) => (
-              <GlassCard key={item.label} className="px-5 py-5">
-                <item.icon className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                <p className="eyebrow mb-2">{item.label}</p>
-                <p className="body-copy text-white/68">{item.value}</p>
-              </GlassCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Featured Event"
-            title={featuredEvent?.title.split(" ").slice(0, -1).join(" ") || "Arab Nights"}
-            goldWord={featuredEvent?.title.split(" ").slice(-1).join(" ") || "returns"}
-            subtitle={featuredEvent?.description || FEATURED_EVENT.description}
-          />
-          <GlassCard hover className="grid overflow-hidden rounded-[26px] lg:grid-cols-[1fr_1.08fr]">
-            <div className="relative min-h-[360px]">
-              <Image
-                src={featuredEvent?.coverImageUrl || FEATURED_EVENT.image}
-                alt={featuredEvent?.title || FEATURED_EVENT.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 44vw"
-              />
+          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="eyebrow mb-4">2025 RECAP</p>
+              <h2 className="section-title">
+                Relive the <em>night</em>
+              </h2>
+              <p className="body-copy mt-5 text-white/66">
+                A look back at the energy, the crowd, and the moments that made our first BEDOUIN
+                White Party unforgettable.
+              </p>
             </div>
-              <div className="px-6 py-7 md:px-8 md:py-8">
-                <p className="eyebrow mb-4">Signature Experience</p>
-                <h3 className="section-title text-[2.25rem]">
-                  {featuredEvent?.title || FEATURED_EVENT.title} <em>night</em>
-                </h3>
-                <div className="gold-divider-left mt-5 h-px w-24" />
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
-                  <GlassCard dark className="px-4 py-4">
-                    <p className="eyebrow mb-2">Date</p>
-                    <p className="body-copy text-white/70">
-                      {featuredEvent?.formattedDate || FEATURED_EVENT.date}
-                    </p>
-                  </GlassCard>
-                  <GlassCard dark className="px-4 py-4">
-                    <p className="eyebrow mb-2">Venue</p>
-                    <p className="body-copy text-white/70">
-                      {featuredEvent?.shortVenue || FEATURED_EVENT.venue}
-                    </p>
-                  </GlassCard>
-                </div>
-                <div className="mt-6 grid gap-3">
-                  {(
-                    featuredEvent?.ticketTypes.length
-                      ? [
-                          featuredEvent.ticketsAvailable
-                            ? "Live checkout is active for this event."
-                            : "Ticket inventory is currently unavailable.",
-                          `Pricing starts at $${featuredEvent.priceFrom}`,
-                          featuredEvent.shortDescription,
-                          `${featuredEvent.shortVenue}, ${featuredEvent.cityLine}`,
-                        ]
-                      : FEATURED_EVENT.details
-                  ).map((detail) => (
-                    <GlassCard key={detail} className="px-4 py-4">
-                      <p className="body-copy text-white/68">{detail}</p>
-                    </GlassCard>
-                  ))}
-                </div>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-                  <LiquidLinkButton
-                    href={featuredCheckoutHref}
-                    gold
-                    className="w-full justify-center sm:w-auto"
-                  >
-                    {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}
-                  </LiquidLinkButton>
-                  <LiquidLinkButton
-                    href={featuredDetailHref}
-                    className="w-full justify-center sm:w-auto"
-                  >
-                    View Details
-                  </LiquidLinkButton>
-                </div>
-              </div>
-            </GlassCard>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Why ZOYA"
-            title="Premium nights need stronger"
-            goldWord="control"
-            subtitle="We are hired when clients want the evening to feel expensive, effortless, and culturally alive. That takes more than decoration. It takes real production structure."
-          />
-          <div className="grid gap-5 lg:grid-cols-3">
-            {WHY_ZOYA.map((item, index) => {
-              const icons = [Music4, ShieldCheck, Globe2];
-              const Icon = icons[index];
-
-              return (
-                <GlassCard key={item.title} hover className="px-6 py-7">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(135deg,rgba(198,169,98,0.18),rgba(198,169,98,0.06))]">
-                    <Icon className="h-5 w-5 text-[var(--gold)]" strokeWidth={1.2} />
-                  </div>
-                  <h3 className="font-serif text-[2rem] font-light tracking-[0.05em] text-white">
-                    {item.title}
-                  </h3>
-                  <div className="gold-divider-left mt-4 h-px w-24" />
-                  <p className="body-copy mt-5">{item.body}</p>
-                </GlassCard>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Access Options"
-            title="Choose the right level of"
-            goldWord="arrival"
-            subtitle={
-              liveCatalogHealthy
-                ? "Each tier is structured around sightlines, service flow, and the feeling you want your night to carry. Pricing and availability below are tied to the live event catalog."
-                : "These access tiers are representative of the ZOYA guest experience. Live pricing and availability reopen only when the real event catalog is healthy."
-            }
-          />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredTicketTypes.map((ticket) => (
-              <div
-                key={ticket.id}
-              >
-                <GlassCard hover className="h-full px-6 py-6">
-                  <div
-                    className="mb-5 h-1.5 rounded-full"
-                    style={{ background: `linear-gradient(90deg, ${ticket.color}, transparent)` }}
-                  />
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="eyebrow mb-3">Ticket Tier</p>
-                      <h3 className="font-serif text-[2rem] font-light tracking-[0.05em] text-white">
-                        {ticket.name}
-                      </h3>
-                    </div>
-                    {ticket.badge ? (
-                      <span className="liquid-button-gold px-4 py-2 !text-[9px]">{ticket.badge}</span>
-                    ) : null}
-                  </div>
-                  <p className="mt-4 font-serif text-[2.2rem] font-light tracking-[0.04em] text-[var(--gold)]">
-                    ${ticket.price}
-                  </p>
-                  <p className="body-copy mt-4">{ticket.description}</p>
-                  <LiquidLinkButton
-                    href={featuredCheckoutHref}
-                    gold
-                    className="mt-7 w-full justify-center"
-                  >
-                    {liveCatalogHealthy && featuredEvent?.ticketsAvailable
-                      ? "Buy Ticket"
-                      : "Browse Events"}
-                  </LiquidLinkButton>
-                </GlassCard>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Services"
-            title="Capabilities built for premium"
-            goldWord="events"
-            subtitle="The same discipline that shapes our public nights is available to private clients, brands, and partners looking for a more controlled event standard."
-          />
-          <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
-            {serviceHighlights.map((service) => (
-              <GlassCard key={service.title} hover className="h-full px-5 py-6">
-                <p className="eyebrow mb-3">{service.category}</p>
-                <h3 className="font-serif text-[1.8rem] font-light tracking-[0.05em] text-white">
-                  {service.title}
-                </h3>
-                <div className="gold-divider-left mt-4 h-px w-20" />
-                <p className="body-copy mt-5">{service.summary}</p>
-              </GlassCard>
-            ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <LiquidLinkButton href="/services" gold>
-              View All Services
+            <LiquidLinkButton href="/events" gold>
+              Watch The 2025 Recap <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
             </LiquidLinkButton>
           </div>
+
+          <GlassCard dark className="overflow-hidden p-3">
+            <div className="overflow-hidden rounded-[18px]">
+              <video
+                src={SITE.heroVideo}
+                autoPlay
+                loop
+                muted
+                playsInline
+                controls
+                preload="metadata"
+                poster="/bedouin/vibeup-31.jpg"
+                className="aspect-[16/9] w-full object-cover"
+              />
+            </div>
+          </GlassCard>
         </div>
       </section>
 
-      <section className="px-6 py-20 md:px-10 lg:px-16">
+      <section className="relative z-10 px-5 py-12 sm:px-10 lg:px-16">
         <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Past Moments"
-            title="Proof of atmosphere and"
-            goldWord="scale"
-            subtitle="A selection of frames from previous productions, capturing the visual texture, room energy, and production finish that define the ZOYA signature."
-          />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {galleryHighlights.map((item) => (
-              <div
-                key={`${item.title}-${item.image}`}
-              >
-                <GlassCard hover className="overflow-hidden p-3">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[18px]">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition duration-500 hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.85))]" />
-                    <div className="absolute inset-x-0 bottom-0 p-5">
-                      <p className="eyebrow mb-2">{item.date}</p>
-                      <h3 className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white">
-                        {item.title}
-                      </h3>
-                    </div>
-                  </div>
-                </GlassCard>
-              </div>
-            ))}
+          <div className="mb-8 max-w-3xl">
+            <p className="eyebrow mb-4">PARTY FLOW</p>
+            <h2 className="section-title">
+              Every detail has a <em>role</em>
+            </h2>
           </div>
-          <div className="mt-8 flex justify-center">
-            <LiquidLinkButton href="/gallery">Open Gallery</LiquidLinkButton>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Client Voices"
-            title="How the experience"
-            goldWord="lands"
-            subtitle="Our best feedback tends to say the same thing in different ways: the room feels calm, elevated, and fully considered, even when the event energy is high. These are representative client and guest impressions, not live booking metrics."
-          />
-          <div className="hidden gap-5 lg:grid lg:grid-cols-3">{testimonialCards}</div>
-          <div className="lg:hidden">
-            <SwipeCarousel items={testimonialCards} />
-          </div>
-        </div>
-      </section>
-
-      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <SectionHeader
-            eyebrow="Partners"
-            title="Trusted by venues, producers, and"
-            goldWord="collaborators"
-            subtitle="We work best in rooms where quality matters, timing matters, and the brand around the event matters as much as the event itself. These partner references are brand proof, not live event inventory signals."
-          />
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-            {PARTNERS.map((partner) => (
-              <GlassCard key={partner} className="flex items-center justify-center px-4 py-6 text-center">
-                <p className="eyebrow text-white/28">{partner}</p>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {flow.map((item) => (
+              <GlassCard key={item.step} hover className="h-full px-5 py-6">
+                <p className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-[var(--gold)]">
+                  {item.step}
+                </p>
+                <h3 className="mt-2 section-subtitle text-[1.35rem]">{item.title}</h3>
+                <p className="body-copy mt-4 text-white/64">{item.body}</p>
               </GlassCard>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-5 pb-20 pt-12 sm:px-10 lg:px-16">
-        <div className="mx-auto max-w-5xl">
-          <GlassCard gold className="px-6 py-8 text-center md:px-10 md:py-10">
-            <p className="eyebrow mb-4">Private Access</p>
-            <h2 className="section-title">
-              Join the guest list <em>early</em>
-            </h2>
-            <p className="body-copy mx-auto mt-5 max-w-2xl">
-              Receive first access to new releases, private event announcements, premium table
-              opportunities, and editorial recaps from ZOYA productions.
-            </p>
-            <div className="mt-8 flex justify-center">
-              <NewsletterForm source="home-cta" />
+      <section className="relative z-10 px-5 py-12 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="eyebrow mb-4">THIS SEPTEMBER</p>
+              <h2 className="section-title">
+                BEDOUIN White Party <em>Calendar</em>
+              </h2>
+            </div>
+            <LiquidLinkButton href="/events" gold>
+              View details <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+            </LiquidLinkButton>
+          </div>
+
+          <GlassCard warm className="overflow-hidden p-4">
+            <div className="grid gap-4 lg:grid-cols-[1fr_0.9fr]">
+              <div className="relative min-h-[340px] overflow-hidden rounded-[18px]">
+                <Image
+                  src={featuredEvent.image}
+                  alt={featuredEvent.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.82))]" />
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <p className="eyebrow mb-2 text-white/55">Annual Celebration</p>
+                  <h3 className="font-serif text-[2rem] font-light leading-tight text-white">
+                    Join Us This September — Get Notified
+                  </h3>
+                </div>
+              </div>
+
+              <div className="grid gap-3">
+                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                  <p className="eyebrow mb-2">Event</p>
+                  <p className="body-copy text-white/68">{featuredEvent.title}</p>
+                </div>
+                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                  <p className="eyebrow mb-2">Date</p>
+                  <p className="body-copy text-white/68">{featuredEvent.date}</p>
+                </div>
+                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                  <p className="eyebrow mb-2">Venue</p>
+                  <p className="body-copy text-white/68">{featuredEvent.venue}</p>
+                </div>
+                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
+                  <p className="eyebrow mb-2">Description</p>
+                  <p className="body-copy text-white/68">{featuredEvent.summary}</p>
+                </div>
+              </div>
             </div>
           </GlassCard>
         </div>
       </section>
 
-      <StickyBuyCTA
-        href={featuredCheckoutHref}
-        price={featuredEvent?.ticketsAvailable ? featuredEvent.priceFrom : undefined}
-        label={featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}
-      />
+      <section className="px-5 py-12 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 max-w-3xl">
+            <p className="eyebrow mb-4">REAL MOMENTS</p>
+            <h2 className="section-title">
+              See the atmosphere before you <em>book</em>
+            </h2>
+            <p className="body-copy mt-5 text-white/66">
+              Open the gallery to understand the mood, crowd, food, music, and service standard.
+            </p>
+          </div>
+
+          <SwipeCarousel
+            items={bedouinPhotos.map((src, index) => (
+              <div key={src} className="overflow-hidden rounded-[18px] bg-white/[0.02] p-3">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[16px]">
+                  <Image
+                    src={src}
+                    alt={`BEDOUIN gallery preview ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.7))]" />
+                  <div className="absolute inset-x-0 bottom-0 p-5">
+                    <p className="eyebrow mb-2 text-white/55">BEDOUIN party gallery preview {index + 1}</p>
+                    <p className="font-serif text-[1.45rem] font-light leading-tight text-white">
+                      White attire. Warm hospitality. A night people remember.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          />
+
+          <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {GALLERY_ITEMS.slice(0, 4).map((item) => (
+              <GlassCard key={item.title} dark className="overflow-hidden p-3">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[18px]">
+                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                </div>
+                <div className="px-2 pb-2 pt-4">
+                  <p className="eyebrow mb-2">{item.date}</p>
+                  <h3 className="font-serif text-[1.4rem] font-light tracking-[0.05em] text-white">
+                    {item.title}
+                  </h3>
+                </div>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative z-10 px-5 py-16 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-7xl">
+          <GlassCard className="px-6 py-8 md:px-8">
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-2xl">
+                <p className="eyebrow mb-3">MORE THAN A PARTY</p>
+                <h2 className="section-title text-[2.2rem]">
+                  An immersive production that connects culture, people, music, food, and timeless
+                  <em>moments</em>
+                </h2>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <LiquidLinkButton href="/events" gold>
+                  Discover More <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
+                </LiquidLinkButton>
+                <LiquidLinkButton href="/contact-us">Join Us This September</LiquidLinkButton>
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+      </section>
     </main>
   );
 }

@@ -10,7 +10,7 @@ import { getPublicEventsFeed } from "@/lib/public-events";
 export const metadata: Metadata = {
   title: "Events",
   description:
-    "Browse live ZOYA events, ticket availability, venues, and premium cultural experiences from the active event catalog.",
+    "Browse BEDOUIN White Party dates, premium beach and desert-style experiences, and the full event archive.",
 };
 
 export default async function EventsPage() {
@@ -24,16 +24,16 @@ export default async function EventsPage() {
   return (
     <main className="overflow-x-hidden pb-20">
       <PageHero
-        eyebrow="Events Calendar"
-        title="Find your next ZOYA"
-        goldWord="experiences"
-        description="Browse upcoming events, compare dates and venues, and buy tickets when live checkout is open."
+        eyebrow="This September"
+        title="BEDOUIN White Party"
+        goldWord="Calendar"
+        description="Browse upcoming BEDOUIN experiences, compare dates and venues, and open the new annual celebration."
         media={
           <GlassCard className="overflow-hidden p-3">
             <div className="relative min-h-[320px] sm:min-h-[500px] overflow-hidden rounded-[18px]">
               <Image
-                src={featuredEvent?.coverImageUrl || "/arabnights-1200.webp"}
-                alt={featuredEvent?.title || "ZOYA events"}
+                src={featuredEvent?.coverImageUrl || "/bedouin/vibeup-31.jpg"}
+                alt={featuredEvent?.title || "BEDOUIN events"}
                 fill
                 priority
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 42vw"
@@ -45,10 +45,10 @@ export default async function EventsPage() {
         actions={
           <>
             <LiquidLinkButton href={featuredCheckoutHref} gold>
-              {featuredEvent?.ticketsAvailable ? "Buy Tickets" : "Browse Events"}{" "}
+              {featuredEvent?.ticketsAvailable ? "Reserve Access" : "Browse Events"}{" "}
               <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
             </LiquidLinkButton>
-            <LiquidLinkButton href="/contact-us">Plan Private Event</LiquidLinkButton>
+            <LiquidLinkButton href="/contact-us">Join The List</LiquidLinkButton>
           </>
         }
       />
@@ -72,18 +72,18 @@ export default async function EventsPage() {
           {[
             {
               icon: CalendarRange,
-              label: "Live Catalog",
-              body: "Published events, featured placements, and sold-out states now come from the event database instead of a static marketing list.",
+              label: "Annual Edition",
+              body: "The BEDOUIN calendar centers on one signature white-party experience each September, with the archive available beside it.",
             },
             {
               icon: Music2,
               label: "Programming",
-              body: "Live performers, DJs, hosts, and social pacing designed to keep the room emotionally alive without losing production control.",
+              body: "Live musicians, DJs, majlis moments, and coastal hospitality designed to move from elegant sunset to high-energy night.",
             },
             {
               icon: Sparkles,
               label: "Guest Standard",
-              body: "Premium hospitality, elegant arrival, and clear guest guidance from pre-event communications through venue entry.",
+              body: "White dress code, elevated food, and premium service from arrival through the final lounge sequence.",
             },
           ].map((item) => (
             <GlassCard key={item.label} gold className="h-full px-5 py-5">
@@ -101,7 +101,7 @@ export default async function EventsPage() {
             eyebrow="Browse The Calendar"
             title="Compare dates, venues, and"
             goldWord="history"
-            subtitle="Use the filters to find upcoming ticketed nights, review past events, and open checkout only when inventory is available."
+            subtitle="Use the filters to find the annual BEDOUIN edition, review the archive, and open the experience details."
           />
           <EventsShowcase upcoming={feed.upcoming} past={feed.past} />
         </div>
@@ -141,7 +141,7 @@ export default async function EventsPage() {
                       ? "Live ticket inventory is currently available."
                       : "Ticket inventory is temporarily unavailable.",
                   ].map((detail) => (
-                    <div
+                  <div
                       key={detail}
                       className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
                     >

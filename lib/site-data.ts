@@ -13,7 +13,7 @@ export const SITE = {
   credit: "Presented by FR ع · California Nights Entertainment",
   frInstagram: "https://www.instagram.com/fr3_fdn/?__pwa=1",
   countdownIso: "2026-12-31T20:30:00",
-  heroVideo: "/arab.mp4",
+  heroVideo: "/bedouin/recap2final.mp4",
   ambientAudio: "/luxury-ambient.mp3",
   socials: {
     whatsapp: "https://wa.me/19492479309",
@@ -41,10 +41,10 @@ export const SECONDARY_NAV_LINKS = [
 ] as const;
 
 export const HERO_STATS = [
-  { label: "Events Produced", value: "50+" },
-  { label: "Guests Served", value: "10,000+" },
-  { label: "Years Of Experience", value: "7" },
-  { label: "Cities Activated", value: "4" },
+  { label: "Guests in 2025", value: "1,500+" },
+  { label: "Annual Edition", value: "September" },
+  { label: "Culture + Hospitality", value: "01" },
+  { label: "White Party Standard", value: "Premium" },
 ] as const;
 
 export const TICKET_TYPES = [
@@ -106,6 +106,19 @@ export const TICKET_TYPES = [
 
 export const UPCOMING_EVENTS = [
   {
+    title: "BEDOUIN White Party",
+    slug: "bedouin-white-party",
+    date: "September 19-20, 2026",
+    isoDate: "2026-09-19T16:00:00",
+    venue: "California Coast",
+    city: "California, United States",
+    priceFrom: 0,
+    status: "upcoming" as const,
+    image: "/bedouin/vibeup-31.jpg",
+    summary:
+      "Premium beach and desert-style gatherings with white dress code, majlis lounges, live music, elevated food, and a community that comes ready to celebrate.",
+  },
+  {
     title: "Arab Nights ft. Abdel Karim",
     slug: "arab-nights",
     date: "March 28, 2026",
@@ -117,19 +130,6 @@ export const UPCOMING_EVENTS = [
     image: "/arabnights-1200.webp",
     summary:
       "A black-tie cultural celebration with live performance, premium dining, ceremonial arrival moments, and a deeply atmospheric midnight sequence.",
-  },
-  {
-    title: "Ramadan Night Gala",
-    slug: "ramadan-night-gala",
-    date: "April 15, 2026",
-    isoDate: "2026-04-15T19:30:00",
-    venue: "Beverly Wilshire Hotel",
-    city: "Beverly Hills, CA",
-    priceFrom: 150,
-    status: "upcoming" as const,
-    image: "/gala-hero.jpg",
-    summary:
-      "An elegant evening built around hospitality, performance, fine dining, and a polished production language tailored to premium cultural gatherings.",
   },
   {
     title: "Summer Rooftop Series",
@@ -203,19 +203,19 @@ export const PAST_EVENTS = [
 ] as const;
 
 export const FEATURED_EVENT = {
-  eyebrow: "Featured Event",
-  title: "Abdel Karim’s Arab Nights",
+  eyebrow: "This September",
+  title: "BEDOUIN White Party",
   goldWord: "Returns",
   description:
-    "An evening of ceremony, voice, dining, and atmosphere produced for guests who expect more than a party. Arab Nights is built as a complete journey, from arrival and reception to performance, social immersion, and a precisely timed finale.",
-  image: "/arabnights-1200.webp",
-  venue: SITE.venue,
-  date: "March 28",
+    "Premium beach and desert-style gatherings with white dress code, majlis lounges, live music, elevated food, and a community that comes ready to celebrate.",
+  image: "/bedouin/vibeup-31.jpg",
+  venue: "California Coast",
+  date: "September 19-20",
   details: [
-    "Red-carpet arrival with editorial photo moments",
-    "Headline performance by Abdel Karim Hamdan",
-    "Luxury hospitality flow and curated guest experience",
-    "Refined seating tiers with premium table service options",
+    "White dress code with elevated arrival moments",
+    "Majlis lounges, coastal hospitality, and curated food stations",
+    "Live music, percussion, and premium night energy",
+    "A community-centered celebration built around unity",
   ],
 };
 
@@ -536,15 +536,15 @@ export const PARTNERS = [
 ] as const;
 
 export const GALLERY_ITEMS = [
-  { category: "events", image: "/VIBEUP21-1600.webp", title: "New Year’s Eve Gala", date: "December 31, 2025" },
-  { category: "events", image: "/VIBEUP22.jpeg", title: "Arab Nights Reception", date: "March 28, 2025" },
-  { category: "artists", image: "/VIBEUP9.jpg", title: "Featured Artist Performance", date: "March 28, 2025" },
-  { category: "venues", image: "/stage-1600.webp", title: "Stage & Lighting Architecture", date: "January 2026" },
-  { category: "behind-the-scenes", image: "/VIBEUP4.jpg", title: "Production Build", date: "October 2025" },
-  { category: "events", image: "/VIBEUP10.jpg", title: "Guest Arrival Story", date: "October 12, 2025" },
-  { category: "artists", image: "/VIBEUP11.jpg", title: "Voices Of Legends", date: "August 2025" },
-  { category: "venues", image: "/gala-hero.jpg", title: "Dining & Table Setting", date: "January 2026" },
-  { category: "behind-the-scenes", image: "/VIBEUP13.jpg", title: "Team Coordination", date: "June 2025" },
+  { category: "events", image: "/bedouin/vibeup-31.jpg", title: "White Party Arrival", date: "September 2025" },
+  { category: "events", image: "/bedouin/vibeup-50.jpg", title: "Guest Portrait Moment", date: "September 2025" },
+  { category: "artists", image: "/bedouin/vibeup-113.jpg", title: "Night Performance", date: "September 2025" },
+  { category: "venues", image: "/bedouin/vibeup-64.jpg", title: "Majlis Hospitality", date: "September 2025" },
+  { category: "behind-the-scenes", image: "/bedouin/vibeup-16.jpg", title: "Bar Service", date: "September 2025" },
+  { category: "events", image: "/bedouin/vibeup-204.jpg", title: "Dance Circle Energy", date: "September 2025" },
+  { category: "artists", image: "/bedouin/vibeup-117.jpg", title: "Live Violin", date: "September 2025" },
+  { category: "venues", image: "/bedouin/vibeup-51.jpg", title: "Beach Lounge Texture", date: "September 2025" },
+  { category: "behind-the-scenes", image: "/bedouin/vibeup-348.jpg", title: "Crew And Crowd", date: "September 2025" },
 ] as const;
 
 export const GALLERY_VIDEOS = [
