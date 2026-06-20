@@ -183,48 +183,51 @@ export default function HomePage() {
             <h2 className="section-title">
               Experience the stadium atmosphere inside <em>Grand Theater Anaheim</em>
             </h2>
-            <p className="body-copy mt-5 text-white/66">
+            <p className="body-copy mt-5 max-w-2xl text-white/82">
               Massive LED match viewing, thousands of football fans, DJ sets before and after each
               match, premium indoor venue comfort, and a stronger focus on Arab national teams.
             </p>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-[0.92fr_1.08fr]">
-            <GlassCard dark className="px-5 py-6">
-              <p className="eyebrow mb-4">Featured Nations</p>
-              <div className="flex flex-wrap gap-2">
-                {arabNations.map((nation) => (
-                  <span
-                    key={nation}
-                    className="rounded-full border border-white/12 bg-white/[0.04] px-3 py-2 text-[0.78rem] text-white/78"
-                  >
-                    {nation}
-                  </span>
+          <div className="grid gap-4 lg:grid-cols-[1.06fr_0.94fr]">
+            <div className="grid gap-4">
+              <div className="grid gap-4 sm:grid-cols-3">
+                {["/bedouin/worldcup-1.jpg", "/bedouin/worldcup-2.jpg", "/bedouin/worldcup-3.jpg"].map((src, index) => (
+                  <GlassCard key={src} dark className="overflow-hidden p-3">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-[16px]">
+                      <Image src={src} alt={`World Cup fan festival image ${index + 1}`} fill className="object-cover" />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.72))]" />
+                    </div>
+                  </GlassCard>
                 ))}
               </div>
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
-                  <p className="eyebrow mb-2">Venue</p>
-                  <p className="body-copy text-white/68">Grand Theater Anaheim</p>
+
+              <GlassCard dark className="px-5 py-6">
+                <p className="eyebrow mb-4">Featured Nations</p>
+                <div className="flex flex-wrap gap-2">
+                  {arabNations.map((nation) => (
+                    <span
+                      key={nation}
+                      className="rounded-full border border-white/14 bg-white/[0.05] px-3 py-2 text-[0.78rem] text-white/88"
+                    >
+                      {nation}
+                    </span>
+                  ))}
                 </div>
-                <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
-                  <p className="eyebrow mb-2">Contact</p>
-                  <p className="body-copy text-white/68">754-262-0884</p>
-                </div>
-              </div>
-            </GlassCard>
+              </GlassCard>
+            </div>
 
             <GlassCard className="px-5 py-6">
               <p className="eyebrow mb-4">Match Schedule</p>
               <div className="grid gap-3">
                 {worldCupMatches.map((item) => (
-                  <div key={item.day} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
-                    <p className="eyebrow mb-2">{item.day}</p>
+                  <div key={item.day} className="rounded-[18px] border border-white/10 bg-white/[0.03] px-4 py-4">
+                    <p className="eyebrow mb-2 text-white/78">{item.day}</p>
                     <div className="flex flex-wrap gap-2">
                       {item.matches.map((match) => (
                         <span
                           key={match}
-                          className="rounded-full border border-[rgba(198,169,98,0.28)] bg-[rgba(198,169,98,0.08)] px-3 py-2 text-[0.78rem] text-white/84"
+                          className="rounded-full border border-[rgba(198,169,98,0.34)] bg-[rgba(198,169,98,0.1)] px-3 py-2 text-[0.78rem] text-white/92"
                         >
                           {match}
                         </span>
@@ -232,6 +235,16 @@ export default function HomePage() {
                     </div>
                   </div>
                 ))}
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] px-4 py-4">
+                  <p className="eyebrow mb-2 text-white/78">Venue</p>
+                  <p className="body-copy text-white/88">Grand Theater Anaheim</p>
+                </div>
+                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] px-4 py-4">
+                  <p className="eyebrow mb-2 text-white/78">Contact</p>
+                  <p className="body-copy text-white/88">754-262-0884</p>
+                </div>
               </div>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <LiquidLinkButton href="/events" gold className="w-full justify-center sm:w-auto">

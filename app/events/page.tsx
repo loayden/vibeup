@@ -114,13 +114,13 @@ export default async function EventsPage() {
                 <h2 className="section-title text-[2rem]">
                   Stadium atmosphere inside <em>Grand Theater Anaheim</em>
                 </h2>
-                <p className="body-copy mt-4 text-white/66">
+                <p className="body-copy mt-4 text-white/84">
                   Massive LED match viewing, DJ entertainment, premium indoor comfort, food and
                   beverage access, and a focused spotlight on Arab national teams.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {featuredNations.map((nation) => (
-                    <span key={nation} className="rounded-full border border-white/12 bg-white/[0.04] px-3 py-2 text-[0.78rem] text-white/78">
+                    <span key={nation} className="rounded-full border border-white/14 bg-white/[0.05] px-3 py-2 text-[0.78rem] text-white/88">
                       {nation}
                     </span>
                   ))}
@@ -128,13 +128,13 @@ export default async function EventsPage() {
               </div>
               <div className="grid gap-3">
                 {worldCupSchedule.map((item) => (
-                  <div key={item.day} className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
-                    <p className="eyebrow mb-2">{item.day}</p>
+                  <div key={item.day} className="rounded-[18px] border border-white/10 bg-white/[0.03] px-4 py-4">
+                    <p className="eyebrow mb-2 text-white/78">{item.day}</p>
                     <div className="flex flex-wrap gap-2">
                       {item.matches.map((match) => (
                         <span
                           key={match}
-                          className="rounded-full border border-[rgba(198,169,98,0.28)] bg-[rgba(198,169,98,0.08)] px-3 py-2 text-[0.78rem] text-white/84"
+                          className="rounded-full border border-[rgba(198,169,98,0.34)] bg-[rgba(198,169,98,0.1)] px-3 py-2 text-[0.78rem] text-white/92"
                         >
                           {match}
                         </span>
