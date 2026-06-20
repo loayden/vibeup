@@ -208,7 +208,7 @@ export default function HomePage() {
                   {arabNations.map((nation) => (
                     <span
                       key={nation}
-                      className="rounded-full border border-white/14 bg-white/[0.05] px-3 py-2 text-[0.78rem] text-white/88"
+                      className="rounded-full border border-[#b9912f]/30 bg-white px-3 py-2 text-[0.78rem] font-medium tracking-[0.08em] text-[#1f1a13]"
                     >
                       {nation}
                     </span>
@@ -221,13 +221,13 @@ export default function HomePage() {
               <p className="eyebrow mb-4">Match Schedule</p>
               <div className="grid gap-3">
                 {worldCupMatches.map((item) => (
-                  <div key={item.day} className="rounded-[18px] border border-white/10 bg-white/[0.03] px-4 py-4">
-                    <p className="eyebrow mb-2 text-white/78">{item.day}</p>
+                  <div key={item.day} className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
+                    <p className="eyebrow mb-2 text-[#33291a]">{item.day}</p>
                     <div className="flex flex-wrap gap-2">
                       {item.matches.map((match) => (
                         <span
                           key={match}
-                          className="rounded-full border border-[rgba(198,169,98,0.34)] bg-[rgba(198,169,98,0.1)] px-3 py-2 text-[0.78rem] text-white/92"
+                          className="rounded-full border border-[#b9912f]/28 bg-white px-3 py-2 text-[0.78rem] font-medium tracking-[0.03em] text-[#1c1c1c]"
                         >
                           {match}
                         </span>
@@ -237,13 +237,13 @@ export default function HomePage() {
                 ))}
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] px-4 py-4">
-                  <p className="eyebrow mb-2 text-white/78">Venue</p>
-                  <p className="body-copy text-white/88">Grand Theater Anaheim</p>
+                <div className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
+                  <p className="eyebrow mb-2 text-[#33291a]">Venue</p>
+                  <p className="body-copy text-[#241b10]">Grand Theater Anaheim</p>
                 </div>
-                <div className="rounded-[18px] border border-white/10 bg-white/[0.03] px-4 py-4">
-                  <p className="eyebrow mb-2 text-white/78">Contact</p>
-                  <p className="body-copy text-white/88">754-262-0884</p>
+                <div className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
+                  <p className="eyebrow mb-2 text-[#33291a]">Contact</p>
+                  <p className="body-copy text-[#241b10]">754-262-0884</p>
                 </div>
               </div>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
