@@ -10,6 +10,7 @@ import {
   Users2,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { HomeHeroVisual } from "@/components/site/home-hero-visual";
 import { GlassCard, LiquidLinkButton } from "@/components/site/liquid";
