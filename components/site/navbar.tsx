@@ -29,20 +29,22 @@ const DESKTOP_LEFT = [
 
 const DESKTOP_RIGHT = [
   { label: "Gallery", href: "/gallery" },
+  { label: "Contact", href: "/contact-us" },
   { label: "FAQ", href: "/faq" },
 ] as const;
 
 const MOBILE_PRIMARY = [
   { label: "Events", href: "/events", icon: CalendarDays },
+  { label: "Contact", href: "/contact-us", icon: Mail },
   { label: "Services", href: "/services", icon: Briefcase },
-  { label: "About", href: "/about", icon: UserRound },
   { label: "Gallery", href: "/gallery", icon: ImageIcon },
-  { label: "FAQ", href: "/faq", icon: HelpCircle },
 ] as const;
 
 const MOBILE_SECONDARY = [
-  { label: "Contact Us", href: "/contact-us", icon: Mail },
-  { label: "Find My Order", href: "/orders/find", icon: ArrowRight },
+  { label: "About", href: "/about", icon: UserRound },
+  { label: "Journal", href: "/blog", icon: ArrowRight },
+  { label: "Careers", href: "/careers", icon: Briefcase },
+  { label: "FAQ", href: "/faq", icon: HelpCircle },
 ] as const;
 
 function isActivePath(pathname: string, href: string) {
@@ -117,43 +119,53 @@ function MobileOverlay({
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: "100%" }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: "100%" }}
-      transition={{ duration: 0.3, ease: EASING }}
-      className="mobile-nav-overlay safe-top safe-bottom fixed inset-y-0 right-0 z-[100] w-[280px] flex flex-col overflow-y-auto"
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+      transition={{ duration: 0.35, ease: EASING }}
+      className="mobile-nav-overlay safe-top safe-bottom fixed inset-0 z-[100] flex flex-col overflow-y-auto"
       style={{
         height: "100dvh",
         WebkitOverflowScrolling: "touch",
-        background: "rgba(13, 8, 8, 0.98)",
-        backdropFilter: "blur(8px)",
+        background:
+          "linear-gradient(160deg, rgba(255,255,255,0.98), rgba(250,247,239,0.98))",
+        paddingLeft: "max(env(safe-area-inset-left), 20px)",
+        paddingRight: "max(env(safe-area-inset-right), 20px)",
       }}
     >
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-        <span
-          style={{
-            fontFamily: "'Cormorant Garamond',serif",
-            fontWeight: 300,
-            fontSize: "1.1rem",
-            letterSpacing: "0.34em",
-            color: "rgba(198,169,98,0.9)",
-            textTransform: "uppercase",
-          }}
-        >
-          ZOYA
-        </span>
+      <div className="absolute inset-x-6 top-0 h-px pointer-events-none bg-[linear-gradient(90deg,transparent,rgba(198,169,98,0.35),transparent)]" />
+
+      <div className="flex items-center justify-between pb-5 pt-2">
+        <div>
+          <p
+            style={{
+              fontFamily: "'Cormorant Garamond',serif",
+              fontWeight: 300,
+              fontSize: "1rem",
+              letterSpacing: "0.34em",
+              color: "rgba(198,169,98,0.74)",
+              textTransform: "uppercase",
+            }}
+          >
+            {SITE.shortName.toUpperCase()}
+          </p>
+          <p className="mt-1 text-[7px] uppercase tracking-[0.36em] text-white/24">
+            Events & Services
+          </p>
+        </div>
+
         <button
           type="button"
           onClick={onClose}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 hover:text-white"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-white/58"
           aria-label="Close menu"
         >
           <X className="h-4 w-4" strokeWidth={1.3} />
         </button>
       </div>
 
-      <div className="flex-1 px-5 py-4">
-        <div className="space-y-1">
+      <div className="grid gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {MOBILE_PRIMARY.map((item) => {
             const active = isActivePath(pathname, item.href);
             const Icon = item.icon;
@@ -164,14 +176,21 @@ function MobileOverlay({
                 href={item.href}
                 onClick={onClose}
                 aria-current={active ? "page" : undefined}
-                className="flex min-h-[44px] items-center gap-3 rounded-lg px-4 py-3 transition-colors"
+                className="glass-card glass-card-warm flex min-h-[76px] items-center gap-3 rounded-[18px] px-4 py-4"
                 style={{
-                  backgroundColor: active ? "rgba(198,169,98,0.15)" : "transparent",
-                  color: active ? "rgba(198,169,98,0.9)" : "rgba(255,255,255,0.8)",
+                  borderColor: active
+                    ? "rgba(198,169,98,0.28)"
+                    : "rgba(255,255,255,0.08)",
+                  background: active
+                    ? "linear-gradient(135deg, rgba(198,169,98,0.12), rgba(198,169,98,0.04))"
+                    : undefined,
                 }}
               >
-                <Icon className="h-4 w-4" strokeWidth={1.2} />
-                <span className="text-sm font-medium tracking-wide">
+                <div className="spec-line" />
+                <span className="flex h-10 w-10 items-center justify-center rounded-[14px] border border-[rgba(198,169,98,0.16)] bg-[rgba(198,169,98,0.08)]">
+                  <Icon className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                </span>
+                <span className="text-[10px] uppercase tracking-[0.22em] text-white/74">
                   {item.label}
                 </span>
               </Link>
@@ -179,51 +198,71 @@ function MobileOverlay({
           })}
         </div>
 
-        <div className="my-4 h-px bg-white/10" />
+        <div className="glass-card glass-card-dark rounded-[22px] p-4">
+          <div className="spec-line" />
+          <p className="eyebrow mb-4">Explore More</p>
+          <div className="grid grid-cols-2 gap-2">
+            {MOBILE_SECONDARY.map((item) => {
+              const active = isActivePath(pathname, item.href);
+              const Icon = item.icon;
 
-        <div className="space-y-1">
-          {MOBILE_SECONDARY.map((item) => {
-            const active = isActivePath(pathname, item.href);
-            const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onClose}
+                  aria-current={active ? "page" : undefined}
+                  className="flex min-h-[52px] items-center gap-3 rounded-[16px] border px-4 py-3"
+                  style={{
+                    borderColor: active
+                      ? "rgba(198,169,98,0.22)"
+                      : "rgba(255,255,255,0.06)",
+                    background: active ? "rgba(198,169,98,0.08)" : "rgba(255,255,255,0.02)",
+                  }}
+                >
+                  <Icon className="h-3.5 w-3.5 text-[var(--gold)]" strokeWidth={1.2} />
+                  <span className="text-[9px] uppercase tracking-[0.22em] text-white/62">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
 
-            return (
+        <div className="glass-card rounded-[22px] p-4">
+          <div className="spec-line" />
+          <p className="eyebrow mb-3">Need A Fast Answer</p>
+          <p className="body-copy text-[0.82rem] text-white/58">
+            Get ticket help, event timing, or order support quickly.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {supportActions.map((item) => (
               <Link
-                key={item.href}
+                key={item.label}
                 href={item.href}
-                onClick={onClose}
-                aria-current={active ? "page" : undefined}
-                className="flex min-h-[44px] items-center gap-3 rounded-lg px-4 py-3 transition-colors"
-                style={{
-                  backgroundColor: active ? "rgba(198,169,98,0.15)" : "transparent",
-                  color: active ? "rgba(198,169,98,0.9)" : "rgba(255,255,255,0.8)",
-                }}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+                className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
               >
-                <Icon className="h-4 w-4" strokeWidth={1.2} />
-                <span className="text-sm font-medium tracking-wide">
-                  {item.label}
-                </span>
+                <p className="eyebrow mb-2 text-[var(--gold)]">{item.label}</p>
+                <p className="body-copy text-white/68">{item.note}</p>
               </Link>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="px-5 py-4 border-t border-white/10 space-y-3">
+      <div className="mt-auto pt-5">
         <Link
-          href="/checkout"
+          href="/contact-us"
           onClick={onClose}
-          className="block w-full bg-amber-500 text-black font-semibold text-sm px-5 py-2.5 rounded-sm text-center"
+          className="liquid-button-gold flex w-full justify-center"
         >
-          Buy Tickets
-        </Link>
-        <Link
-          href={SITE.socials.whatsapp}
-          target="_blank"
-          rel="noreferrer"
-          onClick={onClose}
-          className="block w-full bg-green-600 text-white font-semibold text-sm px-5 py-2.5 rounded-sm text-center"
-        >
-          WhatsApp
+          <span className="inline-flex items-center gap-2">
+            Contact The Team
+            <Mail className="h-3.5 w-3.5" strokeWidth={1.2} />
+          </span>
         </Link>
       </div>
     </motion.div>
@@ -243,10 +282,9 @@ export function SiteNavbar() {
         transition={{ duration: 0.35, ease: EASING }}
         className="site-navbar-shell safe-top fixed inset-x-0 top-0 z-50 transition-all duration-500"
         style={{
-          height: "56px",
           background: liteSurface
-            ? "rgba(13, 8, 8, 0.97)"
-            : "linear-gradient(180deg, rgba(13, 8, 8, 0.96) 0%, rgba(11, 6, 6, 0.92) 100%)",
+            ? "rgba(255,255,255,0.97)"
+            : "linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(255,253,248,0.92) 100%)",
           borderBottom: "1px solid rgba(164,127,43,0.14)",
           boxShadow: "0 8px 28px rgba(69,52,18,0.06)",
         }}
@@ -256,7 +294,7 @@ export function SiteNavbar() {
         <div
           className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10"
           style={{
-            height: "56px",
+            height: 60,
           }}
         >
           <nav className="hidden flex-1 items-center gap-1 lg:flex">
@@ -290,11 +328,24 @@ export function SiteNavbar() {
               <DesktopNavLink key={item.href} href={item.href} label={item.label} />
             ))}
             <Link href="/contact-us" className="liquid-button-gold ml-2">
-              Contact
+              <span className="inline-flex items-center gap-2">
+                Contact
+                <Mail className="h-3.5 w-3.5" strokeWidth={1.2} />
+              </span>
             </Link>
           </nav>
 
           <div className="ml-auto flex items-center gap-2 lg:hidden">
+            <Link
+              href="/contact-us"
+              className="liquid-button-gold min-h-[44px] !px-4"
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <Mail className="h-3 w-3" strokeWidth={1.2} />
+                Contact
+              </span>
+            </Link>
+
             <button
               type="button"
               onClick={() => setOpen((current) => !current)}
@@ -310,7 +361,7 @@ export function SiteNavbar() {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className="h-4 w-4 text-white" strokeWidth={1.35} />
+                    <X className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.35} />
                   </motion.span>
                 ) : (
                   <motion.span
@@ -320,7 +371,7 @@ export function SiteNavbar() {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className="h-4 w-4 text-white" strokeWidth={1.35} />
+                    <Menu className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.35} />
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -330,19 +381,7 @@ export function SiteNavbar() {
       </motion.header>
 
       <AnimatePresence>
-        {open ? (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-[99] bg-black/60"
-              onClick={() => setOpen(false)}
-            />
-            <MobileOverlay onClose={() => setOpen(false)} />
-          </>
-        ) : null}
+        {open ? <MobileOverlay onClose={() => setOpen(false)} /> : null}
       </AnimatePresence>
     </>
   );
