@@ -551,7 +551,7 @@ export function CheckoutExperience({
                   <div className="mt-6 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <button
-                        className="nav-mobile-button !h-12 !w-12"
+                        className="nav-mobile-button !h-11 !w-11"
                         type="button"
                         onClick={(eventObject) => {
                           eventObject.stopPropagation();
@@ -566,7 +566,7 @@ export function CheckoutExperience({
                         {quantity}
                       </span>
                       <button
-                        className="nav-mobile-button !h-12 !w-12"
+                        className="nav-mobile-button !h-11 !w-11"
                         type="button"
                         onClick={(eventObject) => {
                           eventObject.stopPropagation();

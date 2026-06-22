@@ -45,13 +45,17 @@ export default function ContactPage() {
               href: "https://maps.apple.com/?q=Los+Angeles,+CA",
             },
           ].map((item) => (
-            <GlassCard key={item.label} gold className="px-5 py-5">
-              <a href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="block min-h-[52px]">
-                <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-                <p className="eyebrow mb-2">{item.label}</p>
-                <p className="body-copy text-white/68">{item.value}</p>
-              </a>
-            </GlassCard>
+            <a key={item.label} href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="block">
+              <GlassCard gold className="px-5 py-5 hover:border-white/20 transition-colors">
+                <div className="flex items-center gap-3 min-h-[52px]">
+                  <item.icon className="h-5 w-5 text-[var(--gold)]" strokeWidth={1.2} />
+                  <div>
+                    <p className="eyebrow">{item.label}</p>
+                    <p className="body-copy text-white/68">{item.value}</p>
+                  </div>
+                </div>
+              </GlassCard>
+            </a>
           ))}
         </div>
       </section>
@@ -67,14 +71,14 @@ export default function ContactPage() {
                   fastest channel first.
                 </p>
               </div>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <LiquidLinkButton href={SITE.socials.whatsapp} gold external>
+              <div className="scrollbar-hide -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0 sm:pb-0">
+                <LiquidLinkButton href={SITE.socials.whatsapp} gold external className="shrink-0">
                   WhatsApp Support
                 </LiquidLinkButton>
-                <LiquidLinkButton href={`mailto:${SITE.email}`} external>
+                <LiquidLinkButton href={`mailto:${SITE.email}`} external className="shrink-0">
                   Email Team
                 </LiquidLinkButton>
-                <LiquidLinkButton href="/orders/find">
+                <LiquidLinkButton href="/orders/find" className="shrink-0">
                   Find Order
                 </LiquidLinkButton>
               </div>

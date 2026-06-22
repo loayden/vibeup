@@ -24,7 +24,7 @@ export default function FindOrderPage() {
       />
 
       <section className="px-5 pb-20 pt-2 sm:px-10 lg:px-16">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-3xl">
           <OrderLookupForm />
         </div>
       </section>

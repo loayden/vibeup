@@ -100,40 +100,38 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
-          {[
-            { key: "all", label: "All Events" },
-            { key: "upcoming", label: "Upcoming" },
-            { key: "past", label: "Past" },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              className={`${activeTab === tab.key ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
-              onClick={() => setActiveTab(tab.key as "all" | "upcoming" | "past")}
-              data-cursor="hover"
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+      <div className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
+        {[
+          { key: "all", label: "All Events" },
+          { key: "upcoming", label: "Upcoming" },
+          { key: "past", label: "Past" },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            className={`${activeTab === tab.key ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
+            onClick={() => setActiveTab(tab.key as "all" | "upcoming" | "past")}
+            data-cursor="hover"
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-        <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
-          <button
-            className={`${view === "grid" ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
-            onClick={() => setView("grid")}
-            data-cursor="hover"
-          >
-            Cards
-          </button>
-          <button
-            className={`${view === "calendar" ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
-            onClick={() => setView("calendar")}
-            data-cursor="hover"
-          >
-            Calendar
-          </button>
-        </div>
+      <div className="hidden lg:flex gap-2">
+        <button
+          className={`${view === "grid" ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
+          onClick={() => setView("grid")}
+          data-cursor="hover"
+        >
+          Cards
+        </button>
+        <button
+          className={`${view === "calendar" ? "liquid-button-gold" : "liquid-button-ghost"} shrink-0`}
+          onClick={() => setView("calendar")}
+          data-cursor="hover"
+        >
+          Calendar
+        </button>
       </div>
 
       {view === "grid" ? (
@@ -199,14 +197,8 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
 
                         <div className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:gap-4">
                           <LiquidLinkButton
-                            href={`/events/${event.slug}`}
-                            gold
-                            className="w-full justify-center sm:w-auto"
-                          >
-                            Details <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.2} />
-                          </LiquidLinkButton>
-                          <LiquidLinkButton
                             href={event.ticketsAvailable ? `/checkout?event=${event.slug}` : "/contact-us"}
+                            gold
                             className="w-full justify-center sm:w-auto"
                           >
                             {event.ticketsAvailable ? "Buy Tickets" : "Contact"}{" "}
@@ -238,18 +230,18 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                   <div
                     key={event.slug}
                   >
-                    <GlassCard hover className="h-full overflow-hidden p-3">
+                    <GlassCard hover className="h-full overflow-hidden p-3 opacity-75">
                       <div className="relative aspect-[4/5] overflow-hidden rounded-[18px]">
                         <Image
                           src={event.coverImageUrl}
                           alt={event.title}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          className="object-cover transition duration-500 hover:scale-105"
+                          className="object-cover transition duration-500 hover:scale-105 grayscale"
                         />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(8,8,8,0.86))]" />
                         <div className="absolute left-4 top-4 rounded-full bg-[rgba(8,8,8,0.55)] px-4 py-2 backdrop-blur-md on-image-text">
-                          <p className="eyebrow text-white/45">Memories</p>
+                          <p className="eyebrow text-white/45">MEMORIES</p>
                         </div>
                       </div>
 

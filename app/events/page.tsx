@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArrowRight, CalendarRange, Music2, Sparkles } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { EventsShowcase } from "@/components/site/events-showcase";
 import { GlassCard, LiquidLinkButton, PageHero, SectionHeader } from "@/components/site/liquid";
@@ -73,75 +74,17 @@ export default async function EventsPage() {
         </section>
       ) : null}
 
-      <section className="px-5 py-8 sm:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-          {[
-            {
-              icon: CalendarRange,
-              label: "Annual Edition",
-              body: "The BEDOUIN calendar centers on one signature white-party experience each September, with the archive available beside it.",
-            },
-            {
-              icon: Music2,
-              label: "Programming",
-              body: "Live musicians, DJs, majlis moments, and coastal hospitality designed to move from elegant sunset to high-energy night.",
-            },
-            {
-              icon: Sparkles,
-              label: "Guest Standard",
-              body: "White dress code, elevated food, and premium service from arrival through the final lounge sequence.",
-            },
-          ].map((item) => (
-            <GlassCard key={item.label} gold className="h-full px-5 py-5">
-              <item.icon className="mb-4 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
-              <p className="eyebrow mb-2">{item.label}</p>
-              <p className="body-copy text-white/68">{item.body}</p>
-            </GlassCard>
-          ))}
-        </div>
-      </section>
-
-      <section className="px-5 py-8 sm:px-10 lg:px-16">
-        <div className="mx-auto max-w-7xl">
-          <GlassCard className="overflow-hidden px-5 py-6 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-              <div>
-                <p className="eyebrow mb-3">World Cup Fan Festival</p>
-                <h2 className="section-title text-[2rem]">
-                  Stadium atmosphere inside <em>Grand Theater Anaheim</em>
-                </h2>
-                <p className="body-copy mt-4 text-white/84">
-                  Massive LED match viewing, DJ entertainment, premium indoor comfort, food and
-                  beverage access, and a focused spotlight on Arab national teams.
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {featuredNations.map((nation) => (
-                    <span key={nation} className="rounded-full border border-white/20 bg-black/20 px-3 py-2 text-[0.78rem] font-medium tracking-[0.08em] text-white">
-                      {nation}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="grid gap-3">
-                {worldCupSchedule.map((item) => (
-                  <div key={item.day} className="rounded-[18px] border border-white/10 bg-white/[0.07] px-4 py-4">
-                    <p className="eyebrow mb-2 text-white/78">{item.day}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {item.matches.map((match) => (
-                        <span
-                          key={match}
-                          className="rounded-full border border-white/20 bg-black/20 px-3 py-2 text-[0.78rem] font-medium tracking-[0.03em] text-white"
-                        >
-                          {match}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+      <section className="px-5 py-6 sm:px-10 lg:px-16">
+        <Link href="/contact-us" className="block">
+          <div className="bg-gradient-to-r from-green-950 to-black border border-green-800 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">🏟</span>
+              <p className="eyebrow text-green-400">WORLD CUP FAN FESTIVAL</p>
             </div>
-          </GlassCard>
-        </div>
+            <p className="body-copy text-white/80 mb-3">Grand Theater Anaheim</p>
+            <p className="text-sm text-green-400 font-medium">View Details →</p>
+          </div>
+        </Link>
       </section>
 
       <section id="events-calendar" className="px-5 py-12 sm:px-10 sm:py-20 lg:px-16">
@@ -186,7 +129,7 @@ export default async function EventsPage() {
                     "Access details available through the ZOYA team",
                     "Simple guest support by contact form, WhatsApp, or email",
                   ].map((detail) => (
-                  <div
+                      <div
                       key={detail}
                       className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4"
                     >

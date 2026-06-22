@@ -33,7 +33,7 @@ export function GalleryShowcase({ items }: GalleryShowcaseProps) {
   return (
     <>
       <div className="space-y-8">
-        <div className="scrollbar-none -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
+        <div className="scrollbar-hide -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:px-0">
           {categories.map((category) => (
             <button
               key={category.key}
