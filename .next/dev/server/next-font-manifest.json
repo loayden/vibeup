@@ -1,5 +1,17 @@
 {
   "app": {
+    "[project]/app/contact-us/page": [
+      "static/media/81cef6a21128489e-s.p.2csanl8cs02r-.woff2",
+      "static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2"
+    ],
+    "[project]/app/events/page": [
+      "static/media/81cef6a21128489e-s.p.2csanl8cs02r-.woff2",
+      "static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2"
+    ],
+    "[project]/app/gallery/page": [
+      "static/media/81cef6a21128489e-s.p.2csanl8cs02r-.woff2",
+      "static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2"
+    ],
     "[project]/app/page": [
       "static/media/81cef6a21128489e-s.p.2csanl8cs02r-.woff2",
       "static/media/01e4147cff8141ee-s.p.3huc2loe0ie8a.woff2"
