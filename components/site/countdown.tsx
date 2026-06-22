@@ -37,7 +37,7 @@ const CountdownBlock = memo(function CountdownBlock({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 18 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-[clamp(1.45rem,6vw,2.5rem)] font-light tracking-[0.04em] text-[var(--gold)]"
+            className="font-serif text-[clamp(1.45rem,6vw,2.5rem)] font-light tracking-[0.04em] text-white"
           >
             {value}
           </motion.span>

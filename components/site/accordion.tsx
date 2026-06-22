@@ -34,7 +34,7 @@ export function LiquidAccordion({ items }: LiquidAccordionProps) {
                 {item.question}
               </span>
               <ChevronDown
-                className={`h-4 w-4 shrink-0 text-[var(--gold)] transition ${isOpen ? "rotate-180" : ""}`}
+                className={`h-4 w-4 shrink-0 text-white transition ${isOpen ? "rotate-180" : ""}`}
                 strokeWidth={1.2}
               />
             </button>

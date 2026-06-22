@@ -284,7 +284,7 @@ export function OrderExperience({
       <GlassCard gold className="px-6 py-7 md:px-8">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[rgba(198,169,98,0.12)]">
-            <statusCopy.Icon className="h-5 w-5 text-[var(--gold)]" strokeWidth={1.4} />
+            <statusCopy.Icon className="h-5 w-5 text-white" strokeWidth={1.4} />
           </div>
           <div>
             <p className="eyebrow mb-3">{statusCopy.eyebrow}</p>
@@ -305,7 +305,7 @@ export function OrderExperience({
           </GlassCard>
           <GlassCard dark className="px-5 py-5">
             <p className="eyebrow mb-2">Total Paid</p>
-            <p className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-[var(--gold)]">
+            <p className="font-serif text-[1.7rem] font-light tracking-[0.05em] text-white">
               {formatMoney(order.total, order.currency)}
             </p>
           </GlassCard>
@@ -313,7 +313,7 @@ export function OrderExperience({
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <GlassCard dark className="px-5 py-5">
-            <CalendarDays className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+            <CalendarDays className="mb-3 h-4 w-4 text-white" strokeWidth={1.2} />
             <p className="eyebrow mb-2">Event Date</p>
             <p className="body-copy text-white/68">
               {order.events?.event_date
@@ -322,12 +322,12 @@ export function OrderExperience({
             </p>
           </GlassCard>
           <GlassCard dark className="px-5 py-5">
-            <MapPin className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+            <MapPin className="mb-3 h-4 w-4 text-white" strokeWidth={1.2} />
             <p className="eyebrow mb-2">Venue</p>
             <p className="body-copy text-white/68">{order.events?.venue_name || "ZOYA Event"}</p>
           </GlassCard>
           <GlassCard dark className="px-5 py-5">
-            <Mail className="mb-3 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+            <Mail className="mb-3 h-4 w-4 text-white" strokeWidth={1.2} />
             <p className="eyebrow mb-2">Guest</p>
             <p className="body-copy text-white/68">
               {order.customer_name}
@@ -352,7 +352,7 @@ export function OrderExperience({
                       Quantity {item.quantity} · {formatMoney(item.unit_price, order.currency)} each
                     </p>
                   </div>
-                  <p className="font-serif text-[1.5rem] font-light tracking-[0.05em] text-[var(--gold)]">
+                  <p className="font-serif text-[1.5rem] font-light tracking-[0.05em] text-white">
                     {formatMoney(item.total_price, order.currency)}
                   </p>
                 </div>
@@ -387,7 +387,7 @@ export function OrderExperience({
             <div className="gold-divider-left h-px w-20" />
             <div className="flex items-center justify-between">
               <p className="eyebrow">Final Total</p>
-              <p className="font-serif text-[1.9rem] font-light tracking-[0.05em] text-[var(--gold)]">
+              <p className="font-serif text-[1.9rem] font-light tracking-[0.05em] text-white">
                 {formatMoney(order.total, order.currency)}
               </p>
             </div>

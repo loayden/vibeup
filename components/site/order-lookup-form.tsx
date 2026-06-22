@@ -242,7 +242,7 @@ export function OrderLookupForm() {
         <div className="gold-divider-left mt-6 h-px w-20" />
 
         <div className="mt-6 space-y-3">
-          <p className="eyebrow text-[var(--gold)]">Support Note</p>
+          <p className="eyebrow text-white">Support Note</p>
           <p className="body-copy text-white/68">
             If the order is still pending, the fastest next step is to check the confirmation email
             first, then contact ZOYA support with the order number.

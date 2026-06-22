@@ -448,7 +448,7 @@ export function CheckoutExperience({
 
       <div className="mt-5 flex items-center justify-between">
         <p className="eyebrow">Estimated Total</p>
-        <p className="font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)]">
+        <p className="font-serif text-[2rem] font-light tracking-[0.05em] text-white">
           ${total.toFixed(2)}
         </p>
       </div>
@@ -469,7 +469,7 @@ export function CheckoutExperience({
                 key={step.label}
                 className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
               >
-                <p className="eyebrow mb-2 text-[var(--gold)]">Step {index + 1}</p>
+                <p className="eyebrow mb-2 text-white">Step {index + 1}</p>
                 <p className="body-copy text-white/68">{step.label}</p>
                 <p className="body-copy mt-2 text-[0.78rem] text-white/50">{step.body}</p>
               </div>
@@ -523,7 +523,7 @@ export function CheckoutExperience({
                       ) : null}
                     </div>
 
-                    <p className="mt-4 font-serif text-[2rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[2.1rem]">
+                    <p className="mt-4 font-serif text-[2rem] font-light tracking-[0.05em] text-white sm:text-[2.1rem]">
                       ${ticketType.price}
                     </p>
                     <p className="body-copy mt-4">{ticketType.description}</p>
@@ -560,7 +560,7 @@ export function CheckoutExperience({
                         disabled={soldOut}
                         data-cursor="hover"
                       >
-                        <Minus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
+                        <Minus className="h-4 w-4 text-white" strokeWidth={1.4} />
                       </button>
                       <span className="font-serif text-[1.6rem] font-light tracking-[0.05em] text-white">
                         {quantity}
@@ -575,14 +575,14 @@ export function CheckoutExperience({
                         disabled={soldOut}
                         data-cursor="hover"
                       >
-                        <Plus className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
+                        <Plus className="h-4 w-4 text-white" strokeWidth={1.4} />
                       </button>
                     </div>
 
                     {selected ? (
                       <div className="flex items-center gap-2 rounded-full border border-[rgba(198,169,98,0.24)] bg-[rgba(198,169,98,0.10)] px-3 py-2">
-                        <Check className="h-3.5 w-3.5 text-[var(--gold)]" strokeWidth={1.5} />
-                        <span className="eyebrow text-[var(--gold)]">Selected</span>
+                        <Check className="h-3.5 w-3.5 text-white" strokeWidth={1.5} />
+                        <span className="eyebrow text-white">Selected</span>
                       </div>
                     ) : soldOut ? (
                       <div className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-2">
@@ -596,7 +596,7 @@ export function CheckoutExperience({
           ) : (
             <GlassCard dark className="px-6 py-8 sm:col-span-2 xl:col-span-2">
               <div className="flex items-start gap-4">
-                <AlertTriangle className="mt-1 h-4 w-4 text-[var(--gold)]" strokeWidth={1.3} />
+                <AlertTriangle className="mt-1 h-4 w-4 text-white" strokeWidth={1.3} />
                 <div>
                   <p className="eyebrow mb-3">Ticketing Unavailable</p>
                   <p className="body-copy text-white/68">{unavailableMessage}</p>
@@ -710,7 +710,7 @@ export function CheckoutExperience({
 
             <GlassCard dark className="px-5 py-5">
               <div className="flex items-center gap-3">
-                <ShieldCheck className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                <ShieldCheck className="h-4 w-4 text-white" strokeWidth={1.2} />
                 <p className="eyebrow">Need Help Before Payment</p>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -721,9 +721,9 @@ export function CheckoutExperience({
                   className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
                 >
                   <div className="flex items-center gap-3">
-                    <Phone className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                    <Phone className="h-4 w-4 text-white" strokeWidth={1.2} />
                     <div>
-                      <p className="eyebrow mb-1 text-[var(--gold)]">WhatsApp</p>
+                      <p className="eyebrow mb-1 text-white">WhatsApp</p>
                       <p className="body-copy text-[0.8rem] text-white/62">Fastest guest support</p>
                     </div>
                   </div>
@@ -733,9 +733,9 @@ export function CheckoutExperience({
                   className="rounded-[16px] border border-white/8 bg-white/[0.02] px-4 py-4"
                 >
                   <div className="flex items-center gap-3">
-                    <Mail className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                    <Mail className="h-4 w-4 text-white" strokeWidth={1.2} />
                     <div>
-                      <p className="eyebrow mb-1 text-[var(--gold)]">Email Team</p>
+                      <p className="eyebrow mb-1 text-white">Email Team</p>
                       <p className="body-copy text-[0.8rem] text-white/62">{SITE.email}</p>
                     </div>
                   </div>
@@ -763,7 +763,7 @@ export function CheckoutExperience({
 
         <GlassCard warm className="px-6 py-6">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.3} />
+            <ShieldCheck className="h-4 w-4 text-white" strokeWidth={1.3} />
             <p className="eyebrow">Order Signals</p>
           </div>
           <div className="mt-5 space-y-3">

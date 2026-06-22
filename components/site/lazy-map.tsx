@@ -27,7 +27,7 @@ export function LazyMap({ embedUrl, openUrl }: LazyMapProps) {
         ) : (
           <div className="flex min-h-[320px] flex-col items-center justify-center gap-5 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] px-5 text-center sm:min-h-[420px]">
             <div className="flex h-14 w-14 items-center justify-center rounded-[18px] border border-[rgba(198,169,98,0.22)] bg-[rgba(198,169,98,0.08)]">
-              <MapPin className="h-5 w-5 text-[var(--gold)]" strokeWidth={1.2} />
+              <MapPin className="h-5 w-5 text-white" strokeWidth={1.2} />
             </div>
             <div className="space-y-3">
               <p className="eyebrow">Map Preview</p>

@@ -33,7 +33,7 @@ export function GalleryVideoGrid({ videos }: GalleryVideoGridProps) {
           </div>
           <div className="px-3 pb-3 pt-5">
             <div className="flex items-center gap-3">
-              <PlayCircle className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+              <PlayCircle className="h-4 w-4 text-white" strokeWidth={1.2} />
               <p className="eyebrow">Video Highlight</p>
             </div>
             <h3 className="mt-4 font-serif text-[1.8rem] font-light tracking-[0.05em] text-white">

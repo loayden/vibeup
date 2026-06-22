@@ -255,14 +255,14 @@ export function CareersBoard({ positions }: CareersBoardProps) {
                 </h3>
                 <div className="gold-divider-left mt-4 h-px w-20" />
                 <div className="mt-5 flex items-center gap-3">
-                  <MapPin className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <MapPin className="h-4 w-4 text-white" strokeWidth={1.2} />
                   <p className="body-copy text-white/65">{position.location}</p>
                 </div>
                 <div className="mt-3 flex items-center gap-3">
-                  <BriefcaseBusiness className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                  <BriefcaseBusiness className="h-4 w-4 text-white" strokeWidth={1.2} />
                   <p className="body-copy text-white/65">{position.type}</p>
                 </div>
-                <p className="eyebrow mt-5 text-[var(--gold)] md:hidden">
+                <p className="eyebrow mt-5 text-white md:hidden">
                   {expandedRole === position.role ? "Hide details" : "View details"}
                 </p>
               </button>

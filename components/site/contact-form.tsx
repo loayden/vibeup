@@ -377,7 +377,7 @@ export function ContactForm() {
       </div>
 
       <div className="rounded-[18px] border border-white/8 bg-white/[0.02] px-4 py-4">
-        <p className="eyebrow mb-2 text-[var(--gold)]">What happens next</p>
+        <p className="eyebrow mb-2 text-white">What happens next</p>
         <p className="body-copy text-[0.8rem] text-white/62">
           After you send this, the team reviews fit, timing, and scope first. If the project is a
           match, you receive either a consultation path, follow-up questions, or a proposal route.

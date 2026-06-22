@@ -627,6 +627,15 @@ select option:checked {
   display: none;
 }
 
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .touch-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

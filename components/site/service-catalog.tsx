@@ -77,7 +77,7 @@ export function ServiceCatalog({ services }: ServiceCatalogProps) {
                     </h3>
                     <div className="gold-divider-left mt-4 h-px w-24" />
                     <p className="body-copy mt-5">{service.summary}</p>
-                    <p className="eyebrow mt-5 text-[var(--gold)] md:hidden">
+                    <p className="eyebrow mt-5 text-white md:hidden">
                       {expandedService === service.title ? "Hide details" : "View details"}
                     </p>
                   </button>

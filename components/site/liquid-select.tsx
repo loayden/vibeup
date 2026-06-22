@@ -66,7 +66,7 @@ export function LiquidSelect({
           {activeOption?.label || placeholder}
         </span>
         <ChevronDown
-          className={`h-4 w-4 shrink-0 text-[var(--gold)] transition-transform ${
+          className={`h-4 w-4 shrink-0 text-white transition-transform ${
             open ? "rotate-180" : ""
           }`}
           strokeWidth={1.3}

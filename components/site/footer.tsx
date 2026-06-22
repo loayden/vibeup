@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+import { Facebook, Instagram, Mail, Phone, X } from "lucide-react";
 
 import { NewsletterForm } from "@/components/site/newsletter-form";
 import { GlassCard } from "@/components/site/liquid";
@@ -30,6 +34,26 @@ const footerGroups = [
   },
 ] as const;
 
+function FooterAccordion({ title, links }: { title: string; links: ReadonlyArray<{ href: string; label: string }> }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <details className="group" open={isOpen} onToggle={(e) => setIsOpen(e.currentTarget.open)}>
+      <summary className="flex min-h-[44px] items-center justify-between cursor-pointer list-none">
+        <p className="eyebrow">{title}</p>
+        <X className={`h-4 w-4 transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`} strokeWidth={1.2} />
+      </summary>
+      <div className="mt-3 space-y-2">
+        {links.map((link) => (
+          <Link key={link.href} href={link.href} className="block py-2 text-sm text-white/80 hover:text-[var(--gold)]">
+            {link.label}
+          </Link>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 export function SiteFooter() {
   return (
     <footer className="relative z-10 px-5 pb-8 pt-8 md:px-10 lg:px-16">
@@ -60,7 +84,7 @@ export function SiteFooter() {
             </div>
 
             {footerGroups.map((group) => (
-              <div key={group.title}>
+              <div key={group.title} className="hidden lg:block">
                 <p className="eyebrow mb-4">{group.title}</p>
                 <div className="space-y-2.5">
                   {group.links.map((link) => (
@@ -71,6 +95,12 @@ export function SiteFooter() {
                 </div>
               </div>
             ))}
+
+            <div className="lg:hidden space-y-4">
+              {footerGroups.map((group) => (
+                <FooterAccordion key={group.title} title={group.title} links={group.links} />
+              ))}
+            </div>
 
             <div className="space-y-4">
               <p className="eyebrow">Stay Close</p>
@@ -105,40 +135,57 @@ export function SiteFooter() {
             <span style={{ color: "rgba(147, 108, 224, 0.94)" }}>FR</span>
             <span style={{ color: "var(--gold)" }}>ع</span>
           </Link>
-          <div className="flex flex-wrap items-center justify-center gap-4 md:justify-end">
+          <div className="flex gap-4 justify-center py-4 lg:justify-end lg:py-0">
+            <Link
+              href={`mailto:${SITE.email}`}
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <Mail className="h-4 w-4 text-white" strokeWidth={1.2} />
+            </Link>
+            <Link
+              href={`tel:+19492479309`}
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <Phone className="h-4 w-4 text-white" strokeWidth={1.2} />
+            </Link>
             <Link
               href={SITE.socials.whatsapp}
               target="_blank"
               rel="noreferrer"
-              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             >
-              WhatsApp
+              <span className="text-sm font-semibold text-white">W</span>
             </Link>
             <Link
               href={SITE.socials.facebook}
               target="_blank"
               rel="noreferrer"
-              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             >
-              Facebook
+              <Facebook className="h-4 w-4 text-white" strokeWidth={1.2} />
             </Link>
             <Link
               href={SITE.socials.instagram}
               target="_blank"
               rel="noreferrer"
-              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             >
-              Instagram
+              <Instagram className="h-4 w-4 text-white" strokeWidth={1.2} />
             </Link>
             <Link
               href={SITE.socials.tiktok}
               target="_blank"
               rel="noreferrer"
-              className="eyebrow text-white/30 transition hover:text-[var(--gold)]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             >
-              TikTok
+              <span className="text-sm font-semibold text-white">TT</span>
             </Link>
           </div>
+        </div>
+        <div className="mt-4 text-center">
+          <p className="body-copy text-xs text-white/40">
+            © 2026 ZOYA · <Link href="/terms" className="hover:text-[var(--gold)]">Terms</Link> · <Link href="/privacy" className="hover:text-[var(--gold)]">Privacy</Link>
+          </p>
         </div>
       </div>
     </footer>

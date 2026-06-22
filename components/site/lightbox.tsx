@@ -110,7 +110,7 @@ export function Lightbox({
               onClick={onClose}
               aria-label="Close lightbox"
             >
-              <X className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
+              <X className="h-4 w-4 text-white" strokeWidth={1.4} />
             </button>
             <div className="relative flex-1 overflow-hidden rounded-[20px] sm:aspect-[16/10] sm:flex-none">
               <Image
@@ -143,10 +143,10 @@ export function Lightbox({
               </div>
               <div className="hidden items-center gap-3 sm:flex">
                 <button className="nav-mobile-button" onClick={onPrevious} aria-label="Previous image">
-                  <ChevronLeft className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
+                  <ChevronLeft className="h-4 w-4 text-white" strokeWidth={1.4} />
                 </button>
                 <button className="nav-mobile-button" onClick={onNext} aria-label="Next image">
-                  <ChevronRight className="h-4 w-4 text-[var(--gold)]" strokeWidth={1.4} />
+                  <ChevronRight className="h-4 w-4 text-white" strokeWidth={1.4} />
                 </button>
               </div>
             </div>

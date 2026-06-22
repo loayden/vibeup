@@ -171,7 +171,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                               {event.title}
                             </h3>
                           </div>
-                          <p className="font-serif text-[1.25rem] font-light tracking-[0.05em] text-[var(--gold)] sm:text-[1.8rem]">
+                          <p className="font-serif text-[1.25rem] font-light tracking-[0.05em] text-white sm:text-[1.8rem]">
                             {event.priceFrom > 0 ? `From $${event.priceFrom}` : "Invite Only"}
                           </p>
                         </div>
@@ -180,12 +180,12 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
 
                         <div className="mt-3 grid gap-3 sm:mt-5 sm:grid-cols-2">
                           <GlassCard dark className="px-4 py-4">
-                            <CalendarDays className="mb-2 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                            <CalendarDays className="mb-2 h-4 w-4 text-white" strokeWidth={1.2} />
                             <p className="eyebrow mb-2">Date</p>
                             <p className="body-copy text-white/68">{event.formattedDate}</p>
                           </GlassCard>
                           <GlassCard dark className="px-4 py-4">
-                            <MapPin className="mb-2 h-4 w-4 text-[var(--gold)]" strokeWidth={1.2} />
+                            <MapPin className="mb-2 h-4 w-4 text-white" strokeWidth={1.2} />
                             <p className="eyebrow mb-2">Venue</p>
                             <p className="body-copy text-white/68">
                               {event.shortVenue}
@@ -326,7 +326,7 @@ export function EventsShowcase({ upcoming, past }: EventsShowcaseProps) {
                             {item.venue}
                           </p>
                         </div>
-                        <span className="eyebrow text-[var(--gold)]">Open</span>
+                        <span className="eyebrow text-white">Open</span>
                       </div>
                     </Link>
                   ))}
