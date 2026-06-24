@@ -14,6 +14,7 @@
   --gold-dark: #7d5f1d;
   --gold-dim: rgba(164, 127, 43, 0.58);
   --gold-glow: rgba(198, 169, 98, 0.16);
+  --cream: #f5e6d3;
 }
 
 html {
@@ -192,7 +193,7 @@ h5 {
 
 .display-title em,
 .section-title em {
-  color: var(--gold);
+  color: var(--cream);
   font-style: italic;
 }
 
@@ -201,7 +202,7 @@ h5 {
   font-size: clamp(1.6rem, 5vw, 3.5rem);
   font-weight: 300;
   letter-spacing: 0.06em;
-  color: var(--foreground);
+  color: #ffffff;
 }
 
 .body-copy {

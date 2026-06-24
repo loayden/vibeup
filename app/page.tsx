@@ -83,7 +83,7 @@ export default function HomePage() {
   const featuredEvent = UPCOMING_EVENTS[0];
 
   return (
-    <main className="relative overflow-x-hidden bg-[url('/bedouin/carpet.jpeg')] bg-cover bg-center bg-no-repeat sm:bg-fixed" style={{ backgroundSize: 'cover' }}>
+    <main className="relative overflow-x-hidden bg-[url('/bedouin/carpet.jpeg')] bg-cover bg-center bg-no-repeat sm:bg-fixed" style={{ backgroundSize: 'auto 100%' }}>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,8,0.34)_0%,rgba(11,6,6,0.42)_42%,rgba(9,5,5,0.58)_100%)]" />
 
       <section className="relative z-10 min-h-[92vh] overflow-hidden bg-transparent">
@@ -331,7 +331,7 @@ export default function HomePage() {
                 <div className="md:hidden">
                   <div className="flex gap-4">
                     <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full bg-amber-500 text-black text-xs font-bold flex items-center justify-center">
                         {index + 1}
                       </div>
                       {index < flow.length - 1 && (
@@ -360,7 +360,7 @@ export default function HomePage() {
           </div>
 
           <div className="bg-white/5 border border-amber-500/30 rounded-xl p-5 mx-5">
-            <div className="absolute top-4 right-4 bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">
+            <div className="absolute top-4 right-4 bg-amber-500 text-black text-xs font-bold px-2 py-1 rounded">
               Sept 19-20
             </div>
             <div className="mb-4">
