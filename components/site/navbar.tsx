@@ -23,6 +23,7 @@ const EASING = [0.22, 1, 0.36, 1] as const;
 
 const DESKTOP_LEFT = [
   { label: "Events", href: "/events" },
+  { label: "World Cup", href: "/world-cup" },
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
 ] as const;
@@ -35,6 +36,7 @@ const DESKTOP_RIGHT = [
 
 const MOBILE_PRIMARY = [
   { label: "Events", href: "/events", icon: CalendarDays },
+  { label: "World Cup", href: "/world-cup", icon: CalendarDays },
   { label: "Contact", href: "/contact-us", icon: Mail },
   { label: "Services", href: "/services", icon: Briefcase },
   { label: "Gallery", href: "/gallery", icon: ImageIcon },

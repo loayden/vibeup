@@ -7,3 +7,8 @@
 {"timestamp":"30:12:59.332","source":"Server","level":"LOG","message":"✓ Compiled in 2000ms"}
 {"timestamp":"30:13:02.518","source":"Server","level":"LOG","message":"✓ Compiled in 251ms"}
 {"timestamp":"30:13:06.821","source":"Server","level":"LOG","message":"✓ Compiled in 192ms"}
+{"timestamp":"30:14:58.809","source":"Server","level":"LOG","message":"✓ Compiled in 1857ms"}
+{"timestamp":"30:14:58.923","source":"Server","level":"WARN","message":"⚠ Fast Refresh had to perform a full reload when ./node_modules/next/dist/client/image-component.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload"}
+{"timestamp":"30:15:01.752","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
+{"timestamp":"30:15:17.556","source":"Server","level":"LOG","message":"✓ Compiled in 1532ms"}
+{"timestamp":"30:15:21.767","source":"Server","level":"LOG","message":"✓ Compiled in 339ms"}
